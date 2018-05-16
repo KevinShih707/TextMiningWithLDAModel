@@ -7,8 +7,11 @@ def cutTextFile(path = ""):
         words = jieba.lcut(content)
     return " ".join(words)
 
-# def cutCsvFile(path = ""):
-#     data = openCsvFileAsDict(path)
+def cutCsvFile(path = ""):
+    dataDict = openCsvFileAsDict(path)
+    for row in dataDict:
+        row['text'] = " ".join(jieba.lcut(row['text']))
+    return dataDict
 
 def openCsvFileAsDict(path = ""):
     with open (path, "rt", encoding = 'utf-8') as file:
@@ -23,4 +26,4 @@ def openCsvFileAsDict(path = ""):
 
 if __name__ == "__main__":
     cutTextFile("DataProcessing/test_data/testData.txt")
-    # cutCsvFile("DataProcessing/test_data/testData.csv")
+    cutCsvFile("DataProcessing/test_data/testData.csv")
