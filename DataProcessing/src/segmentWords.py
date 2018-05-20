@@ -44,8 +44,8 @@ def createDtm(texts):#建立文檔辭頻矩陣
 
 def createTfidf(texts):#辭頻-逆向文檔辭頻
     dictionary = corpora.Dictionary(texts)
-    wordCount = [dictionary.doc2bow(text) for text in tests]#list of (wordID,count)
-    tfidfModel = models.tfidfModel(wordCount)
+    wordCount = [dictionary.doc2bow(text) for text in texts]#list of (wordID,count)
+    tfidfModel = models.TfidfModel(wordCount)
     tfidf = tfidfModel[wordCount]
     tfidfMatrix = corpus2dense(tfidf, len(dictionary))#(data,featureCount)
     return tfidfMatrix.T

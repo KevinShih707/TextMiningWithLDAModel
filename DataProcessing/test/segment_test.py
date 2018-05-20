@@ -33,16 +33,19 @@ class TestSegment(unittest.TestCase):
     #     dataDict = segmentWords.openCsvFileAsDict(self.CSV_FILE_PATH, cutText = True, stopwords = stopwords)
     #     self.assertEqual('適當 的 使用 動畫 可以 為 你 的 作品 加 分 ， 但動畫 不是 人人 都 會 做 ， 所以 這次 我們 為 大家 介紹 如何 透過   loading . io   圖示 庫 快速 製 作 屬 於 自己 的 動畫 圖示 。 \n \n 全文 :   http : / / blog . infographics . tw / 2018 / 02 / loading - io - animated - icons /', dataDict[0]['text'])
 
-    # def test_createDtm(self):
-    #     texts = [["智者", "守時", "而", "盡", "其智"],
-    #              ["不肖", "者", "守命", "而", "盡", "其力"]]
-    #     dtm = segmentWords.createDtm(texts)
-    #     expectResult = np.array([[1., 1., 1., 1., 1., 0., 0., 0., 0.],
-    #                              [0., 0., 0., 1., 1., 1., 1., 1., 1.]])
-    #     self.assertEqual(expectResult, dtm)
+    def test_createDtm(self):
+        texts = [["智者", "守時", "而", "盡", "其智"],
+                 ["不肖", "者", "守命", "而", "盡", "其力"]]
+        dtm = segmentWords.createDtm(texts)
+        expectResult = np.array([[1., 1., 1., 1., 1., 0., 0., 0., 0.],
+                                 [0., 0., 0., 1., 1., 1., 1., 1., 1.]])
+        self.assertTrue(np.array_equal(expectResult, dtm))
 
 
-    # def test_creareTfidf(self):
-    #     texts = [["智者", "守時", "而", "盡", "其智"],
-    #              ["不肖", "者", "守命", "而", "盡", "其力"]]
-    #     tfidf = segmentWords.createTfidf(texts)
+    def test_creareTfidf(self):
+        texts = [["智者", "守時", "而", "盡", "其智"],
+                 ["不肖", "者", "守命", "而", "盡", "其力"]]
+        tfidf = segmentWords.createTfidf(texts)
+        expectResult = np.array([[0.57735026, 0.57735026, 0.57735026, 0., 0., 0., 0., 0., 0.],
+                                 [0., 0., 0., 0., 0., 0.5, 0.5, 0.5, 0.5]])
+        self.assertTrue(np.array_equal(expectResult, tfidf))
