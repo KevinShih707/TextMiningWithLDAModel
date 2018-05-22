@@ -8,7 +8,26 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+        a:link {
+            text-decoration: none;
+        }
+
+        a:visited {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
     <div class="uk-section-secondary uk-preserve-color">
 
@@ -82,33 +101,187 @@
             </nav>
         </div>
 
-        <h1 class="uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
 
+    </div>
+
+    <div class="uk-section-secondary uk-preserve-color">
+        <h1 class="uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
+        <h3 class="uk-text-center uk-light">We've just begun</h3>
+        <a href="#about" uk-scroll>
+            <button class="uk-button uk-align-center uk-button-muted uk-dark">
+            START
+            </button>
+        </a>
+        <div class="uk-container uk-container-large uk-background-secondary">
+        <script>
+            var width = 1280,
+                height = 500;
+
+            var nodes = d3.range(100).map(function() { return {radius: Math.random() * 12 + 4}; }),
+                root = nodes[0],
+                color = d3.scale.category10();
+
+            root.radius = 0;
+            root.fixed = true;
+
+            var force = d3.layout.force()
+                .gravity(0.06)
+                .charge(function(d, i) { return i ? 0 : -2000; })
+                .nodes(nodes)
+                .size([width, height]);
+
+            force.start();
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.append("rect")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("fill", "#222222");
+
+            svg.selectAll("circle")
+                .data(nodes.slice(5))
+              .enter().append("circle")
+                .attr("r", function(d) { return d.radius; })
+                .style("fill", function(d, i) { return color(i % 10); });
+
+            force.on("tick", function(e) {
+              var q = d3.geom.quadtree(nodes),
+                  i = 0,
+                  n = nodes.length;
+
+              while (++i < n) q.visit(collide(nodes[i]));
+
+              svg.selectAll("circle")
+                  .attr("cx", function(d) { return d.x; })
+                  .attr("cy", function(d) { return d.y; });
+            });
+
+            svg.on("mousemove", function() {
+              var p1 = d3.mouse(this);
+              root.px = p1[0];
+              root.py = p1[1];
+              force.resume();
+            });
+
+            function collide(node) {
+              var r = node.radius + 16,
+                  nx1 = node.x - r,
+                  nx2 = node.x + r,
+                  ny1 = node.y - r,
+                  ny2 = node.y + r;
+              return function(quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== node)) {
+                  var x = node.x - quad.point.x,
+                      y = node.y - quad.point.y,
+                      l = Math.sqrt(x * x + y * y),
+                      r = node.radius + quad.point.radius;
+                  if (l < r) {
+                    l = (l - r) / l * .5;
+                    node.x -= x *= l;
+                    node.y -= y *= l;
+                    quad.point.x += x;
+                    quad.point.y += y;
+                  }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+              };
+            }
+
+            ////////////////////////////////////
+            //Responsive D3 Charts
+            ////////////////////////////////////
+            var container = d3.select(svg.node().parentNode),
+                width = parseInt(svg.style("width")),
+                height = parseInt(svg.style("height")),
+                aspect = width / height;
+
+            // add viewBox and preserveAspectRatio properties,
+            // and call resize so that svg resizes on inital page load
+            svg.attr("viewBox", "0 0 " + width + " " + height)
+                .attr("perserveAspectRatio", "xMinYMid")
+                .call(resize);
+
+            // to register multiple listeners for same event type,
+            // you need to add namespace, i.e., 'click.foo'
+            // necessary if you call invoke this function for multiple svgs
+            // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+            d3.select(window).on("resize." + container.attr("id"), resize);
+
+            // get width of container and resize svg to fit it
+            function resize() {
+                var targetWidth = parseInt(container.style("width"));
+                svg.attr("width", targetWidth);
+                svg.attr("height", Math.round(targetWidth / aspect));
+            }
+
+            ////////////////////////////////////
+            //Responsive D3 Charts
+            ////////////////////////////////////
+            var container = d3.select(svg.node().parentNode),
+                width = parseInt(svg.style("width")),
+                height = parseInt(svg.style("height")),
+                aspect = width / height;
+
+            // add viewBox and preserveAspectRatio properties,
+            // and call resize so that svg resizes on inital page load
+            svg.attr("viewBox", "0 0 " + width + " " + height)
+                .attr("perserveAspectRatio", "xMinYMid")
+                .call(resize);
+
+            // to register multiple listeners for same event type,
+            // you need to add namespace, i.e., 'click.foo'
+            // necessary if you call invoke this function for multiple svgs
+            // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+            d3.select(window).on("resize." + container.attr("id"), resize);
+
+            // get width of container and resize svg to fit it
+            function resize() {
+                var targetWidth = parseInt(container.style("width"));
+                svg.attr("width", targetWidth);
+                svg.attr("height", Math.round(targetWidth / aspect));
+            }
+        </script>
+        </div>
+    </div>
+
+    <div class="uk-section-secondary uk-preserve-color" id="about">
         <div class="uk-section uk-light " uk-height-viewport="expand: true">
             <div class="uk-container uk-text-center uk-flex-center uk-flex-wrap ">
 
-                <h3>We've just begun</h3>
 
                 <div class="uk-grid-divider uk-grid-match uk-child-width-1-3@m" uk-grid>
-                    <div>
-                        <p>我們將收集網路社群平台上的貼文及評論。分析不同使用者留下的訊息，
-                            彙整出使用者所關注的議題及所抱持態度的傾向。</p>
+                    <div class="uk-height-large uk-background-cover uk-overflow-hidden uk-light uk-flex uk-flex-top"
+                         style="background-image: url('images.jpg');">
+                         <div class="uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
+                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">資料爬取/儲存</h3>
+                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                                使用Python的requests，透過向Facebook Graph API發出請求，以取得指定粉絲專業之文章，
+                                並依時間先後順序儲存貼文資訊。
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <p>現今社群媒體影響力無遠弗屆，橫跨政治、經濟與社會文化等層面，社群平台也加強了使用者間分享資訊的即時性和多元性，
-                            但在審視各種特定議題相關大量貼文和評論之後，難以直接判別議題走向和分析使用者所關注的重點;
-                            此實務專題之目的是要擷取社群平台中資訊，進而統計分析，快速了解特定議題的重點。</p>
+                    <div class="uk-height-large uk-background-cover uk-overflow-hidden uk-light uk-flex uk-flex-top"
+                         style="background-image: url('images.jpg');">
+                         <div class="uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
+                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">資料分析</h3>
+                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                                段詞 (Word Segmentation)：在文章主題分析中，我們將文章視為「無序」的單詞「集合」。
+                                因此在分析前我們先嘗試將文章中的句子，切割為具有意義的單詞以利於後續分析。
+                                我們借助Jieba、Genius工具包進行初步切割再進行調整。
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <p>透過Facebook graph API取得指定用戶底下文章<br>
-                        利用python的requests 取得資料<br>
-                        jieba 中文斷詞<br>
-                        Dynamic program mining<br>
-                        Hidden Markov Model<br>
-                        MongoDB<br>
-                        jango<br>
-                        UIKit<br>
-                        Google App Engine</p>
+                    <div class="uk-height-large uk-background-cover uk-overflow-hidden uk-light uk-flex uk-flex-top"
+                         style="background-image: url('images.jpg');">
+                         <div class="uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
+                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">可視化</h3>
+                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                                D3.js：是一個動態圖形顯示資料圖形的JavaScript Library，負責數據可視化的部分。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
