@@ -2,7 +2,6 @@ import jieba
 import csv
 from gensim import corpora, models
 from gensim.matutils import corpus2dense
-from gensim.models.ldamodel import LdaModel
 
 class Corpora():
     def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = None):
@@ -27,6 +26,13 @@ class Corpora():
                 self.corpus = words
                 return words
         raise Exception("Undefined file Extension")
+
+    def filterFrequentWord(self, num = 10):
+        self.dictionary.filter_n_most_frequent(num)
+
+    @property
+    def Dictionary(self):
+        return self.dictionary
 
     @property
     def DtPair(self):#list of (wordID,count)
@@ -54,13 +60,3 @@ def stopwordsFilter(sentence, stopwords):
         if seg not in stopwords: #過濾停用辭
             result.append(seg)
     return result
-
-# """========================================="""
-#
-# def ldaTraining(texts, numOfTopics = 10):
-#     #建構辭典
-#     dictionary = corpora.Dictionary(texts)
-#     #建夠TF-IDF矩陣
-#     tfidfMatrix = createTfidf(texts)
-#     lda = LdaModel(corpus = tfidfMatrix, id2word = dictionary, num_topics = numOfTopics)
-#     return lda

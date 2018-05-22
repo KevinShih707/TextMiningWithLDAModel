@@ -11,6 +11,10 @@ class TestCorpora(unittest.TestCase):
         self.corporaTxt = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt')
         self.corporaCsv = Corpora(filePath = self.CSV_FILE_PATH)
 
+    def tearDown(self):
+        del self.corporaCsv
+        del self.corporaTxt
+
     def test_segmentWoeds(self):
         #txt
         exceptResult = "智者 守時 而 盡 其智 ， \n"
@@ -34,7 +38,6 @@ class TestCorpora(unittest.TestCase):
         self.assertEqual(2, len(self.corporaTxt.DtMatrix))
 
     def test_getTfidfPair(self):
-        print(self.corporaTxt.TfidfPair[0])
         exceptResult = np.array([(1, 0.5), (2, 0.5), (3, 0.5), (6, 0.5)])
         self.assertTrue(np.array_equal(exceptResult, self.corporaTxt.TfidfPair[0]))
         self.assertEqual(2, len(self.corporaTxt.TfidfPair))
@@ -49,13 +52,3 @@ class TestCorpora(unittest.TestCase):
         stopwords = ["#", "@", "是", "不是"]
         result = " ".join(corpora.stopwordsFilter(victimText, stopwords))
         self.assertEqual("帥哥 你 你是 帥哥", result)
-
-    # def test_cutCsvFileWithStopwords(self):
-    #     stopwords = ["#", "@", "是", "不是"]
-    #     dataDict = segmentWords.openCsvFileAsDict(self.CSV_FILE_PATH, cutText = True, stopwords = stopwords)
-    #     self.assertEqual('適當 的 使用 動畫 可以 為 你 的 作品 加 分 ， 但動畫 不是 人人 都 會 做 ， 所以 這次 我們 為 大家 介紹 如何 透過   loading . io   圖示 庫 快速 製 作 屬 於 自己 的 動畫 圖示 。 \n \n 全文 :   http : / / blog . infographics . tw / 2018 / 02 / loading - io - animated - icons /', dataDict[0]['text'])
-
-    # def test_ldaTraining(self):
-    #     dataDicts = segmentWords.openCsvFileAsDict(self.CSV_FILE_PATH , cutText = True)
-    #     texts = [dataDict['text'] for dataDict in dataDicts]
-    #     segmentWords.ldaTraining(texts)
