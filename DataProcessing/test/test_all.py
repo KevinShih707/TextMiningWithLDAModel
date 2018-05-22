@@ -1,5 +1,5 @@
 import unittest
-from .segment_test import TestSegment
+from .corpora_test import TestCorpora
 
 if __name__ == "__main__":
     unittest.main()
