@@ -10,6 +10,8 @@ class Corpora():
         self.stopwords = stopwords
         self.segmentWords()
         self.dictionary = corpora.Dictionary(self.corpus)
+        if(self.stopwords != None):
+            self.delDictStopwords()
 
     def segmentWords(self):
         with open(self.filePath, encoding = 'utf-8') as file:
@@ -26,6 +28,17 @@ class Corpora():
                 self.corpus = words
                 return words
         raise Exception("Undefined file Extension")
+
+    def delDictStopwords(self):
+        if(type(self.stopwords) == str):
+            with open(self.stopwords, encoding = 'utf-8') as file:
+                read = file.read()
+                self.stopwords = read.splitlines()
+        badIds = []
+        for key, value in self.dictionary.items():
+            if value in self.stopwords:
+                badIds.append(key)
+        self.dictionary.filter_tokens(bad_ids = badIds)
 
     def filterFrequentWord(self, num = 10):
         self.dictionary.filter_n_most_frequent(num)
@@ -53,10 +66,3 @@ class Corpora():
 
 # def creatDTVectorSpace(texts):#distributed representation
     # modelDR = gensim.models.Word2Vec(texts, size=100, window=5, min_count=5)
-
-def stopwordsFilter(sentence, stopwords):
-    result = []
-    for seg in sentence:
-        if seg not in stopwords: #過濾停用辭
-            result.append(seg)
-    return result

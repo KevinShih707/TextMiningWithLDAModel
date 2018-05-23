@@ -6,6 +6,7 @@ import numpy as np
 class TestCorpora(unittest.TestCase):
     TEXT_FILE_PATH = "DataProcessing/test_data/testData.txt"
     CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
+    STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
 
     def setUp(self):
         self.corporaTxt = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt')
@@ -47,8 +48,14 @@ class TestCorpora(unittest.TestCase):
         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfMatrix[0]))
         self.assertEqual(2, len(self.corporaTxt.TfidfMatrix))
 
-    def test_stopwordsFilter(self):
-        victimText = ["帥哥", "是", "你", "#", "你是", "@", "帥哥"]
-        stopwords = ["#", "@", "是", "不是"]
-        result = " ".join(corpora.stopwordsFilter(victimText, stopwords))
-        self.assertEqual("帥哥 你 你是 帥哥", result)
+    def test_delDictStopwords(self):
+        corpora = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = self.STOPWORDS_FILE_PATH)
+        self.assertFalse(',' in corpora.corpus)
+        self.assertFalse('\n' in corpora.corpus)
+        self.assertFalse('。' in corpora.corpus)
+        self.assertFalse(' ' in corpora.corpus)
+        corpora2 = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = ['\n', '，', '。', ' '])
+        self.assertFalse(',' in corpora2.corpus)
+        self.assertFalse('\n' in corpora2.corpus)
+        self.assertFalse('。' in corpora2.corpus)
+        self.assertFalse(' ' in corpora2.corpus)
