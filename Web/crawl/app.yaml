@@ -1,0 +1,27 @@
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT crawl.wsgi
+
+env_variables:
+# the secret key used for the Django app (from PROJECT-DIRECTORY/settings.py)
+  SECRET_KEY: '8(m)8e5a0*xt5q3(=63pgt2erwr!7r36!6dz=$f8o69$1qu9$8'
+  DEBUG: 'False' # always False for deployment
+  STATIC_URL: 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
+
+runtime_config:
+  python_version: 3.6
+
+handlers:
+- url: /static
+  static_dir: static
+
+# This sample incurs costs to run on the App Engine flexible environment.
+# The settings below are to reduce costs during testing and are not appropriate
+# for production use. For more information, see:
+# https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10

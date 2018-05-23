@@ -25,7 +25,7 @@ SECRET_KEY = '8(m)8e5a0*xt5q3(=63pgt2erwr!7r36!6dz=$f8o69$1qu9$8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'localhost']
+ALLOWED_HOSTS = ['*', 'localhost', 'ngrok.io', 'crawl-curation.appspot.com']
 
 
 # Application definition
