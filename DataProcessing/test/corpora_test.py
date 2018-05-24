@@ -18,9 +18,13 @@ class TestCorpora(unittest.TestCase):
 
     def test_segmentWoeds(self):
         #txt
-        exceptResult = "智者 守時 而 盡 其智 ， \n"
-        self.assertEqual(exceptResult, " ".join(self.corporaTxt.segmentWords()[0]))
-        self.assertEqual(2, len(self.corporaTxt.segmentWords()))
+        '''
+        智者守時而盡其智，
+        不肖者守命而盡其力。
+        '''
+        exceptResult = [["智者", "守時", "而", "盡", "其智", "，", "\n"],
+                        ["不肖", "者", "守命", "而", "盡", "其力", "。", "\n"]]
+        self.assertEqual(exceptResult, self.corporaTxt.segmentWords())
         #csv
         exceptResultCsv = "適當 的 使用 動畫 可以 為 你 的 作品 加 分 ， 但動畫 不是 人人 都 會 做 ， 所以 這次 我們 為 大家 介紹 如何 透過   loading . io   圖示 庫 快速 製 作 屬 於 自己 的 動畫 圖示 。 \n \n 全文 :   http : / / blog . infographics . tw / 2018 / 02 / loading - io - animated - icons /"
         self.assertEqual(exceptResultCsv, " ".join(self.corporaCsv.segmentWords()[0]))
