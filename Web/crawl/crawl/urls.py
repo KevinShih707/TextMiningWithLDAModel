@@ -14,10 +14,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from facebook.views import index
+from facebook import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', index),
-    url(r'^index/', index)
+    url(r'^$', views.index),
+    url(r'^index/(\d+)/$', views.index),
+    url(r'^text/$', views.text),
 ]
