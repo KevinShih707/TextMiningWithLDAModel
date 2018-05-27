@@ -11,10 +11,10 @@ class Lda():
             else:
                 self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics)
         else:
-            self.ldaModel = LdaModel.load(saveModel)
+            self.ldaModel = LdaModel.load(savedModle)
 
-    def saveModel(self, name):
-        LdaModel.save(name)
+    def saveModel(self, name = "my_model"):
+        self.ldaModel.save(fname = name)
 
     def showTopicsStr(self):
         return self.ldaModel.show_topics(self.numTopics)
