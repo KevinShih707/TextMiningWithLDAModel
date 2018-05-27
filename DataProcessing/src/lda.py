@@ -16,3 +16,8 @@ class Lda():
             result.append([(word.split("*")[0], word.split("*")[1][1:-1]) for word in words])
         # result = [[(word.split("*")[0], word.split("*")[1][1:-1]) for word in topic[1].split(' + ')] for topic in self.ldaModel.show_topics(self.numTopics)]
         return result
+
+    def matchingTopics(self, tfidf = None):
+        if(tfidf == None):
+            tfidf = self.corpora.TfidfPair
+        return [self.ldaModel[article] for article in tfidf]

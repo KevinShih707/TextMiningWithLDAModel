@@ -4,32 +4,50 @@ from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
 class Corpora():
-    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = None):
+    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = None, isDelLinesHasUrl = True):
         self.filePath = filePath
         self.fileExtension = fileExtension
         self.stopwords = stopwords
-        self.segmentWords()
+        self.isDelLinesHasUrl = isDelLinesHasUrl
+        self.corpus = None
+
+    def __createCorpus(self):
+        file = self.__openFile(self.filePath, self.fileExtension)
+        if(self.isDelLinesHasUrl):
+            for article in file:
+                self.__delLinesHasUrl(article)
+        self.corpus = self.__segmentWords(file)
         self.dictionary = corpora.Dictionary(self.corpus)
         if(self.stopwords != None):
-            self.delDictStopwords()
+            self.__delDictStopwords()
 
-    def segmentWords(self):
-        with open(self.filePath, encoding = 'utf-8') as file:
-            if (self.fileExtension == 'txt'):
-                lines = file.readlines()#暫存爆炸
-                words = [jieba.lcut(line) for line in lines]
-                self.corpus = words
-                return words
-            elif (self.fileExtension == 'csv'):
-                reader = csv.DictReader(file, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount'])
-                words = [jieba.lcut(row['text']) for row in reader] #串列生成式
-                if (words[0] == ["貼文", "內容"]):
+    def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):
+        words = ""
+        with open(path, encoding = 'utf-8') as file:
+            if (extension == 'txt'):
+                reader = file.read()
+                words = reader.split('\n\n')
+            elif (extension == 'csv'):
+                reader = csv.DictReader(file, fieldnames)
+                words = [row['text'] for row in reader] #串列生成式
+                if (words[0] == "貼文內容"):
                     del words[0]
-                self.corpus = words
-                return words
-        raise Exception("Undefined file Extension")
+            else:
+                raise Exception("Undefined file Extension")
+        return words
 
-    def delDictStopwords(self):
+    def __segmentWords(self, articles):
+        return [jieba.lcut(article) for article in articles]
+
+
+    def __delLinesHasUrl(self, article):
+        lines = article.splitlines()
+        for line in lines:
+            if ('http://' in line or 'https://' in line):
+                lines.remove(line)
+        return '\n'.join(lines)
+
+    def __delDictStopwords(self):
         if(type(self.stopwords) == str):
             with open(self.stopwords, encoding = 'utf-8') as file:
                 read = file.read()
@@ -44,24 +62,41 @@ class Corpora():
         self.dictionary.filter_n_most_frequent(num)
 
     @property
+    def Corpus(self):
+        if(self.corpus == None):
+            self.createCorpus()
+        return self.corpus
+
+    @property
     def Dictionary(self):
+        '''語意庫辭典{ID,:word}'''
+        if(self.corpus == None):
+            self.__createCorpus()
         return self.dictionary
 
     @property
-    def DtPair(self):#list of (wordID,count)
+    def DtPair(self):
+        '''以tuple方式回傳詞頻矩陣(wordID, count)'''
+        if(self.corpus == None):
+            self.__createCorpus()
         return [self.dictionary.doc2bow(text) for text in self.corpus]
 
     @property
-    def DtMatrix(self):#one_hot_represent matrix
+    def DtMatrix(self):
+        '''以矩陣方式回傳詞頻矩陣'''
         return corpus2dense(self.DtPair, len(self.dictionary)).T
 
     @property
-    def TfidfPair(self):#辭頻-逆向文檔辭頻
+    def TfidfPair(self):
+        '''以tuple回傳辭頻-逆向文檔辭頻矩陣(wordID, value)'''
+        if(self.corpus == None):
+            self.__createCorpus()
         tfidfModel = models.TfidfModel(self.DtPair)
         return tfidfModel[self.DtPair]
 
     @property
     def TfidfMatrix(self):
+        '''以矩陣方式回傳辭頻-逆向文檔辭頻矩陣'''
         return corpus2dense(self.TfidfPair, len(self.dictionary)).T
 
 # def creatDTVectorSpace(texts):#distributed representation
