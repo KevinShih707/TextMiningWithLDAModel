@@ -15,7 +15,7 @@ class Corpora():
         file = self.__openFile(self.filePath, self.fileExtension)
         if(self.isDelLinesHasUrl):
             for article in file:
-                self.__delLinesHasUrl(article)
+                file[file.index(article)] = self.__delLinesHasUrl(article)
         self.corpus = self.__segmentWords(file)
         self.dictionary = corpora.Dictionary(self.corpus)
         if(self.stopwords != None):

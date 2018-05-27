@@ -17,22 +17,22 @@ class TestCorpora(unittest.TestCase):
     def test_segmentWoeds(self):
         articles = ["智者守時而盡其智，\n不肖者守命而盡其力。", "夫戰勝攻取，而不修其攻者凶，命曰費留。", "主不可以怒而興師，將不可以慍而致戰；合于利而動，不合于利而止。"]
         segmentedArticle = self.mockCorpora._Corpora__segmentWords(articles)
-        exceptResult = ["智者", "守時", "而", "盡", "其智", "，", "\n","不肖", "者", "守命", "而", "盡", "其力", "。"]
-        self.assertEqual(exceptResult, segmentedArticle[0])
+        expectResult = ["智者", "守時", "而", "盡", "其智", "，", "\n","不肖", "者", "守命", "而", "盡", "其力", "。"]
+        self.assertEqual(expectResult, segmentedArticle[0])
 
     def test_openFile(self):
         #txt
         contentTxt = self.mockCorpora._Corpora__openFile(self.TEXT_FILE_PATH, 'txt')
-        exceptResult0 = "智者守時而盡其智，\n不肖者守命而盡其力。"
+        expectResult0 = "智者守時而盡其智，\n不肖者守命而盡其力。"
         expectResult1 = "智者守時，\n不肖者守命。\n"
-        self.assertEqual(exceptResult0, contentTxt[0])
+        self.assertEqual(expectResult0, contentTxt[0])
         self.assertEqual(expectResult1, contentTxt[1])
 
         #csv
         contentCsv = self.mockCorpora._Corpora__openFile(self.CSV_FILE_PATH, 'csv', ['time', 'id', 'text', 'share', 'likecount', 'sharecount'])
-        exceptResult0 = "適當的使用動畫可以為你的作品加分，但動畫不是人人都會做，所以這次我們為大家介紹如何透過 loading.io 圖示庫快速製作屬於自己的動畫圖示。"
+        expectResult0 = "適當的使用動畫可以為你的作品加分，但動畫不是人人都會做，所以這次我們為大家介紹如何透過 loading.io 圖示庫快速製作屬於自己的動畫圖示。"
         expectResult1 = "你能畫出騙過 A* 的絕妙迷宮嗎？\n\n網址: http://qiao.github.io/PathFinding.js/visual"
-        self.assertEqual(exceptResult0, contentCsv[0][:72])
+        self.assertEqual(expectResult0, contentCsv[0][:72])
         self.assertEqual(expectResult1, contentCsv[99][-66:])
 
     def test_delLinesHasUrl(self):
@@ -65,20 +65,19 @@ class TestCorporaProperties(unittest.TestCase):
         del self.corporaTxt
 
     def test_getDtPair(self):
-        exceptResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 2), (8, 1), (9, 2)],
-                                 [(0, 2), (1, 1), (4, 1), (5, 1), (6, 1), (8, 1)]])
-        self.assertTrue(np.array_equal(exceptResult, self.corporaTxt.DtPair))
-        self.assertEqual(2, len(self.corporaTxt.DtPair))
+        expectResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 2), (8, 1), (9, 2)],
+                                 [(0, 1), (1, 1), (4, 1), (5, 1), (6, 1), (8, 1)]])
+        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtPair))
 
     def test_getDtMatrix(self):
+        print()
         expectResult = np.array([[1., 1., 1., 1., 1., 1., 1., 2., 1., 2.],
-                                 [2., 1., 0., 0., 1., 1., 1., 0., 1., 0.]])
+                                 [1., 1., 0., 0., 1., 1., 1., 0., 1., 0.]])
         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtMatrix))
-        self.assertEqual(2, len(self.corporaTxt.DtMatrix))
 
     def test_getTfidfPair(self):
-        exceptResult = [[(2, 0.31622776601683794), (3, 0.31622776601683794), (7, 0.6324555320336759), (9, 0.6324555320336759)],[ ]]
-        self.assertTrue(np.array_equal(exceptResult, self.corporaTxt.TfidfPair))
+        expectResult = [[(2, 0.31622776601683794), (3, 0.31622776601683794), (7, 0.6324555320336759), (9, 0.6324555320336759)],[ ]]
+        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfPair))
 
     def test_getTfidfMatrix(self):
         expectResult = np.array([[0., 0., 0.31622776, 0.31622776, 0., 0., 0., 6324555 , 0., 6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])

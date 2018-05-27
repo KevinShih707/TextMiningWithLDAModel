@@ -1,10 +1,20 @@
 from gensim.models.ldamodel import LdaModel
+import numpy as np
 
 class Lda():
-    def __init__(self, corpora = None, savedModle = None, numTopics = 10):
+    def __init__(self, corpora = None, savedModle = None, numTopics = 10, seed = None):
         self.numTopics = numTopics
         self.corpora = corpora
-        self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics)
+        if(savedModle == None):
+            if(seed != None):
+                self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics, random_state = np.random.RandomState(seed))
+            else:
+                self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics)
+        else:
+            self.ldaModel = LdaModel.load(saveModel)
+
+    def saveModel(self, name):
+        LdaModel.save(name)
 
     def showTopicsStr(self):
         return self.ldaModel.show_topics(self.numTopics)
