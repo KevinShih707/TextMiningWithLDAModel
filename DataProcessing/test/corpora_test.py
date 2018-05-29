@@ -85,3 +85,6 @@ class TestCorporaProperties(unittest.TestCase):
         for row in minus:
             for a in row:
                 self.assertTrue(a < 0.00000001)
+
+    def test_lenOfCorpus(self):
+        self.assertEqual(2, len(self.corporaTxt))    

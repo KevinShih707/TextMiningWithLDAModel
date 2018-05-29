@@ -27,7 +27,31 @@ class Lda():
         # result = [[(word.split("*")[0], word.split("*")[1][1:-1]) for word in topic[1].split(' + ')] for topic in self.ldaModel.show_topics(self.numTopics)]
         return result
 
-    def matchingTopics(self, tfidf = None):
+    def topicsDistribution(self, tfidf = None):
         if(tfidf == None):
             tfidf = self.corpora.TfidfPair
         return [self.ldaModel[article] for article in tfidf]
+
+    def classifyTopic(self, tfidf = None):
+        if(tfidf == None):
+            tfidf = self.corpora.TfidfPair
+        result = []
+        for article in tfidf:
+            topicId = 0;
+            distribution = self.ldaModel[article]
+            for pb in distribution:
+                if(pb[1] > distribution[topicId][1]):
+                    topicId = pb[0]
+            result.append(topicId)
+        return result
+
+    def findArticleMatchd(self, topicId = 'all'):
+        if(topicId != 'all'):
+            return [index for index,tid in enumerate(self.classifyTopic()) if tid == topicId]
+        result = [[] for num in range(0, self.numTopics)]
+        classified = self.classifyTopic()
+        counter = 0
+        while (counter < len(self.corpora)):
+            result[classified[counter]].append(counter)
+            counter += 1
+        return result

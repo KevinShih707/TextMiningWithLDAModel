@@ -21,8 +21,9 @@ class TestLda(unittest.TestCase):
                         [('0.001', '圖表'), ('0.001', '你'), ('0.001', '在'), ('0.001', '與'), ('0.001', '覺化'), ('0.001', '圖'), ('0.001', '為'), ('0.001', '台灣'), ('0.001', '上'), ('0.001', '呢')]]
         self.assertEqual(expectResult, self.lda.showTopicsList())
 
-    # def test_matchTopic(self):
-    #     print(self.lda.matchingTopics(tfidf = self.corpora.TfidfPair))
+    # def test_topicsDistribution(self):
+    #     from pprint import pprint
+    #     pprint(self.lda.topicsDistribution(tfidf = self.corpora.TfidfPair)
 
     def test_saveModel(self):
         if(os.path.exists("DataProcessing/test_data/model_test.pkl")):
@@ -30,3 +31,19 @@ class TestLda(unittest.TestCase):
         self.assertFalse(os.path.exists("DataProcessing/test_data/model_test.pkl"))
         self.lda.saveModel("DataProcessing/test_data/model_test.pkl")
         self.assertTrue(os.path.exists("DataProcessing/test_data/model_test.pkl"))
+
+    def test_classifyTopic(self):
+        expectResult = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+                        0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0,
+                        0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1,
+                        0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0,
+                        1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1]
+        self.assertEqual(expectResult, self.lda.classifyTopic())
+
+    def test_findArticleMatchd(self):
+        result = self.lda.findArticleMatchd()
+        self.assertEqual([0,  1,  2,  3,  4,  5,  7,  8,  9, 11], result[0][:10])
+        self.assertEqual([6, 10, 13, 15, 17, 19, 22, 23, 24, 25], result[1][:10])
+
+        # self.assertEqual(result[0], self.lda.findArticleMatchd(0))
+        # self.assertEqual(result[1], self.lda.findArticleMatchd(1))

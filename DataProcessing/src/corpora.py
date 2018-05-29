@@ -58,13 +58,18 @@ class Corpora():
                 badIds.append(key)
         self.dictionary.filter_tokens(bad_ids = badIds)
 
+    def __len__(self):
+        if(self.corpus == None):
+            self.__createCorpus()
+        return len(self.corpus)
+
     def filterFrequentWord(self, num = 10):
         self.dictionary.filter_n_most_frequent(num)
 
     @property
     def Corpus(self):
         if(self.corpus == None):
-            self.createCorpus()
+            self.__createCorpus()
         return self.corpus
 
     @property
