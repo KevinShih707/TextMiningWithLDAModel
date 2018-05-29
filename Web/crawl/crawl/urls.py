@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^index/(\d+)/$', views.index),
     url(r'^text/$', views.text),
+    url(r'^get/$', views.get),
 ]

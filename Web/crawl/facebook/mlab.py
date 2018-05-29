@@ -44,9 +44,10 @@ def save_to_mongo(collection_input,input_data):
     #data = read_csv()
 
     try:
-        collection.insert(input_data)
+        collection.drop()
+        collection.insert_many(input_data)
         #result = collection.insert_many(data)
-        print('%d rows are saved to "%s" collection in "%s" document successfully!' % (len(result.inserted_ids), COLLECTION_NAME, DOCUMENT_NAME))
+        #print('%d rows are saved to "%s" collection in "%s" document successfully!' % (len(result.inserted_ids), COLLECTION_NAME, DOCUMENT_NAME))
     except Exception as e:
         print('Got an error!')
         print(e)
