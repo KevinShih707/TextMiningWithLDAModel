@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>資料文本</title>
-	</head>
-	<body>
-        <h2><center>顯示資料表資料{{errormessage}}</center></h2>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
+    <title>資料文本</title>
+</head>
+<body>
+<div uk-sticky="top: 400">{% include "nav.html" %}</div>
+
+    <div class="uk-section-muted">
+        <h2 class="uk-text-center"><span>顯示資料表資料{{errormessage}}</span></h2>
+
+        <div class="uk-container uk-container-expand uk-background-muted uk-text-center">
+        <div class="uk-child-width-1-3@m uk-grid-small" uk-grid uk-height-match="target: > div > .uk-card">
+
         {% for unit in units %}
-        <center>時間：{{ unit.time }} </center><br />
-        <center>ID：{{ unit.id }}  </center><br />
-        <center>內容：{{ unit.text }} </center><br />
-        <center>分享：{{ unit.share}} </center> <br />
-        <center>按讚數量：{{unit.likecount }} </center><br />
-        <center>分享數量：{{ unit.sharecount }}</center>  <br /><br />
+        <div class="uk-card uk-card-default uk-card-body uk-text-left">
+        <h7 class="uk-text-small uk-card-title">
+            時間：{{ unit.time }}<br/>
+            ID：{{ unit.id }}
+        </h7>
+        <div class="uk-text-top">
+        內容：
+        <div class="uk-text-primary uk-text-truncate">
+        {{ unit.text }}
+        </div>
+        分享：{{ unit.share}}<br />
+        按讚數量：{{unit.likecount }}<br />
+        分享數量：{{ unit.sharecount }}<br /><br />
+        </div>
+        </div>
         {% endfor %}
-	</body>
+
+        </div>
+        </div>
+    </div>
+
+    {% include "copyright.html" %}
+</body>
 </html>	
