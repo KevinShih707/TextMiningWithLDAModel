@@ -6,5 +6,5 @@ def index(request):
     return render(request, 'index.html')
 
 def text(request):
-	units = getAllDoc()
+	units = getAllDoc("post")
 	return render(request, "text.html", locals())	
