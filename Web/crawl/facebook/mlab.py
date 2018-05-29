@@ -39,13 +39,13 @@ def read_csv():
     return csv.DictReader(reader, COLUMNS)
 
 
-def save_to_mongo(collection_input):
+def save_to_mongo(collection_input,input_data):
     collection = connect_mongo(collection_input)
-    collection.drop()
-    data = read_csv()
+    #data = read_csv()
 
     try:
-        result = collection.insert_many(data)
+        collection.insert(input_data)
+        #result = collection.insert_many(data)
         print('%d rows are saved to "%s" collection in "%s" document successfully!' % (len(result.inserted_ids), COLLECTION_NAME, DOCUMENT_NAME))
     except Exception as e:
         print('Got an error!')
