@@ -1,256 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crawl Curation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
+{% extends "basic.html" %}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
-    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
-    <style type="text/css">
-        a:link {
-            text-decoration: none;
-        }
+{% block mainbody %}
 
-        a:visited {
-            text-decoration: none;
-        }
+<div class="uk-background-secondary">
 
-        a:hover {
-            text-decoration: none;
-        }
+        {% include "index_bg.html" %}
 
-        a:active {
-            text-decoration: none;
-        }
-    </style>
-    <style type="text/css">
-        .center-overlap {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: block;
-            width: auto;
-            height: auto;
-            text-align:center;
-        }
-
-        .script-overlap {
-            position: relative;
-            width: auto;
-            height: auto;
-        }
-
-        .center {
-            left: 50%;
-            transform: translate(-50%, 0);
-        }
-    </style>
-</head>
-
-<body>
-
-<div id="navbar">
-    <div class="uk-section-secondary uk-preserve-color">
-        <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container;
-        cls-active: uk-navbar-sticky uk-navbar-transparent uk-light;
-        cls-inactive: uk-navbar-transparent uk-light; top: 200">
-
-            <nav class="uk-navbar-container">
-                <div class="uk-container uk-container-expand">
-                    <div uk-navbar>
-
-                        <ul class="uk-navbar-nav uk-transition-toggle" tabindex="0">
-                            <div class="uk-offcanvas-content">
-
-                                <a class="uk-navbar-toggle uk-hidden@m "
-                                   uk-navbar-toggle-icon href="#offcanvas" uk-toggle>
-                                </a>
-
-                                <div id="offcanvas" uk-offcanvas>
-
-                                    <div class="uk-offcanvas-bar uk-animation-toggle">
-
-                                        <div class="uk-animation-fade">
-                                            <button class="uk-offcanvas-close uk-align-right" type="button" uk-close>
-                                            </button>
-                                            <div>
-                                                <h2>Services</h2>
-                                            </div>
-                                            <div class="uk-child-width-1-1" uk-grid>
-                                                <div>
-                                                    <a href="#">Facebook Login</a>
-                                                </div>
-                                                <div>
-                                                    <a href="#">數據可視畫</a>
-                                                </div>
-                                                <div>
-                                                    <a href="#">情感分析</a>
-                                                </div>
-                                                <div>
-                                                    <a href="#">資料文本</a>
-                                                </div>>
-                                            </div>
-                                            <p></p>
-                                            <div>
-                                                <a href="https://csie.ntut.edu.tw/csie/index_i.htm">
-                                                    <h2>CSIE</h2>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <li class="uk-active uk-visible@m uk-hidden-touch">
-                                <a href="#">Crawl Curation</a>
-                            </li>
-                            <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
-                                <a href="#">Services</a>
-                                <div class="uk-navbar-dropdown">
-                                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                                        <li><a href="#">Facebook Login</a></li>
-                                        <li><a href="#">數據可視畫</a></li>
-                                        <li><a href="#">情感分析</a></li>
-                                        <li><a href="/text/">資料文本</a></li
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
-                                <a href="https://csie.ntut.edu.tw/csie/index_i.htm">
-                                CSIE</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </div>
-</div>
-
-    <div class="uk-section uk-section-secondary">
-
-
-        <div>
-        <div class="script-overlap uk-container">
-            <script type="text/javascript" async>
-            var width = 1280,
-                height = 700;
-
-            var nodes = d3.range(100).map(function() { return {radius: Math.random() * 12 + 4}; }),
-                root = nodes[0],
-                color = d3.scale.category10();
-
-            root.radius = 0;
-            root.fixed = true;
-
-            var force = d3.layout.force()
-                .gravity(0.015)
-                .charge(function(d, i) { return i ? 0 : -2000; })
-                .nodes(nodes)
-                .size([width, height]);
-
-            force.start();
-
-            var svg = d3.select("body").append("svg")
-                .attr("width", width)
-                .attr("height", height);
-
-            svg.append("rect")
-                .attr("width", "100%")
-                .attr("height", "110%")
-                .attr("fill", "#222222");
-
-            svg.selectAll("circle")
-                .data(nodes.slice(5))
-              .enter().append("circle")
-                .attr("r", function(d) { return d.radius; })
-                .style("fill", function(d, i) { return color(i % 100); });
-
-            force.on("tick", function(e) {
-              var q = d3.geom.quadtree(nodes),
-                  i = 0,
-                  n = nodes.length;
-
-              while (++i < n) q.visit(collide(nodes[i]));
-
-              svg.selectAll("circle")
-                  .attr("cx", function(d) { return d.x; })
-                  .attr("cy", function(d) { return d.y; });
-            });
-
-            svg.on("mousemove", function() {
-              var p1 = d3.mouse(this);
-              root.px = p1[0];
-              root.py = p1[1];
-              force.resume();
-            });
-
-            function collide(node) {
-              var r = node.radius + 16,
-                  nx1 = node.x - r,
-                  nx2 = node.x + r,
-                  ny1 = node.y - r,
-                  ny2 = node.y + r;
-              return function(quad, x1, y1, x2, y2) {
-                if (quad.point && (quad.point !== node)) {
-                  var x = node.x - quad.point.x,
-                      y = node.y - quad.point.y,
-                      l = Math.sqrt(x * x + y * y),
-                      r = node.radius + quad.point.radius;
-                  if (l < r) {
-                    l = (l - r) / l * .5;
-                    node.x -= x *= l;
-                    node.y -= y *= l;
-                    quad.point.x += x;
-                    quad.point.y += y;
-                  }
-                }
-                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-              };
-            }
-
-            ////////////////////////////////////
-            //Responsive D3 Charts
-            ////////////////////////////////////
-            var container = d3.select(svg.node().parentNode),
-                width = parseInt(svg.style("width")),
-                height = parseInt(svg.style("height")),
-                aspect = width / height;
-
-            // add viewBox and preserveAspectRatio properties,
-            // and call resize so that svg resizes on inital page load
-            svg.attr("viewBox", "0 0 " + width + " " + height)
-                .attr("perserveAspectRatio", "xMinYMid")
-                .call(resize);
-
-            // to register multiple listeners for same event type,
-            // you need to add namespace, i.e., 'click.foo'
-            // necessary if you call invoke this function for multiple svgs
-            // api docs: https://github.com/mbostock/d3/wiki/Selections#on
-            d3.select(window).on("resize." + container.attr("id"), resize);
-
-            // get width of container and resize svg to fit it
-            function resize() {
-                var targetWidth = parseInt(container.style("width"));
-                svg.attr("width", targetWidth);
-                svg.attr("height", Math.round(targetWidth / aspect));
-            }
-        </script>
-        </div>
-        </div>
-
-        <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade">
+        <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade;">
             <h1 class="uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
             <h3 class="uk-text-center uk-light">We've just begun</h3><br>
             <a href="#about" uk-scroll>
-                <button class="uk-button uk-align-center uk-button-default">
+                <button class="uk-button uk-align-center uk-button-default tm-button-default uk-light">
                 START
                 </button>
+            </a>
+        </div>
+        <div class="chevron-down-position uk-visible@m">
+            <a href="#about" uk-scroll>
+            <span uk-icon="icon: chevron-down; ratio: 3" class="uk-light"></span>
             </a>
         </div>
     </div>
@@ -267,8 +34,8 @@
                          style="background-image: url(https://mklnd.com/2s0pxgB);" uk-parallax="bgy: -70">
                         <div class="uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">資料爬取/儲存</h3>
-                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                            <h3>資料爬取/儲存</h3>
+                            <p>
                                 使用Python的requests，透過向Facebook Graph API發出請求，以取得指定粉絲專業之文章，
                                 並依時間先後順序儲存貼文資訊。
                             </p>
@@ -281,8 +48,8 @@
                          style="background-image: url(http://bit.ly/2IWo6dD);" uk-parallax="bgy: -70">
                         <div class="uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">資料分析</h3>
-                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                            <h3>資料分析</h3>
+                            <p>
                                 段詞 (Word Segmentation)：在文章主題分析中，我們將文章視為「無序」的單詞「集合」。
                                 因此在分析前我們先嘗試將文章中的句子，切割為具有意義的單詞以利於後續分析。
                                 我們借助Jieba、Genius工具包進行初步切割再進行調整。
@@ -296,8 +63,8 @@
                     uk-light" style="background-image: url(http://bit.ly/2IV4CGl);" uk-parallax="bgy: -70">
                         <div class="uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 uk-parallax="opacity: 0,1; y: -100,0; scale: 2,1; viewport: 0.5;">可視化</h3>
-                            <p uk-parallax="opacity: 0,1; y: 100,0; scale: 0.5,1; viewport: 0.5;">
+                            <h3>可視化</h3>
+                            <p>
                                 D3.js：是一個動態圖形顯示資料圖形的JavaScript Library，負責數據可視化的部分。
                             </p>
                         </div>
@@ -307,5 +74,7 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+
+    {% include "copyright.html" %}
+
+{% endblock %}

@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<script>
+<div>
+        <div class="script-overlap uk-container">
+            <script>
             var width = 1280,
-                height = 600;
+                height = 700;
 
             var nodes = d3.range(100).map(function() { return {radius: Math.random() * 12 + 4}; }),
                 root = nodes[0],
@@ -17,27 +12,27 @@
             root.fixed = true;
 
             var force = d3.layout.force()
-                .gravity(0.06)
+                .gravity(0.015)
                 .charge(function(d, i) { return i ? 0 : -2000; })
                 .nodes(nodes)
                 .size([width, height]);
 
             force.start();
 
-            var svg = d3.select("body").append("svg")
+            var svg = d3.select("div > div").append("svg")
                 .attr("width", width)
                 .attr("height", height);
 
             svg.append("rect")
                 .attr("width", "100%")
-                .attr("height", "100%")
+                .attr("height", "110%")
                 .attr("fill", "#222222");
 
             svg.selectAll("circle")
                 .data(nodes.slice(5))
               .enter().append("circle")
                 .attr("r", function(d) { return d.radius; })
-                .style("fill", function(d, i) { return color(i % 10); });
+                .style("fill", function(d, i) { return color(i % 100); });
 
             force.on("tick", function(e) {
               var q = d3.geom.quadtree(nodes),
@@ -109,5 +104,5 @@
                 svg.attr("height", Math.round(targetWidth / aspect));
             }
         </script>
-</body>
-</html>
+        </div>
+        </div>
