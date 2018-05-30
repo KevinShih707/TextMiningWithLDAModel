@@ -1,0 +1,32 @@
+{% extends "basic.html" %}
+
+{% block mainbody %}
+<div class="uk-container-expand">
+    {% include "index_bg.html" %}
+    <div class="center-overlap uk-container uk-background-transparent">
+    <h3 class="noto uk-text-left uk-heading-bullet uk-light"><span>使用說明</span></h3>
+    <div class="noto uk-text-left uk-light">
+        <ul class="uk-list uk-list-bullet">
+            <li>
+                先至
+                <a class="uk-link-muted" href="https://developers.facebook.com/tools/explorer">Facebook Graph Explorer
+                </a>
+                取得 存取權杖 與 粉絲專頁 ID。 (將粉絲專頁網址貼上至 Graph Explorer 即可獲取 ID)
+            </li>
+            <li>
+                在臉書爬蟲頁面輸入 存取權杖 與 粉絲專頁 ID，送出後請稍等。
+            </li>
+            <li>
+                頁面重新導向至資料文本，查看爬蟲或得知貼文。
+            </li>
+        </ul>
+    </div>
+    <div>
+        {% include "steps.html" %}
+    </div>
+    <svg width="100%" height=100%" style="z-index: -1; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);height: 130%">
+    <rect width="100%" height="100%" style="fill:white;fill-opacity:0.1;" />
+    </svg>
+    </div>
+</div>
+{% endblock %}

@@ -8,9 +8,9 @@
 
         <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade;">
             <h1 class="uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
-            <h3 class="uk-text-center uk-light">We've just begun</h3><br>
+            <h3 class="uk-text-center uk-light">CSIE Independent Study</h3><br>
             <a href="#about" uk-scroll>
-                <button class="uk-button uk-align-center uk-button-default tm-button-default uk-light">
+                <button class="uk-button uk-align-center uk-button-default uk-light">
                 START
                 </button>
             </a>
@@ -28,13 +28,14 @@
                 <div class="uk-grid-match uk-grid-medium uk-child-width-1-3@m uk-flex uk-flex-center" uk-grid
                      uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
                     <div class="uk-padding-small">
+                    {% load static %}
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                     uk-background-blend-multiply uk-background-secondary
                     uk-light uk-flex uk-flex-top"
-                         style="background-image: url(https://mklnd.com/2s0pxgB);" uk-parallax="bgy: -70">
-                        <div class="uk-overlay uk-position-center
+                         style="background-image: url({% static "media/fb-logo.png" %});" uk-parallax="bgy: -70">
+                        <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3>資料爬取/儲存</h3>
+                            <h3 class="noto">資料爬取/儲存</h3>
                             <p>
                                 使用Python的requests，透過向Facebook Graph API發出請求，以取得指定粉絲專業之文章，
                                 並依時間先後順序儲存貼文資訊。
@@ -45,10 +46,10 @@
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                     uk-background-blend-multiply uk-background-secondary uk-light"
-                         style="background-image: url(http://bit.ly/2IWo6dD);" uk-parallax="bgy: -70">
-                        <div class="uk-overlay uk-position-center
+                         style="background-image: url({% static "media/segmentation-header.jpg" %});" uk-parallax="bgy: -70">
+                        <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3>資料分析</h3>
+                            <h3 class="noto">資料分析</h3>
                             <p>
                                 段詞 (Word Segmentation)：在文章主題分析中，我們將文章視為「無序」的單詞「集合」。
                                 因此在分析前我們先嘗試將文章中的句子，切割為具有意義的單詞以利於後續分析。
@@ -60,10 +61,10 @@
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                     uk-background-blend-multiply uk-background-secondary
-                    uk-light" style="background-image: url(http://bit.ly/2IV4CGl);" uk-parallax="bgy: -70">
-                        <div class="uk-overlay uk-position-center
+                    uk-light" style="background-image: url({% static "media/d3js.jpg" %});" uk-parallax="bgy: -70">
+                        <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3>可視化</h3>
+                            <h3 class="noto">可視化</h3>
                             <p>
                                 D3.js：是一個動態圖形顯示資料圖形的JavaScript Library，負責數據可視化的部分。
                             </p>
@@ -74,7 +75,5 @@
             </div>
         </div>
     </div>
-
-    {% include "copyright.html" %}
 
 {% endblock %}

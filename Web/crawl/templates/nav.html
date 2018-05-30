@@ -1,7 +1,7 @@
 <div id="navbar">
     <div class="uk-section-secondary uk-preserve-color">
         <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container;
-        cls-active: uk-navbar-sticky uk-navbar-transparent uk-light;
+        cls-active: uk-navbar-sticky uk-navbar-transparent uk-background-secondary uk-light;
         cls-inactive: uk-navbar-transparent uk-light; top: 200">
 
             <nav class="uk-navbar-container">
@@ -23,19 +23,22 @@
                                             <button class="uk-offcanvas-close uk-align-right" type="button" uk-close>
                                             </button>
                                             <div>
+                                                <a href="/"><h2>HOME</h2></a>
+                                            </div>
+                                            <div>
                                                 <h2>Services</h2>
                                             </div>
                                             <div class="uk-child-width-1-1" uk-grid>
-                                                <div>
-                                                    <a href="/get/">Facebook Login</a>
+                                                <div class="noto">
+                                                    <a href="/get/">臉書爬蟲</a>
                                                 </div>
-                                                <div>
-                                                    <a href="#">數據可視畫</a>
+                                                <div class="noto">
+                                                    <a href="/soon/">數據可視化</a>
                                                 </div>
-                                                <div>
-                                                    <a href="#">情感分析</a>
+                                                <div class="noto">
+                                                    <a href="/soon/">情感分析</a>
                                                 </div>
-                                                <div>
+                                                <div class="noto">
                                                     <a href="/text/">資料文本</a>
                                                 </div>
                                             </div>
@@ -51,34 +54,39 @@
                                 </div>
                             </div>
                             <li class="uk-active uk-visible@m uk-hidden-touch">
-                                <a href="#">Crawl Curation</a>
+                                <a href="/">Crawl Curation</a>
                             </li>
                             <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
                                 <a href="#">Services</a>
                                 <div class="uk-navbar-dropdown">
                                     <ul class="uk-nav uk-text-left uk-navbar-dropdown-nav">
-                                        <li><a href="/get/">
-                                            <span uk-icon="icon: facebook;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            Facebook Login
-                                        </a></li>
-                                        <li><a href="#">
-                                            <span uk-icon="icon: grid;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            數據可視畫
-                                        </a></li>
-                                        <li><a href="#">
-                                            <span uk-icon="icon: happy;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            情感分析
-                                        </a></li>
-                                        <li><a href="/text/">
+                                        <li><a href="/text/" class="noto">
                                             <span uk-icon="icon: database;" class="uk-dark uk-margin-small-right">
                                             </span>
                                             資料文本
                                         </a></li>
+                                        <li><a href="/get/" class="noto">
+                                            <span uk-icon="icon: facebook;" class="uk-dark uk-margin-small-right">
+                                            </span>
+                                            臉書爬蟲
+                                        </a></li>
+                                        <li><a href="/soon/" class="noto">
+                                            <span uk-icon="icon: grid;" class="uk-dark uk-margin-small-right">
+                                            </span>
+                                            數據可視化
+                                        </a></li>
+                                        <li><a href="/soon/" class="noto">
+                                            <span uk-icon="icon: happy;" class="uk-dark uk-margin-small-right">
+                                            </span>
+                                            情感分析
+                                        </a></li>
                                     </ul>
                                 </div>
+                            </li>
+                            <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
+                                <a href="/help/">
+                                    說明
+                                </a>
                             </li>
                             <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
                                 <a href="https://csie.ntut.edu.tw/csie/index_i.htm">
