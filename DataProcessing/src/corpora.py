@@ -63,6 +63,10 @@ class Corpora():
             self.__createCorpus()
         return len(self.corpus)
 
+    def checkWordInDictionary(self, word):
+        '''if word in dictionary return wordId else return none'''
+        return self.InvertDictionary.get(word)
+
     def filterFrequentWord(self, num = 10):
         self.dictionary.filter_n_most_frequent(num)
 
@@ -74,10 +78,15 @@ class Corpora():
 
     @property
     def Dictionary(self):
-        '''語意庫辭典{ID,:word}'''
+        '''語意庫辭典{id:word}'''
         if(self.corpus == None):
             self.__createCorpus()
         return self.dictionary
+
+    @property
+    def InvertDictionary(self):
+        '''反轉語意庫辭典{word:id}'''
+        return {word: id for id,word in self.Dictionary.items()}
 
     @property
     def DtPair(self):

@@ -41,17 +41,17 @@ class TestCorpora(unittest.TestCase):
         expectResult = "第一行\n第三行\n第五行"
         self.assertEqual(expectResult, noUrlArticle)
 
-# def test_delDictStopwords(self):
-    #     corpora = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = self.STOPWORDS_FILE_PATH)
-    #     self.assertFalse(',' in corpora.corpus)
-    #     self.assertFalse('\n' in corpora.corpus)
-    #     self.assertFalse('。' in corpora.corpus)
-    #     self.assertFalse(' ' in corpora.corpus)
-    #     corpora2 = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = ['\n', '，', '。', ' '])
-    #     self.assertFalse(',' in corpora2.corpus)
-    #     self.assertFalse('\n' in corpora2.corpus)
-    #     self.assertFalse('。' in corpora2.corpus)
-    #     self.assertFalse(' ' in corpora2.corpus)
+    def test_delDictStopwords(self):
+        corpora = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = self.STOPWORDS_FILE_PATH)
+        self.assertFalse(',' in corpora.InvertDictionary)
+        self.assertFalse('\n' in corpora.InvertDictionary)
+        self.assertFalse('。' in corpora.InvertDictionary)
+        self.assertFalse(' ' in corpora.InvertDictionary)
+        corpora2 = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = ['\n', '，', '。', ' '])
+        self.assertFalse(',' in corpora2.InvertDictionary)
+        self.assertFalse('\n' in corpora2.InvertDictionary)
+        self.assertFalse('。' in corpora2.InvertDictionary)
+        self.assertFalse(' ' in corpora2.InvertDictionary)
 
 class TestCorporaProperties(unittest.TestCase):
     TEXT_FILE_PATH = "DataProcessing/test_data/testData.txt"
@@ -63,6 +63,25 @@ class TestCorporaProperties(unittest.TestCase):
 
     def tearDown(self):
         del self.corporaTxt
+
+    def test_checkWordInDictionary(self):
+        self.assertEqual(0, self.corporaTxt.checkWordInDictionary('\n'))
+        self.assertEqual(1, self.corporaTxt.checkWordInDictionary('不肖'))
+        self.assertEqual(2, self.corporaTxt.checkWordInDictionary('其力'))
+        self.assertEqual(3, self.corporaTxt.checkWordInDictionary('其智'))
+        self.assertEqual(4, self.corporaTxt.checkWordInDictionary('守命'))
+        self.assertEqual(5, self.corporaTxt.checkWordInDictionary('守時'))
+        self.assertEqual(6, self.corporaTxt.checkWordInDictionary('智者'))
+        self.assertEqual(7, self.corporaTxt.checkWordInDictionary('盡'))
+        self.assertEqual(8, self.corporaTxt.checkWordInDictionary('者'))
+        self.assertEqual(9, self.corporaTxt.checkWordInDictionary('而'))
+        self.assertEqual(None, self.corporaTxt.checkWordInDictionary('瞎掰的'))
+
+    def test_Dictionary(self):
+        self.assertEqual('不肖', self.corporaTxt.Dictionary.get(1))
+        self.assertEqual(None, self.corporaTxt.Dictionary.get(-1))
+        self.assertEqual(1, self.corporaTxt.InvertDictionary.get('不肖'))
+        self.assertEqual(None, self.corporaTxt.InvertDictionary.get('zzz'))
 
     def test_getDtPair(self):
         expectResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 2), (8, 1), (9, 2)],
@@ -80,11 +99,11 @@ class TestCorporaProperties(unittest.TestCase):
         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfPair))
 
     def test_getTfidfMatrix(self):
-        expectResult = np.array([[0., 0., 0.31622776, 0.31622776, 0., 0., 0., 6324555 , 0., 6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+        expectResult = np.array([[0., 0., 0.31622776, 0.31622776, 0., 0., 0., 0.6324555 , 0., 0.6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
         minus = self.corporaTxt.TfidfMatrix - expectResult
         for row in minus:
             for a in row:
-                self.assertTrue(a < 0.00000001)
+                self.assertTrue(a < 0.00001)
 
     def test_lenOfCorpus(self):
-        self.assertEqual(2, len(self.corporaTxt))    
+        self.assertEqual(2, len(self.corporaTxt))
