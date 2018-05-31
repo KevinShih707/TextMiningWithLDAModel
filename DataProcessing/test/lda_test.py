@@ -56,6 +56,3 @@ class TestLda(unittest.TestCase):
         self.assertEqual(0.0, self.lda._Lda__relativeEntropy(p, p))
         self.assertEqual(0.4564348191467835, self.lda._Lda__relativeEntropy(p, q))
         self.assertEqual(math.inf, self.lda._Lda__relativeEntropy(p, r))
-
-    def test_foo(self):
-        self.lda.showAuthenticArticle(0)
