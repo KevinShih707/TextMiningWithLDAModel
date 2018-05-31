@@ -9,6 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
     <script src="//d3js.org/d3.v3.min.js"></script>
+    <!-- 講究字體：思源黑體 -->
+    <link href="//fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
     <style type="text/css">
         a:link {
             text-decoration: none;
@@ -24,6 +26,10 @@
 
         a:active {
             text-decoration: none;
+        }
+
+        .noto {
+            font-family: "Noto Sans TC", sans-serif;
         }
     </style>
     <style>
@@ -53,6 +59,15 @@
             width: auto;
             height: auto;
         }
+
+        .top-button {
+            position: fixed;
+            left: 95%;
+            top: 95%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -62,5 +77,7 @@
 {% block mainbody %}
 
 {% endblock %}
+
+{% include "copyright.html" %}
 </body>
 </html>

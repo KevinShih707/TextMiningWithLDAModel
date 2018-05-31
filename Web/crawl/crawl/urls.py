@@ -15,11 +15,16 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from facebook import views
+#from django.conf import settings            # 開發用，Deploy時請註解掉
+#from django.conf.urls.static import static  # 開發用，Deploy時請註解掉
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index),
     url(r'^index/(\d+)/$', views.index),
     url(r'^text/$', views.text),
+    url(r'^soon/', views.comming_soon),
     url(r'^get/$', views.get),
-]
+    url(r'^help/', views.help),
+]# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# + static... 是開發用，Deploy時請註解掉

@@ -1,15 +1,29 @@
-<html>
-<head>
-	<title>表單傳送</title>
-</head>
-<body>
-<form action="/get/" method="POST" name="form1">
-	{% csrf_token %}
-    <div>請輸入Graph API Token：<input type="text" name="token" /></br>
-        請輸入粉絲專頁ID：<input type="text" name="page_id" /></br>
-	<input type="submit" value="送出資料" /></div>
-    <div>接收到的資料：{{mess}}</div>
-    <div>接收到的資料：{{mess2}}</div> 
-</form>
-</body>
-</html> 
+{% extends "basic.html" %}
+
+{% block mainbody %}
+<div class="uk-section-secondary uk-padding uk-preserve-color">
+    <div class="uk-container uk-container-expand">
+    <form action="/get/" method="POST" name="form1">
+        <fieldset class="uk-fieldset">
+            <legend class="uk-legend noto uk-heading-bullet uk-light">
+                臉書爬蟲
+            </legend>
+            {% csrf_token %}
+            <div class="uk-margin uk-light noto">
+                <div class="uk-margin">
+                <input class="uk-input" type="text" name="token" placeholder="請輸入Graph API Token" />
+                </div>
+                <div class="uk-margin">
+                <input class="uk-input" type="text" name="page_id" placeholder="請輸入粉絲專頁ID" />
+                </div>
+                <input class="uk-button-default  uk-button-large uk-align-center noto uk-light"
+                       type="submit" value="送出資料" />
+            </div>
+            <div class="noto">接收到的資料：{{mess}}</div>
+            <div class="noto">接收到的資料：{{mess2}}</div>
+        </fieldset>
+    </form>
+    </div>
+</div>
+
+{% endblock %}

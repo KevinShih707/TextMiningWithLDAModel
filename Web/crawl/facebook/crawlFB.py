@@ -1,7 +1,8 @@
 import requests
 import pandas as pd
 from dateutil.parser import parse
-from facebook.mlab import getAllDoc,save_to_mongo
+from facebook.mlab import getAllDoc, save_to_mongo
+
 
 def crawl(input_token, input_pageid):
     token = input_token

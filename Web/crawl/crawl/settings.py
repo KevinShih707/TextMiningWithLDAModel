@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8(m)8e5a0*xt5q3(=63pgt2erwr!7r36!6dz=$f8o69$1qu9$8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost', 'ngrok.io', 'crawl-curation.appspot.com']
 
@@ -103,4 +103,5 @@ USE_TZ = True
 
 # 本地端使用'/static/' Google端使用'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
 STATIC_URL = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)

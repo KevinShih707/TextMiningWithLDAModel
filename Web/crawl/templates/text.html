@@ -1,43 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
+{% extends "basic.html" %}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
-    <title>資料文本</title>
-</head>
-<body>
-<div uk-sticky="top: 400">{% include "nav.html" %}</div>
+{% block mainbody %}
 
-    <div class="uk-section-muted">
-        <h2 class="uk-text-center"><span>顯示資料表資料{{errormessage}}</span></h2>
-
-        <div class="uk-container uk-container-expand uk-background-muted uk-text-center">
-        <div class="uk-child-width-1-3@m uk-grid-small" uk-grid uk-height-match="target: > div > .uk-card">
-
+<div class="uk-section-secondary uk-padding uk-preserve-color">
+    <div class="uk-container uk-container-expand">
+    <h3 class="noto uk-text-left uk-heading-bullet uk-light"><span>資料文本—所有貼文</span></h3>
+    <div class="uk-text-danger">{{errormessage}}</div>
+    <div class="uk-child-width-1-3@m uk-grid-match" uk-grid>
+        <!-- 開始列出資料庫中所有貼文 -->
         {% for unit in units %}
-        <div class="uk-card uk-card-default uk-card-body uk-text-left">
-        <h7 class="uk-text-small uk-card-title">
+        <div class="uk-padding-small uk-padding-remove-vertical">
+        <div class="uk-card uk-card-default uk-card-body">
+            <div class="noto uk-text-top">
             時間：{{ unit.time }}<br/>
-            ID：{{ unit.id }}
-        </h7>
-        <div class="uk-text-top">
-        內容：
-        <div class="uk-text-primary uk-text-truncate">
-        {{ unit.text }}
-        </div>
-        分享：{{ unit.share}}<br />
-        按讚數量：{{unit.likecount }}<br />
-        分享數量：{{ unit.sharecount }}<br /><br />
+            ID：{{ unit.id }}<br/>
+            <dt>內容</dt>
+            <dd class="uk-text-primary uk-text-meta uk-text-truncate">
+            {{ unit.text }}
+            </dd>
+            <dt>分享</dt>
+            <dd class="uk-text-success">
+            {{ unit.share}}
+            </dd>
+            按讚數量：{{unit.likecount }}<br />
+            分享數量：{{ unit.sharecount }}<br /><br />
+            </div>
         </div>
         </div>
         {% endfor %}
 
-        </div>
-        </div>
     </div>
+    </div>
+</div>
 
-    {% include "copyright.html" %}
-</body>
-</html>	
+<a href="#navbar" class="top-button uk-button-small uk-button-primary uk-light" uk-scroll>
+    TOP
+</a>
+{% endblock %}
