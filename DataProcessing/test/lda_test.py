@@ -12,15 +12,15 @@ class TestLda(unittest.TestCase):
         self.corpora = Corpora(filePath = self.CSV_FILE_PATH, stopwords = "DataProcessing/src/stopwords.txt")
         self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
 
-    def test_showTopicsStr(self):
+    def test_getTopicsStr(self):
         expectResult = [(0, '0.001*"來" + 0.001*"圖表" + 0.001*"你" + 0.001*"與" + 0.001*"讓" + 0.001*"在" + 0.001*"有" + 0.001*"吧" + 0.001*"圖" + 0.001*"也"'),
                         (1, '0.001*"圖表" + 0.001*"你" + 0.001*"在" + 0.001*"與" + 0.001*"覺化" + 0.001*"圖" + 0.001*"為" + 0.001*"台灣" + 0.001*"上" + 0.001*"呢"')]
-        self.assertEqual(expectResult, self.lda.showTopicsStr())
+        self.assertEqual(expectResult, self.lda.TopicsStr)
 
-    def test_showTopicsList(self):
+    def test_getTopicsList(self):
         expectResult = [[('0.001', '來'), ('0.001', '圖表'), ('0.001', '你'), ('0.001', '與'), ('0.001', '讓'), ('0.001', '在'), ('0.001', '有'), ('0.001', '吧'), ('0.001', '圖'), ('0.001', '也')],
                         [('0.001', '圖表'), ('0.001', '你'), ('0.001', '在'), ('0.001', '與'), ('0.001', '覺化'), ('0.001', '圖'), ('0.001', '為'), ('0.001', '台灣'), ('0.001', '上'), ('0.001', '呢')]]
-        self.assertEqual(expectResult, self.lda.showTopicsList())
+        self.assertEqual(expectResult, self.lda.TopicsList)
 
     # def test_topicsDistribution(self):
     #     from pprint import pprint

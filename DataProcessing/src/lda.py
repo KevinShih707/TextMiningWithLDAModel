@@ -6,6 +6,12 @@ import math
 
 class Lda():
     def __init__(self, corpora = None, savedModle = None, numTopics = 10, seed = None):
+        '''
+            corpora: Corpora 結構化之文本數據
+            saveModel: str = None 欲載入之model路徑
+            numTopics: int = 10 欲生成之主題數量
+            seed: int = None 使用特定亂數種子碼
+        '''
         self.numTopics = numTopics
         self.corpora = corpora
         if(savedModle == None):
@@ -17,12 +23,20 @@ class Lda():
             self.ldaModel = LdaModel.load(savedModle)
 
     def saveModel(self, name = "my_model"):
+        '''
+            儲存訓練完成之model
+            name: str = "my_modle" 儲存路徑
+        '''
         self.ldaModel.save(fname = name)
 
-    def showTopicsStr(self):
+    @property
+    def TopicsStr(self):
+        '''以字串顯示訓練lda主題'''
         return self.ldaModel.show_topics(self.numTopics)
 
-    def showTopicsList(self):
+    @property
+    def TopicsList(self):
+        '''以list of tuple 顯示主題'''
         result = []
         for topic in self.ldaModel.show_topics(self.numTopics):
             words = topic[1].split(' + ')
@@ -31,12 +45,19 @@ class Lda():
         return result
 
     # def showTopicsListId(self):
-    #     topicList = self.showTopicsList()
+    #     topicList = self.TopicsList()
     #     result = []
     #     for prob, word in topicList
 
 
     def topicsDistribution(self, tfidf = None):
+        '''
+        以該模型分析代定之結構化文檔
+        Input:
+            tfidf: 2d_list: tfidf矩陣
+        output:
+            2d_list: 文檔對各主題歸屬之概率
+        '''
         if(tfidf == None):
             tfidf = self.corpora.TfidfPair
         return [self.ldaModel[article] for article in tfidf]
@@ -76,7 +97,7 @@ class Lda():
     def showAuthenticArticle(self, topicId, num = 1):
         '''代表性文章'''
         #p
-        probWords = self.showTopicsList()[topicId]#取得主題詞彙及其概率
+        probWords = self.TopicsList()[topicId]#取得主題詞彙及其概率
         probs = [float(pw[0]) for pw in probWords]#取出概率
         keyWords = [pw[1] for pw in probWords]#取出單詞
 

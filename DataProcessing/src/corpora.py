@@ -5,6 +5,13 @@ from gensim.matutils import corpus2dense
 
 class Corpora():
     def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = None, isDelLinesHasUrl = True):
+        '''
+        Input:
+            filePath:str 欲開啟檔案路徑
+            fileExtension: str = 'csv' 副檔名接受'txt'及'csv'檔案格式
+            stopwords:停用詞 接受list或txt file路徑(格是參考.stopwords.txt)
+            isDelLinesHasUrl:bool = true 是否刪除文當中含URl的行
+        '''
         self.filePath = filePath
         self.fileExtension = fileExtension
         self.stopwords = stopwords
@@ -72,6 +79,7 @@ class Corpora():
 
     @property
     def Corpus(self):
+        '''回傳段詞後文檔'''
         if(self.corpus == None):
             self.__createCorpus()
         return self.corpus
