@@ -4,7 +4,7 @@ from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
 class Corpora():
-    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = None, isDelLinesHasUrl = True):
+    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = "DataProcessing/src/stopwords.txt", isDelLinesHasUrl = True):
         '''
         Input:
             filePath:str 欲開啟檔案路徑

@@ -97,7 +97,7 @@ class Lda():
     def showAuthenticArticle(self, topicId, num = 1):
         '''代表性文章'''
         #p
-        probWords = self.TopicsList()[topicId]#取得主題詞彙及其概率
+        probWords = self.TopicsList[topicId]#取得主題詞彙及其概率
         probs = [float(pw[0]) for pw in probWords]#取出概率
         keyWords = [pw[1] for pw in probWords]#取出單詞
 
@@ -117,4 +117,4 @@ class Lda():
                 else:
                     q.append(0.000000001)
             klMeans.append((id,self.__relativeEntropy(probs, q)))
-        print(klMeans)
+        return(klMeans)
