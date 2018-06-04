@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from facebook.mlab import getAllDoc
+from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
+from facebook.crawlFB2 import crawl2
 # Create your views here.
 
 
