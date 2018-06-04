@@ -4,7 +4,7 @@ from dateutil.parser import parse
 from facebook.mlab import getAllDoc, save_to_mongo
 
 
-def crawl(input_token, input_pageid):
+def crawl2(input_token, input_pageid):
     token = input_token
 
     # 粉專ID
@@ -40,12 +40,8 @@ def crawl(input_token, input_pageid):
             else:
                 shares = 0
 
-            posts.append([parse(post['created_time']),  # 貼文時間
-                      post['id'],                   # 貼文ID
+            posts.append([
                       post.get('message'),          # 貼文內容
-                      post.get('story'),            # 分享內容(若無則留空)
-                      likes,                        # 讚數
-                      shares                        # 分享數
                       ])
 
             #print(posts)
@@ -64,8 +60,8 @@ def crawl(input_token, input_pageid):
     # 檔案輸出
 
     df = pd.DataFrame(posts)
-    df.columns = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']
+    df.columns = ['text']
     records = df.to_dict('records') # 參數 record 代表把列轉成個別物件
-    save_to_mongo("post",records,fanpage_id)
+    save_to_mongo("post",records)
     # 寫CSV時編碼格式要用'utf_8_sig'
     #df.to_csv('CrawlResult.csv', index=False, encoding='utf_8_sig')
