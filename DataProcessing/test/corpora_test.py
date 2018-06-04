@@ -107,3 +107,6 @@ class TestCorporaProperties(unittest.TestCase):
 
     def test_lenOfCorpus(self):
         self.assertEqual(2, len(self.corporaTxt))
+
+if __name__ == "__main__":
+    unittest.main()
