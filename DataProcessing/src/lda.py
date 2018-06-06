@@ -5,22 +5,66 @@ import operator
 import math
 
 class Lda():
-    def __init__(self, corpora = None, savedModle = None, numTopics = 10, seed = None):
+    def __init__(self, corpora = None, savedModle = None, numTopics = 10, seed = None, autoAproach = False):
         '''
             corpora: Corpora 結構化之文本數據
             saveModel: str = None 欲載入之model路徑
             numTopics: int = 10 欲生成之主題數量
             seed: int = None 使用特定亂數種子碼
+            autoAproach = False 是否自動調整主題數目找出適當值
         '''
-        self.numTopics = numTopics
         self.corpora = corpora
+        self.numTopics = numTopics
+        self.seed = seed
+
         if(savedModle == None):
-            if(seed != None):
-                self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics, random_state = np.random.RandomState(seed))
-            else:
-                self.ldaModel = LdaModel(corpus = corpora.TfidfPair, id2word = corpora.Dictionary, num_topics = numTopics)
+            self.__trainingModel()
         else:
             self.ldaModel = LdaModel.load(savedModle)
+
+        if(autoAproach):
+            wellLastTime = False
+            while(self.__isWellClassify() or not wellLastTime):
+                if(self.__isWellClassify()):
+                    wellLastTime = True
+                    savedModle(name = "temp")
+                    self.numTopics -= 1
+                    self.__trainingModel()
+                elif(not wellLastTime):
+                    self.numTopics += 2
+                    self.__trainingModel()
+            # else:
+            self.numTopics += 1
+            LdaModel.load("temp.pkl")
+
+    def __trainingModel(self):
+        if(self.seed != None):
+            self.ldaModel = LdaModel(corpus = self.corpora.TfidfPair,
+                                id2word = self.corpora.Dictionary,
+                                num_topics = self.numTopics,
+                                random_state = np.random.RandomState(self.seed))
+        else:
+            self.ldaModel = LdaModel(corpus = self.corpora.TfidfPair,
+                                id2word = self.corpora.Dictionary,
+                                num_topics = self.numTopics)
+
+    def __isWellClassify(self, threshold = 0.8, test = None):
+        '''
+            確認個文本至少有一主題之吻合度(概率)大於標準值
+            threshold = 0.8: 最小接受之主題分佈(標準值)
+            (test : 測試用的虛擬分佈)
+        '''
+        if(test == None):
+            test = self.topicsDistribution()
+        for tdb in test:
+            ambiguous = True
+            for prob in tdb:
+                if(prob[1] >= threshold):
+                    ambiguous = False
+                    break
+            if(ambiguous):
+                return False
+        return True
 
     def saveModel(self, name = "my_model"):
         '''
@@ -29,37 +73,13 @@ class Lda():
         '''
         self.ldaModel.save(fname = name)
 
-    @property
-    def TopicsStr(self):
+    def showTopicsStr(self, topn = 10):
         '''以字串顯示訓練lda主題'''
-        # return self.ldaModel.show_topics(self.numTopics)
-        return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = 10, log = False, formatted = True)
+        return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
-    @property
-    def TopicsList(self):
+    def showTopicsList(self, topn = 10):
         '''以list of tuple 顯示主題'''
-        # #將TopicStr經字串處裡拆解開來
-        # # return [[(word.split("*")[0], word.split("*")[1][1:-1]) for word in topic[1].split(' + ')] for topic in self.ldaModel.show_topics(self.numTopics)]
-        # result = list()
-        # for topic in self.ldaModel.show_topics(self.numTopics):
-        #     words = topic[1].split(' + ')
-        #     result.append([(word.split("*")[0], word.split("*")[1][1:-1]) for word in words])
-        # return result
-        return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = 10, log = False, formatted = False)
-
-    # @property
-    # def TopicsListId(self):
-    #     '''
-    #     將TopicList中的
-    #     probility由str轉為float
-    #     word轉為dicitonary key(wordId)
-    #     '''
-    #     topicList = self.TopicsList
-    #     # return [[(prob, self.corpora.InvertDictionary[word]) for prob, word in topic] for topic in topicsList]
-    #     result = list()
-    #     for topic in topicList:
-    #         result.append([(float(prob), self.corpora.InvertDictionary[word]) for prob, word in topic])
-    #     return result
+        return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn, formatted = False)
 
     def topicsDistribution(self, tfidf = None):
         '''
@@ -87,10 +107,10 @@ class Lda():
             result.append(topicId)
         return result
 
-    def findArticleMatched(self, topicId = 'all'):
+    def findArticleMatched(self):
         '''將文本依主題歸類後做成list回傳'''
-        if(topicId != 'all'):
-            return [index for index,tid in enumerate(self.classifyTopic()) if tid == topicId]
+        # if(topicId != 'all'):
+        #     return [index for index,tid in enumerate(self.classifyTopic()) if tid == topicId]
         result = [[] for num in range(0, self.numTopics)]
         classified = self.classifyTopic()
         counter = 0
@@ -110,7 +130,7 @@ class Lda():
         klMeans = list()
         p = self.ldaModel.get_topics()[topicId]
         #q
-        candidatesIds = self.findArticleMatched(topicId)#取得歸類於給定主題之文本
+        candidatesIds = self.findArticleMatched()[topicId]#取得歸類於給定主題之文本
         for id in candidatesIds:
             dtm = dtMatrix[id]
             totalWordCount = sum(dtm)#取得文章總辭彙數用於醬詞頻轉為概率
