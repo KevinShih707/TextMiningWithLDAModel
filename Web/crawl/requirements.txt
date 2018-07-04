@@ -5,3 +5,5 @@ pymongo==3.6.1
 pandas==0.23.0
 requests==2.18.4
 parse==1.8.4
+jieba==0.39
+gensim==3.4.0

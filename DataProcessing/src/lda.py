@@ -99,7 +99,7 @@ class Lda():
             tfidf = self.corpora.TfidfPair
         result = []
         for article in tfidf:
-            topicId = 0;
+            topicId = 0
             distribution = self.ldaModel[article]
             for pb in distribution:
                 if(pb[1] > distribution[topicId][1]):
