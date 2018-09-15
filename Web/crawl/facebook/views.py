@@ -18,6 +18,10 @@ def help(request):
     return render(request, 'help.html')
 
 
+def error(request):
+    return render(request, 'error.html')
+
+
 def get(request):
     if request.method == "POST":		# 如果是以POST方式才處理
         mess = request.POST['token']
@@ -37,3 +41,15 @@ def get(request):
 
 def comming_soon(request):
     return render(request, "soon.html")
+
+
+# Word Cloud Beta
+def word_cloud(request):
+    from facebook.word_cloud import draw_wordcloud
+    imgurl = 'static/media/wordcloud_plot.png'
+    try:
+        draw_wordcloud("default", imgurl)
+    except:
+        return render(request, "error.html")
+
+    return render(request, "wordcloud.html")

@@ -35,11 +35,15 @@ class TestCorpora(unittest.TestCase):
         self.assertEqual(expectResult0, contentCsv[0][:72])
         self.assertEqual(expectResult1, contentCsv[99][-66:])
 
-    def test_delLinesHasUrl(self):
-        article = "第一行\nhttps://www.ntut.edu.tw/\n第三行\nhttp://www.ntut.edu.tw/\n第五行"
-        noUrlArticle = self.mockCorpora._Corpora__delLinesHasUrl(article)
+    def test_deleteUrl(self):
+        article = "第一行\n前https://www.ntut.edu.tw/\n第三行\nhttp://www.ntut.edu.tw/\n第五行"
+        #whole line mode
         expectResult = "第一行\n第三行\n第五行"
-        self.assertEqual(expectResult, noUrlArticle)
+        self.assertEqual(expectResult, self.mockCorpora._Corpora__deleteUrl(article, byWholeLine = True))
+        #not whole line mode
+        expectResult = "第一行\n前 第三行\n 第五行"
+        self.assertEqual(expectResult, self.mockCorpora._Corpora__deleteUrl(article))
+
 
     def test_delDictStopwords(self):
         corpora = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', stopwords = self.STOPWORDS_FILE_PATH)
@@ -64,49 +68,35 @@ class TestCorporaProperties(unittest.TestCase):
     def tearDown(self):
         del self.corporaTxt
 
-    # def test_checkWordInDictionary(self):
-    #     self.assertEqual(0, self.corporaTxt.checkWordInDictionary('\n'))
-    #     self.assertEqual(1, self.corporaTxt.checkWordInDictionary('不肖'))
-    #     self.assertEqual(2, self.corporaTxt.checkWordInDictionary('其力'))
-    #     self.assertEqual(3, self.corporaTxt.checkWordInDictionary('其智'))
-    #     self.assertEqual(4, self.corporaTxt.checkWordInDictionary('守命'))
-    #     self.assertEqual(5, self.corporaTxt.checkWordInDictionary('守時'))
-    #     self.assertEqual(6, self.corporaTxt.checkWordInDictionary('智者'))
-    #     self.assertEqual(7, self.corporaTxt.checkWordInDictionary('盡'))
-    #     self.assertEqual(8, self.corporaTxt.checkWordInDictionary('者'))
-    #     self.assertEqual(9, self.corporaTxt.checkWordInDictionary('而'))
-    #     self.assertEqual(None, self.corporaTxt.checkWordInDictionary('瞎掰的'))
-#
-#     def test_Dictionary(self):
-#         self.assertEqual('不肖', self.corporaTxt.Dictionary.get(1))
-#         self.assertEqual(None, self.corporaTxt.Dictionary.get(-1))
-#         self.assertEqual(1, self.corporaTxt.InvertDictionary.get('不肖'))
-#         self.assertEqual(None, self.corporaTxt.InvertDictionary.get('zzz'))
-#
-#     def test_getDtPair(self):
-#         expectResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 2), (8, 1), (9, 2)],
-#                                  [(0, 1), (1, 1), (4, 1), (5, 1), (6, 1), (8, 1)]])
-#         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtPair))
-#
-#     def test_getDtMatrix(self):
-#         print()
-#         expectResult = np.array([[1., 1., 1., 1., 1., 1., 1., 2., 1., 2.],
-#                                  [1., 1., 0., 0., 1., 1., 1., 0., 1., 0.]])
-#         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtMatrix))
-#
-#     def test_getTfidfPair(self):
-#         expectResult = [[(2, 0.31622776601683794), (3, 0.31622776601683794), (7, 0.6324555320336759), (9, 0.6324555320336759)],[ ]]
-#         self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfPair))
-#
-#     def test_getTfidfMatrix(self):
-#         expectResult = np.array([[0., 0., 0.31622776, 0.31622776, 0., 0., 0., 0.6324555 , 0., 0.6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
-#         minus = self.corporaTxt.TfidfMatrix - expectResult
-#         for row in minus:
-#             for a in row:
-#                 self.assertTrue(a < 0.00001)
-#
-#     def test_lenOfCorpus(self):
-#         self.assertEqual(2, len(self.corporaTxt))
+    def test_Dictionary(self):
+        self.assertEqual('不肖', self.corporaTxt.Dictionary.get(0))
+        self.assertEqual(None, self.corporaTxt.Dictionary.get(-1))
+        self.assertEqual(0, self.corporaTxt.InvertDictionary.get('不肖'))
+        self.assertEqual(None, self.corporaTxt.InvertDictionary.get('zzz'))
+
+    def test_getDtPair(self):
+        expectResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 1), (8, 2)],
+                                 [(0, 1), (3, 1), (4, 1), (5, 1), (7, 1)]])
+        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtPair))
+
+    def test_getDtMatrix(self):
+        expectResult = np.array([[1., 1., 1., 1., 1., 1., 2., 1., 2.],
+                                 [1., 0., 0., 1., 1., 1., 0., 1., 0.]])
+        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtMatrix))
+
+    def test_getTfidfPair(self):
+        expectResult = [[(1, 0.31622776601683794), (2, 0.31622776601683794), (6, 0.6324555320336759), (8, 0.6324555320336759)],[ ]]
+        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfPair))
+
+    def test_getTfidfMatrix(self):
+        expectResult = np.array([[0., 0.31622776, 0.31622776, 0., 0., 0., 0.6324555 , 0., 0.6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+        minus = self.corporaTxt.TfidfMatrix - expectResult
+        for row in minus:
+            for a in row:
+                self.assertTrue(abs(a) < 0.0000001)
+
+    def test_lenOfCorpus(self):
+        self.assertEqual(2, len(self.corporaTxt))
 
 if __name__ == "__main__":
     unittest.main()

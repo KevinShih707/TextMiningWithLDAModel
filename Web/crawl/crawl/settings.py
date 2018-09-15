@@ -10,23 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
+print('[django settings.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8(m)8e5a0*xt5q3(=63pgt2erwr!7r36!6dz=$f8o69$1qu9$8'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
 ALLOWED_HOSTS = ['*', 'localhost', 'ngrok.io', 'crawl-curation.appspot.com']
 
+# SECURITY WARNING: don't run with debug turned on in production!
+if RUNNING_DEVSERVER:
+    DEBUG = True
+else:
+    DEBUG = False
 
 # Application definition
 
@@ -88,20 +88,21 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-USE_TZ = False
+USE_TZ = True
 TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-# 本地端使用'/static/' Google端使用'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
-STATIC_URL = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+# 本地端使用'/static/'
+# Google端使用'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
+if RUNNING_DEVSERVER:
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # 使用本地端 Static 元素用這行
+else:
+    STATIC_URL = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')          # 使用本地端測試圖片等 Static 元素[請註解]

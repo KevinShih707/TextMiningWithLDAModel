@@ -1,0 +1,16 @@
+{% extends "basic.html" %}
+
+{% block mainbody %}
+<div class="uk-background-secondary">
+    {% include "index_bg.html" %}
+
+    <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade;">
+        <h1 class="uk-text-center uk-heading-primary uk-light"><span>Error!</span></h1><hr>
+            <div class="noto uk-text-center">
+                <p>
+                    An ERROR Occured!
+                </p>
+            </div>
+    </div>
+</div>
+{% endblock %}

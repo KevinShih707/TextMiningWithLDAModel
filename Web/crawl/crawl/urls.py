@@ -12,11 +12,18 @@ Class-based views
 Including another URLconf
     1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import sys
 from django.conf.urls import include, url
 from django.contrib import admin
 from facebook import views
-#from django.conf import settings            # 開發用，Deploy時請註解掉
-#from django.conf.urls.static import static  # 開發用，Deploy時請註解掉
+
+RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
+print('[django urls.py]\tRunning on devserver:', RUNNING_DEVSERVER)
+
+# 開發環境才會import
+if RUNNING_DEVSERVER:
+    from django.conf import settings
+    from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,5 +33,7 @@ urlpatterns = [
     url(r'^soon/', views.comming_soon),
     url(r'^get/$', views.get),
     url(r'^help/', views.help),
-]# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-# + static... 是開發用，Deploy時請註解掉
+    url(r'^error/$', views.error),
+    url(r'^wc/', views.word_cloud),
+]
+urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) if RUNNING_DEVSERVER else urlpatterns

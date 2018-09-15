@@ -60,6 +60,20 @@ def getTextById(collection_input, Pageid):
     except Exception as e:
         print('Got an error!')
         print(e)
+
+def getVocabularyByTheme(title):
+# input: 主題字串 ex."deault"
+# output: cursor
+
+    try:
+        client = MongoClient(MONGO_HOST)
+        db = client.python
+        collection = db["theme"]
+        return collection.find({"title":title},{"vocabulary":1})
+    except Exception as e:
+        print('Got an error on getVocabularyByTheme')
+        print(e)
+
 '''
 def read_csv():
     reader = open(FILENAME, 'r', encoding='utf8')
@@ -97,3 +111,4 @@ def findbyid():
     for document in cursor:
         print(document['text'])
 '''
+

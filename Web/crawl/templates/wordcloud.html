@@ -1,0 +1,12 @@
+{% extends "basic.html" %}
+
+{% block mainbody %}
+<div class="uk-background-secondary">
+
+    <div class="uk-container uk-background-transparent">
+        <h1 class="uk-text-center uk-light uk-heading-line"><span>Word Cloud</span></h1>
+        {% load static %}
+        <img data-src="{% static "media/wordcloud_plot.png" %}" class="uk-align-center" uk-img>
+    </div>
+</div>
+{% endblock %}
