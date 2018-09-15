@@ -20,7 +20,7 @@ def draw_wordcloud(title, imgurl):
     back_coloring = imread(path.join(d, back_coloring_path))
 
     wc = WordCloud(font_path=font_path,
-                   background_color="#222222",
+                   background_color="rgba(255, 255, 255, 0)", mode="RGBA",
                    max_words=len(vocabularyDict),   # 詞雲MAX數量
                    mask=back_coloring,              # 背景圖片 做遮罩
                    max_font_size=180,

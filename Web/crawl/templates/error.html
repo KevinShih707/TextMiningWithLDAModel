@@ -1,3 +1,4 @@
+<!-- 錯誤頁面 -->
 {% extends "basic.html" %}
 
 {% block mainbody %}
@@ -10,6 +11,8 @@
                 <p>
                     An ERROR Occured!
                 </p>
+                <!-- 用來顯示 exception 訊息在網頁上 -->
+                <p>{{e}}</p>
             </div>
     </div>
 </div>

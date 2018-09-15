@@ -49,7 +49,7 @@ def word_cloud(request):
     imgurl = 'static/media/wordcloud_plot.png'
     try:
         draw_wordcloud("default", imgurl)
-    except:
-        return render(request, "error.html")
+    except Exception as e:
+        return render(request, "error.html", locals())
 
     return render(request, "wordcloud.html")
