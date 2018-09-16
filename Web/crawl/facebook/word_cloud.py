@@ -5,6 +5,8 @@ from wordcloud import WordCloud
 from scipy.misc import imread
 import matplotlib.pyplot as plt
 from pprint import pprint
+import numpy as np
+from PIL import Image
 
 
 def draw_wordcloud(title, imgurl):
@@ -14,15 +16,15 @@ def draw_wordcloud(title, imgurl):
         print("[word_cloud.py]\t\tData from DB as following:")
         pprint(vocabularyDict)  # 把document print出來
 
-    font_path = "fonts/NotoSansCJKtc-Light.otf"
-    back_coloring_path = "facebook/mask.png"    # 用Python測試請改成 "mask.png"
+    FONT_PATH = "fonts/NotoSansCJKtc-Light.otf"
+    MASK_PATH = "facebook/mask.png"    # 用Python測試請改成 "mask.png"
     d = path.dirname('.')
-    back_coloring = imread(path.join(d, back_coloring_path))
+    mask = np.array(Image.open(path.join(d, MASK_PATH)))
 
-    wc = WordCloud(font_path=font_path,
+    wc = WordCloud(font_path=FONT_PATH,
                    background_color="rgba(255, 255, 255, 0)", mode="RGBA",
                    max_words=len(vocabularyDict),   # 詞雲MAX數量
-                   mask=back_coloring,              # 背景圖片 做遮罩
+                   mask=mask,              # 背景圖片 做遮罩
                    max_font_size=180,
                    relative_scaling=0.9,
                    random_state=42,

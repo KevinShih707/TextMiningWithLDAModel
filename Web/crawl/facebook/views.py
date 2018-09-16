@@ -43,13 +43,22 @@ def comming_soon(request):
     return render(request, "soon.html")
 
 
-# Word Cloud Beta
 def word_cloud(request):
-    from facebook.word_cloud import draw_wordcloud
-    imgurl = 'static/media/wordcloud_plot.png'
-    try:
-        draw_wordcloud("default", imgurl)
-    except Exception as e:
-        return render(request, "error.html", locals())
+    """
+    建立 theme 選單，選擇後
+    呼叫繪製 Wordcloud 並顯示於網頁
+    """
+    from facebook import word_cloud as wc
+    imgurl = 'static/media/wordcloud_plot.png'  # 繪製圖檔，供網頁讀取用
+    wc_list = ["default", "cnanewstaiwan"]      # 前端讀取的 theme 選項 TODO: 未來改成動態取得
+    # 如果接收到前端 theme 選單回傳的POST請求
+    if request.method == "POST":
+        selector = request.POST['theme']    # 由前端選單回傳的 theme 選項
+        if selector != '':
+            try:
+                wc.draw_wordcloud(selector, imgurl)     # 進行 WC 繪製
+                return render(request, "wordcloud.html", locals())  # 重載頁面顯示結果
+            except Exception as e:
+                return render(request, "error.html", locals())      # 失敗則導向至錯誤頁面
 
-    return render(request, "wordcloud.html")
+    return render(request, "wordcloud.html", locals())
