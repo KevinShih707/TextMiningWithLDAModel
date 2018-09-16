@@ -109,3 +109,4 @@ ENV/
 
 # vscode
 .vscode
+Web/crawl/static/media/wordcloud_plot.png
