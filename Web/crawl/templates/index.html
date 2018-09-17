@@ -22,57 +22,103 @@
         </div>
     </div>
 
+    <div class="uk-section uk-preserve-color" style="background-color: #222222";><p></p></div>
+
     <div class="uk-section-secondary uk-preserve-color" id="about">
-        <div class="uk-section uk-dark" uk-height-viewport="expand: true">
-            <div class="uk-container uk-container-expand uk-background-secondary uk-text-center">
-                <div class="uk-grid-match uk-grid-medium uk-child-width-1-3@m uk-flex uk-flex-center" uk-grid
+        <div class="uk-dark" uk-height-viewport="expand: true">
+            <!-- 第一排 -->
+            <div class="uk-container uk-container-expand" style="background-color: #404040;">
+                <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@m uk-flex uk-flex-center" uk-grid
                      uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
+                    <!-- 文字 -->
                     <div class="uk-padding-small">
+                    <div class="uk-inline uk-height-medium uk-light uk-flex">
+                        <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
+                            <a href="/wc/"><h3 class="noto">詞雲
+                            <div class="noto uk-text-small">Word Cloud</div></h3></a>
+                            <p>
+                                透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
+                                ，產生給定數目的主題 (詞彙) 集合，
+                                依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- 圖片 -->
                     {% load static %}
+                    <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
-                    uk-background-blend-multiply uk-background-secondary
-                    uk-light uk-flex uk-flex-top"
-                         style="background-image: url({% static "media/fb-logo.png" %});" uk-parallax="bgy: -70">
+                      uk-light"
+                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
                         <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 class="noto">資料爬取/儲存</h3>
-                            <p>
-                                使用Python的requests，透過向Facebook Graph API發出請求，以取得指定粉絲專業之文章，
-                                並依時間先後順序儲存貼文資訊。
-                            </p>
                         </div>
                     </div>
                     </div>
+                </div>
+            </div><!-- end 第一排 -->
+            <!-- 第二排 -->
+            <div class="uk-container uk-container-expand" style="background-color: #333333;">
+                <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@m uk-flex uk-flex-center" uk-grid
+                     uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
+                    <!-- 圖片 -->
+                    {% load static %}
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
-                    uk-background-blend-multiply uk-background-secondary uk-light"
-                         style="background-image: url({% static "media/segmentation-header.jpg" %});" uk-parallax="bgy: -70">
+                      uk-light"
+                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
                         <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 class="noto">資料分析</h3>
-                            <p>
-                                段詞 (Word Segmentation)：在文章主題分析中，我們將文章視為「無序」的單詞「集合」。
-                                因此在分析前我們先嘗試將文章中的句子，切割為具有意義的單詞以利於後續分析。
-                                我們借助Jieba、Genius工具包進行初步切割再進行調整。
-                            </p>
                         </div>
                     </div>
                     </div>
+                    <!-- 文字 -->
                     <div class="uk-padding-small">
-                    <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
-                    uk-background-blend-multiply uk-background-secondary
-                    uk-light" style="background-image: url({% static "media/d3js.jpg" %});" uk-parallax="bgy: -70">
-                        <div class="noto uk-overlay uk-position-center
-                        uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
-                            <h3 class="noto">可視化</h3>
+                    <div class="uk-inline uk-height-medium uk-light uk-flex">
+                        <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
+                            <h3 class="noto">詞雲
+                            <div class="noto uk-text-small">Word Cloud</div></h3>
                             <p>
-                                D3.js：是一個動態圖形顯示資料圖形的JavaScript Library，負責數據可視化的部分。
+                                透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
+                                ，產生給定數目的主題 (詞彙) 集合，
+                                依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
                             </p>
                         </div>
                     </div>
                     </div>
                 </div>
-            </div>
+            </div><!-- end 第二排 -->
+            <!-- 第三排 -->
+            <div class="uk-container uk-container-expand" style="background-color: #404040;">
+                <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@m uk-flex uk-flex-center" uk-grid
+                     uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
+                    <!-- 文字 -->
+                    <div class="uk-padding-small">
+                    <div class="uk-inline uk-height-medium uk-light uk-flex">
+                        <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
+                            <a href="/wc/"><h3 class="noto">詞雲
+                            <div class="noto uk-text-small">Word Cloud</div></h3></a>
+                            <p>
+                                透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
+                                ，產生給定數目的主題 (詞彙) 集合，
+                                依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- 圖片 -->
+                    {% load static %}
+                    <div class="uk-padding-small">
+                    <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
+                      uk-light"
+                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
+                        <div class="noto uk-overlay uk-position-center
+                        uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div><!-- end 第三排 -->
         </div>
     </div>
 
