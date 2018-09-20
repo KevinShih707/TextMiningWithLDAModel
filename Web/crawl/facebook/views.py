@@ -1,7 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.http import JsonResponse
+from .models import Bar
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
 from facebook.crawlFB2 import crawl2
+import DataProcessing.ldadata as ldadata
+import json
+import numpy as np
+from pprint import pprint
 # Create your views here.
 
 
@@ -62,3 +68,26 @@ def word_cloud(request):
                 return render(request, "error.html", locals())      # 失敗則導向至錯誤頁面
 
     return render(request, "wordcloud.html", locals())
+
+
+def bubble(request):
+    return render(request, "Visual/bubble.html", locals())
+
+
+def bar_chart(request):
+    lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
+    list = ldadata.topics_list(lda)
+    data = [
+        {
+            'values': [],
+            'key': 'Serie 1',
+            'yAxis': '1'
+        }
+    ]
+    for l in list:
+        data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
+
+    print(data)
+
+    json.dumps(data, ensure_ascii=False)
+    return render_to_response('Visual/barchart.html', locals())
