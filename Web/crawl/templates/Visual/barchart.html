@@ -1,9 +1,8 @@
 {% extends "basic.html" %}
 
 {% block mainbody %}
-<script>var data_discreteBarChart = {{ data|safe }};</script>
 {% load static %}
-<script src="{% static 'js/barchart.js' %}" type="text/javascript">var ;</script>
+<link href="{% static 'css/nv.d3.css' %}" rel="stylesheet" />
 <style type="text/css">
 /* 圖表文字 字體 */
 .nvd3 text {
@@ -47,5 +46,9 @@
         </div>
     </div>
 </div>
+<!-- 把 script 載入標籤盡量放在body尾端 速度考量 -->
+<script>var data_discreteBarChart = {{ data|safe }};</script>
+<script src="{% static 'js/nv.d3.js' %}"></script>
+<script src="{% static 'js/barchart.js' %}" type="text/javascript">var ;</script>
 <script src="{% static 'js/responsive.d3.js' %}"></script>
 {% endblock %}
