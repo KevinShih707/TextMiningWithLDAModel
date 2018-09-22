@@ -1,5 +1,25 @@
 {% extends "basic.html" %}
 
+{% block head_script %}
+    {% load static %}
+    <script src="{% static 'js/d3.v3.js' %}"></script>
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+    .center-overlap {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: block;
+            width: auto;
+            height: auto;
+            text-align:center;
+        }
+</style>
+{% endblock %}
+
 {% block mainbody %}
 <div class="uk-container-expand">
     {% include "index_bg.html" %}

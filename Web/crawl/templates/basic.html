@@ -4,67 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crawl Curation</title>
+    {% block head_script %}
+    {# 必要在head載入的Script #}
+    {% endblock %}
+
+    {% block stylesheet %}
+    {# 放自己寫CSS的地方 #}
+    {% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
     {% load static %}
-    <script src="{% static 'js/d3.v3.js' %}"></script><!-- D3一定要先載入 NVD3一定要後載 -->
-    <style type="text/css">
-        a:link {
-            text-decoration: none;
-        }
-
-        a:visited {
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: none;
-        }
-
-        a:active {
-            text-decoration: none;
-        }
-
-        .noto {
-            font-family: "Noto Sans TC", sans-serif;
-        }
-    </style>
-    <style>
-        .center-overlap {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: block;
-            width: auto;
-            height: auto;
-            text-align:center;
-        }
-
-        .script-overlap {
-            position: relative;
-            width: auto;
-            height: auto;
-        }
-
-        .chevron-down-position {
-            position: absolute;
-            left: 50%;
-            top: 90%;
-            transform: translate(-50%, -50%);
-            display: block;
-            width: auto;
-            height: auto;
-        }
-
-        .top-button {
-            position: fixed;
-            left: 95%;
-            top: 95%;
-            transform: translate(-50%, -50%);
-            width: auto;
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}"/>
 </head>
 
 <body>

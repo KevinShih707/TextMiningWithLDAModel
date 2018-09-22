@@ -43,7 +43,7 @@ def get_lda_by_path(filepath, stopwords, numTopics=2, seed=10):
     return lda
 
 
-def topics_list(lda, title=None):
+def topics_list(lda, title=None, topic_id=None):
     """
     將lda.showTopicsList()的結果傳到DB
     :param lda: Lda回傳結果
@@ -52,7 +52,13 @@ def topics_list(lda, title=None):
     topic_tuple = lda.showTopicsList()[0][1]
     # 單純回傳結果，資料型態：array of dicts [(string, float)]
     if title == None:
-        return topic_tuple
+        if topic_id == None:
+            return lda.showTopicsList()[0][1]
+        else:
+            try:
+                return lda.showTopicsList()[topic_id][1]
+            except topic_id < 0:
+                print("[ldadata.topics_list] \ttopic_id couldn't be negative!")
     # 有 title 則儲存至DB
     else:
         topic_dict = dict(topic_tuple)

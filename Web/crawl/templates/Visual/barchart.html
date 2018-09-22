@@ -1,41 +1,48 @@
 {% extends "basic.html" %}
 
-{% block mainbody %}
-{% load static %}
-<link href="{% static 'css/nv.d3.css' %}" rel="stylesheet" />
-<style type="text/css">
-/* 圖表文字 字體 */
-.nvd3 text {
-    font: normal 12px "Noto Sans TC", sans-serif;s
-}
-/* X軸字體顏色大小 */
-.nv-x text{
-  font-size: 20px;
-  fill: #bdbdae;
-}
-/* Y軸字體顏色大小 */
-.nv-y text{
-  font-size: 17px;
-  fill: #bdbdae;
-}
-/* 指標移到上面顯示的字體 */
-.nvtooltip {
-    font-family: "Noto Sans TC", sans-serif;
-    font-size: 17px;
-}
-/* 以下2個為圖表格線 */
-/* 背景網格 */
-.nvd3 .nv-axis line {
-    stroke: #fff;
-    stroke-opacity: .3;
-}
-/* X軸那條垂直線 */
-.nvd3 .nv-axis path {
-    stroke: #fff;
-    stroke-opacity: .75;
-}
-</style>
+{% block head_script %}
+    {% load static %}
+    <script src="{% static 'js/d3.v3.js' %}"></script><!-- D3一定要先載入 NVD3一定要後載 -->
+{% endblock %}
 
+{% block stylesheet %}
+    {% load static %}
+    <link href="{% static 'css/nv.d3.css' %}" rel="stylesheet" />
+    <style type="text/css">
+    /* 圖表文字 字體 */
+    .nvd3 text {
+        font: normal 12px "Noto Sans TC", sans-serif;s
+    }
+    /* X軸字體顏色大小 */
+    .nv-x text{
+      font-size: 20px;
+      fill: #bdbdae;
+    }
+    /* Y軸字體顏色大小 */
+    .nv-y text{
+      font-size: 17px;
+      fill: #bdbdae;
+    }
+    /* 指標移到上面顯示的字體 */
+    .nvtooltip {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 17px;
+    }
+    /* 以下2個為圖表格線 */
+    /* 背景網格 */
+    .nvd3 .nv-axis line {
+        stroke: #fff;
+        stroke-opacity: .3;
+    }
+    /* X軸那條垂直線 */
+    .nvd3 .nv-axis path {
+        stroke: #fff;
+        stroke-opacity: .75;
+    }
+    </style>
+{% endblock %}
+
+{% block mainbody %}
 <div class="uk-section-secondary uk-padding uk-preserve-color">
     <div class="uk-container uk-container-expand">
         <legend class="uk-legend noto uk-heading-bullet uk-light">
