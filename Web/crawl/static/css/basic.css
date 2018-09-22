@@ -1,0 +1,21 @@
+/* 全域CSS定義 */
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+/* 在所不惜，思源黑體 */
+.noto {
+    font-family: "Noto Sans TC", sans-serif;
+}
+

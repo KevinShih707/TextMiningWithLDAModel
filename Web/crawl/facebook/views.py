@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
 from django.http import JsonResponse
-from .models import Bar
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
 from facebook.crawlFB2 import crawl2
+from facebook.visual import bubblechart
 import DataProcessing.ldadata as ldadata
 import json
 import numpy as np
@@ -25,7 +26,7 @@ def help(request):
 
 
 def error(request):
-    return render(request, 'error.html')
+    return render(request, 'error_page/error.html')
 
 
 def get(request):
@@ -63,15 +64,21 @@ def word_cloud(request):
         if selector != '':
             try:
                 wc.draw_wordcloud(selector, imgurl)     # 進行 WC 繪製
-                return render(request, "wordcloud.html", locals())  # 重載頁面顯示結果
+                return render(request, "Visual/wordcloud.html", locals())  # 重載頁面顯示結果
             except Exception as e:
                 return render(request, "error.html", locals())      # 失敗則導向至錯誤頁面
 
-    return render(request, "wordcloud.html", locals())
+    return render(request, "Visual/wordcloud.html", locals())
 
 
 def bubble(request):
     return render(request, "Visual/bubble.html", locals())
+
+
+def bubble_json(request):
+    json_res = bubblechart.provide_bubble_chart_data()
+    pprint(json_res)
+    return JsonResponse(json_res)
 
 
 def bar_chart(request):
@@ -86,8 +93,22 @@ def bar_chart(request):
     ]
     for l in list:
         data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
-
-    print(data)
-
+    # print(data)
     json.dumps(data, ensure_ascii=False)
     return render_to_response('Visual/barchart.html', locals())
+
+
+def handler404(request, *args, **argv):
+    """ Custom 404 Error Page """
+    response = render_to_response('error_page/404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request, *args, **argv):
+    """ Custom 505 Error Page """
+    response = render_to_response('error_page/500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response

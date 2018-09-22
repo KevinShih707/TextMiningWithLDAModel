@@ -30,6 +30,5 @@ nv.addGraph(function () {
     .attr('style', "text-align: right")
     .attr('transform', function(d,i,j) { return 'translate (-10, 10) rotate(30 0,0)' });
   
-    
     return chart;
 });

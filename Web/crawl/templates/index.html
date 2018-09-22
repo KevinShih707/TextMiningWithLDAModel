@@ -1,5 +1,34 @@
 {% extends "basic.html" %}
 
+{% block head_script %}
+    {% load static %}
+    <script src="{% static 'js/d3.v3.js' %}"></script>
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+    .center-overlap {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: block;
+            width: auto;
+            height: auto;
+            text-align:center;
+        }
+        .chevron-down-position {
+            position: absolute;
+            left: 50%;
+            top: 90%;
+            transform: translate(-50%, -50%);
+            display: block;
+            width: auto;
+            height: auto;
+        }
+</style>
+{% endblock %}
+
 {% block mainbody %}
 <div class="uk-background-secondary">
 
@@ -93,12 +122,11 @@
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-light uk-flex">
                         <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
-                            <a href="/wc/"><h3 class="noto">詞雲
-                            <div class="noto uk-text-small">Word Cloud</div></h3></a>
+                            <a href="/bubble/"><h3 class="noto">氣泡圖
+                            <div class="noto uk-text-small">Grouped Bubble Chart</div></h3></a>
                             <p>
-                                透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
-                                ，產生給定數目的主題 (詞彙) 集合，
-                                依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
+                                同一主題之詞彙將集中於同一圓形<br>詞彙概率愈大，則面積愈大<br>
+                                透過集合的概念融合 JavaScript 產生能夠與使用者互動之圖表
                             </p>
                         </div>
                     </div>
@@ -108,7 +136,7 @@
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                       uk-light"
-                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
+                         style="background-image: url({% static "media/bubblechart_index.jpg" %});" uk-parallax="bgy: -70">
                         <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
                         </div>
