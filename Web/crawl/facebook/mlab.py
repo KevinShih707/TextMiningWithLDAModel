@@ -45,6 +45,14 @@ def getAllDoc(collection_input):
         print('Got an error!')
         print(e)
 
+def getNewsContent(collection_input):
+    try:
+        collection = connect_mongo(collection_input)
+        return collection.find({},{'_id':0,'content':1,'by':1})
+    except Exception as e:
+        print('Got an error!')
+        print(e)
+
 def getAllText(collection_input):
     try:
         collection = connect_mongo(collection_input)
