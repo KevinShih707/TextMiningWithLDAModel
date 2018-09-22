@@ -1,6 +1,6 @@
-import jieba
 import csv
 import re
+import jieba
 from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
@@ -35,13 +35,21 @@ class Corpora():
     def __remove_emoji(self, text):
         '''使用正規表達法移除表情符號'''
         emoji_pattern = re.compile(
+            u"[\r?\n]|"
             u"(\ud83d[\ude00-\ude4f])|"  # emoticons
             u"(\ud83c[\udf00-\uffff])|"  # symbols & pictographs (1 of 2)
             u"(\ud83d[\u0000-\uddff])|"  # symbols & pictographs (2 of 2)
             u"(\ud83d[\ude80-\udeff])|"  # transport & map symbols
-            u"(\ud83c[\udde0-\uddff])"  # flags (iOS)
+            u"(\ud83c[\udde0-\uddff])|"  # flags (iOS)
+            u"([\u2600-\u26ff])|"       # Miscellaneous Symbols
+            u"([\U0001f300-\U0001f5ff])"      # Miscellaneous Symbols Unicode v6 加入
             "+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', text)
+
+    def remove_url(self, text):
+        '''改善刪除URL之正規表達式，用法同remove_emoji'''
+        urlregex = re.compile(u"(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
+        return urlregex.sub(r'', text)
 
     def __deleteUrl(self, article, byWholeLine = False):
         '''
@@ -63,6 +71,7 @@ class Corpora():
             elif (extension == 'csv'):
                 reader = csv.DictReader(file, fieldnames)
                 words = [self.__remove_emoji(row['text']) for row in reader] #串列生成式
+                words = [self.remove_url(word) for word in words] # 移除URL
                 if (words[0] == "貼文內容"):
                     del words[0]
             else:

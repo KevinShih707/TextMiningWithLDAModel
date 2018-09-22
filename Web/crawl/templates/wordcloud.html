@@ -1,0 +1,43 @@
+{% extends "basic.html" %}
+
+{% block mainbody %}
+
+<div class="uk-section-secondary uk-padding uk-preserve-color">
+    <div class="uk-container uk-container-expand">
+        <fieldset class="uk-fieldset">
+        <legend class="uk-legend noto uk-heading-bullet uk-light">
+            詞雲 Word Cloud
+        </legend>
+        <div class="uk-grid-divider uk-padding-small" uk-grid>
+            <!-- 資料庫 theme 選單 -->
+            <form method="POST" action="/wc/" class="uk-width-1-4">
+                <div class="uk-margin">
+                    {% csrf_token %}
+                    <div uk-form-custom="target: > * > span:last-child" class="uk-light uk-margin">
+                        <select name="theme" onchange="this.form.submit()">
+                            <option  value="">Select a theme...</option>
+                            <!-- 列出所有選項 -->
+                            {% for options in wc_list %}
+                            <option value="{{ options }}"
+                                    {% if options == selector %}selected="selected"{% endif %}><!-- 停在你選的地方 -->
+                                {{ options }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                            <span></span>
+                            <span uk-icon="icon: chevron-down"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- Wordcloud 即時繪製的詞雲圖片 -->
+            <div class="uk-width-expand">
+            {% load static %}
+            <img data-src="{% static "media/wordcloud_plot.png" %}" class="uk-align-left uk-animation-fade" uk-img>
+            </div>
+        </div>
+        </fieldset>
+    </div>
+</div>
+{% endblock %}

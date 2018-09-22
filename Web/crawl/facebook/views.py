@@ -1,7 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.http import JsonResponse
+from .models import Bar
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
 from facebook.crawlFB2 import crawl2
+import DataProcessing.ldadata as ldadata
+import json
+import numpy as np
+from pprint import pprint
 # Create your views here.
 
 
@@ -16,6 +22,10 @@ def text(request):
 
 def help(request):
     return render(request, 'help.html')
+
+
+def error(request):
+    return render(request, 'error.html')
 
 
 def get(request):
@@ -37,3 +47,47 @@ def get(request):
 
 def comming_soon(request):
     return render(request, "soon.html")
+
+
+def word_cloud(request):
+    """
+    建立 theme 選單，選擇後
+    呼叫繪製 Wordcloud 並顯示於網頁
+    """
+    from facebook import word_cloud as wc
+    imgurl = 'static/media/wordcloud_plot.png'  # 繪製圖檔，供網頁讀取用
+    wc_list = ["default", "cnanewstaiwan"]      # 前端讀取的 theme 選項 TODO: 未來改成動態取得
+    # 如果接收到前端 theme 選單回傳的POST請求
+    if request.method == "POST":
+        selector = request.POST['theme']    # 由前端選單回傳的 theme 選項
+        if selector != '':
+            try:
+                wc.draw_wordcloud(selector, imgurl)     # 進行 WC 繪製
+                return render(request, "wordcloud.html", locals())  # 重載頁面顯示結果
+            except Exception as e:
+                return render(request, "error.html", locals())      # 失敗則導向至錯誤頁面
+
+    return render(request, "wordcloud.html", locals())
+
+
+def bubble(request):
+    return render(request, "Visual/bubble.html", locals())
+
+
+def bar_chart(request):
+    lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
+    list = ldadata.topics_list(lda)
+    data = [
+        {
+            'values': [],
+            'key': 'Serie 1',
+            'yAxis': '1'
+        }
+    ]
+    for l in list:
+        data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
+
+    print(data)
+
+    json.dumps(data, ensure_ascii=False)
+    return render_to_response('Visual/barchart.html', locals())

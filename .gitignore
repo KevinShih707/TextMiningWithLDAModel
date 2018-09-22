@@ -106,3 +106,7 @@ ENV/
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+
+# vscode
+.vscode
+Web/crawl/static/media/wordcloud_plot.png

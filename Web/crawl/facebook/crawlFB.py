@@ -69,3 +69,4 @@ def crawl(input_token, input_pageid):
     save_to_mongo("post",records,fanpage_id)
     # 寫CSV時編碼格式要用'utf_8_sig'
     #df.to_csv('CrawlResult.csv', index=False, encoding='utf_8_sig')
+    
