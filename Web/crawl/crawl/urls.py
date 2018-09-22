@@ -35,5 +35,7 @@ urlpatterns = [
     url(r'^help/', views.help),
     url(r'^error/$', views.error),
     url(r'^wc/', views.word_cloud),
+    url(r'^bubble/$', views.bubble),
+    url(r'^bar_chart/$', views.bar_chart),
 ]
 urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) if RUNNING_DEVSERVER else urlpatterns

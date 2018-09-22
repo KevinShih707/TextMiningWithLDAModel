@@ -1,8 +1,10 @@
 """
 Django 與 LDA 之整合
 """
-from src.corpora import Corpora
-from src.lda import Lda
+# from src.corpora import Corpora
+# from src.lda import Lda
+from DataProcessing.src.lda import Lda
+from DataProcessing.src.corpora import Corpora
 from pymongo import MongoClient
 import numpy as np
 
@@ -41,21 +43,38 @@ def get_lda_by_path(filepath, stopwords, numTopics=2, seed=10):
     return lda
 
 
-def topic_list_to_db(lda, title):
+def topics_list(lda, title=None):
     """
     將lda.showTopicsList()的結果傳到DB
     :param lda: Lda回傳結果
-    :param title: 主題名稱，DB識別用
+    :param title: 主題名稱，DB識別用 (如果沒提供，則當作回傳結果函式)
     """
     topic_tuple = lda.showTopicsList()[0][1]
-    topic_dict = dict(topic_tuple)
-    for key, val in topic_dict.items():
-        topic_dict[key] = np.float64(val)
-    print(topic_dict)
-    topic_data = {"title": title, "theme": "visualize", "vocabulary": topic_dict}
-    print("json sent to mongo:\n", topic_data, "\n")
-    save_to_mongo("theme", topic_data)
+    # 單純回傳結果，資料型態：array of dicts [(string, float)]
+    if title == None:
+        return topic_tuple
+    # 有 title 則儲存至DB
+    else:
+        topic_dict = dict(topic_tuple)
+        for key, val in topic_dict.items():
+            topic_dict[key] = np.float64(val)
+        print(topic_dict)
+        topic_data = {"title": title, "theme": "visualize", "vocabulary": topic_dict}
+        print("json sent to mongo:\n", topic_data, "\n")
+        save_to_mongo("theme", topic_data)
+
+
+# def topics_list(lda):
+#     print(lda.showTopicsList()[0][1])
+#     return lda.showTopicsList()[0][1]
+
+
+def topics_string(lda):
+    print(lda.showTopicsStr())
+    return lda.showTopicsStr()
 
 # 測試範例
 # lda = get_lda_by_path("test_data/cnanewstaiwan.csv", "src/stopwords.txt")
 # topic_list_to_db(lda, 'cnanewstaiwan')
+# topics_string(lda)
+# print(topics_list(lda))

@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crawl Curation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <!-- 講究字體：思源黑體 -->
-    <link href="//fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
+    {% load static %}
+    <script src="{% static 'js/d3.v3.js' %}"></script><!-- D3一定要先載入 NVD3一定要後載 -->
     <style type="text/css">
         a:link {
             text-decoration: none;
@@ -79,5 +75,9 @@
 {% endblock %}
 
 {% include "copyright.html" %}
+<!-- 講究字體：思源黑體 -->
+<link href="//fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
 </body>
 </html>

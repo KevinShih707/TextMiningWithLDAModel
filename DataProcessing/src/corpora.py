@@ -32,7 +32,7 @@ class Corpora():
         if(self.stopwords != None):
             self.__delDictStopwords()
 
-    def remove_emoji(self, text):
+    def __remove_emoji(self, text):
         '''使用正規表達法移除表情符號'''
         emoji_pattern = re.compile(
             u"[\r?\n]|"
@@ -70,7 +70,7 @@ class Corpora():
                 words = reader.split('\n\n')
             elif (extension == 'csv'):
                 reader = csv.DictReader(file, fieldnames)
-                words = [self.remove_emoji(row['text']) for row in reader] #串列生成式
+                words = [self.__remove_emoji(row['text']) for row in reader] #串列生成式
                 words = [self.remove_url(word) for word in words] # 移除URL
                 if (words[0] == "貼文內容"):
                     del words[0]

@@ -1,7 +1,6 @@
 {% extends "basic.html" %}
 
 {% block mainbody %}
-
 <div class="uk-background-secondary">
 
         {% include "index_bg.html" %}
@@ -22,7 +21,7 @@
         </div>
     </div>
 
-    <div class="uk-section uk-preserve-color" style="background-color: #222222";><p></p></div>
+    <div class="uk-section uk-preserve-color" style="background-color: #222222";><p> </p><p> </p><p> </p></div>
 
     <div class="uk-section-secondary uk-preserve-color" id="about">
         <div class="uk-dark" uk-height-viewport="expand: true">
@@ -38,7 +37,7 @@
                             <div class="noto uk-text-small">Word Cloud</div></h3></a>
                             <p>
                                 透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
-                                ，產生給定數目的主題 (詞彙) 集合，
+                                <br>產生給定數目的主題 (詞彙) 集合<br>
                                 依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
                             </p>
                         </div>
@@ -48,8 +47,8 @@
                     {% load static %}
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
-                      uk-light"
-                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
+                      uk-light uk-background-blend-screen uk-background-secondary"
+                        style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
                         <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
                         </div>
@@ -65,8 +64,8 @@
                     {% load static %}
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
-                      uk-light"
-                         style="background-image: url({% static "media/wordcloud_index.png" %});" uk-parallax="bgy: -70">
+                      uk-light uk-background-blend-screen uk-background-secondary"
+                         style="background-image: url({% static "media/barchart_index.jpg" %});" uk-parallax="bgy: -70">
                         <div class="noto uk-overlay uk-position-center
                         uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
                         </div>
@@ -76,12 +75,10 @@
                     <div class="uk-padding-small">
                     <div class="uk-inline uk-height-medium uk-light uk-flex">
                         <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
-                            <h3 class="noto">詞雲
-                            <div class="noto uk-text-small">Word Cloud</div></h3>
+                            <a href="/bar_chart/"><h3 class="noto">直條圖
+                            <div class="noto uk-text-small">Bar Chart</div></h3></a>
                             <p>
-                                透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
-                                ，產生給定數目的主題 (詞彙) 集合，
-                                依據主題中每個詞出現的概率，繪製成詞雲 (Word Cloud)
+                                透過 LDA 主題中每個詞出現的概率<br>使用 D3.js 動態繪製成直條圖
                             </p>
                         </div>
                     </div>
