@@ -53,18 +53,7 @@ class Corpora():
         '''
         urlregex = re.compile(u"(網址|連結|快速連結|捷徑|超連結)*(:|：| )*(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
         return urlregex.sub(r'', text)
-#words = [self.remove_url(word) for word in words] # 移除URL
-    #def __deleteUrl(self, article, byWholeLine = False):
-    #    '''
-    #        刪除文中之url
-    #        article: 欲刪除url文章
-    #        byWholeLine = False: 刪除依整行
-    #    '''
-    #    if(byWholeLine):
-    #        return re.sub(r".*https?:\/\/.*\n", '', article, flags = (re.MULTILINE | re.IGNORECASE))#匹配頭尾、忽略大小寫
-    #    else:
-    #        return re.sub(r"https?:\/\/.*[\r\n]*", ' ', article, flags = (re.IGNORECASE))#匹配頭尾、忽略大小寫
-
+        
     def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):
         words = ""
         with open(path, encoding = 'utf-8') as file:
