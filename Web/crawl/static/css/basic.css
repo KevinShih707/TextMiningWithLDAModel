@@ -16,6 +16,10 @@ a:active {
 }
 /* 在所不惜，思源黑體 */
 .noto {
-    font-family: "Noto Sans TC", sans-serif;
+    font-family: "Noto Sans TC", sans-serif !important; 
 }
-
+.uk-navbar-nav > li > a,
+.uk-navbar-item,
+.uk-navbar-toggle {
+    font-family: "Noto Sans TC", sans-serif !important;
+}

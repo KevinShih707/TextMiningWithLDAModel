@@ -15,6 +15,7 @@ import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
+
 print('[django settings.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -104,6 +105,6 @@ USE_L10N = True
 if RUNNING_DEVSERVER:
     STATIC_URL = '/static/'
     STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # 使用本地端 Static 元素用這行
-else:
+elif not RUNNING_DEVSERVER:
     STATIC_URL = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')          # 使用本地端測試圖片等 Static 元素[請註解]
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')          # 使用本地端測試圖片等 Static 元素[請註解]

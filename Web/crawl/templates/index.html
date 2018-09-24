@@ -2,7 +2,7 @@
 
 {% block head_script %}
     {% load static %}
-    <script src="{% static 'js/d3.v3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/d3.v3.js' %}"></script>
 {% endblock %}
 
 {% block stylesheet %}
@@ -17,7 +17,7 @@
             height: auto;
             text-align:center;
         }
-        .chevron-down-position {
+    .chevron-down-position {
             position: absolute;
             left: 50%;
             top: 90%;
@@ -35,10 +35,10 @@
         {% include "index_bg.html" %}
 
         <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade;">
-            <h1 class="uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
-            <h3 class="uk-text-center uk-light">CSIE Independent Study</h3><br>
+            <h1 class="noto uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
+            <h3 class="noto uk-text-center uk-light">CSIE Independent Study</h3><br>
             <a href="#about" uk-scroll>
-                <button class="uk-button uk-align-center uk-button-default uk-light">
+                <button class="noto uk-button uk-align-center uk-button-default uk-light">
                 START
                 </button>
             </a>

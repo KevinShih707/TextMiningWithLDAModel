@@ -1,15 +1,16 @@
+import sys
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
-from facebook.crawlFB2 import crawl2
 from facebook.visual import bubblechart
 import DataProcessing.ldadata as ldadata
 import json
 import numpy as np
 from pprint import pprint
-# Create your views here.
+
+RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 
 
 def index(request):
@@ -46,42 +47,45 @@ def get(request):
     return render(request, "get.html", locals())
 
 
-def comming_soon(request):
-    return render(request, "soon.html")
-
-
 def word_cloud(request):
     """
     建立 theme 選單，選擇後
     呼叫繪製 Wordcloud 並顯示於網頁
     """
     from facebook import word_cloud as wc
-    imgurl = 'static/media/wordcloud_plot.png'  # 繪製圖檔，供網頁讀取用
+    # 繪製圖檔，供網頁讀取用
+    if not RUNNING_DEVSERVER:
+        imgurl = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/media/wordcloud_plot.png'
+    else:
+        imgurl = 'static/media/wordcloud_plot.png'
     wc_list = ["default", "cnanewstaiwan"]      # 前端讀取的 theme 選項 TODO: 未來改成動態取得
     # 如果接收到前端 theme 選單回傳的POST請求
     if request.method == "POST":
         selector = request.POST['theme']    # 由前端選單回傳的 theme 選項
         if selector != '':
             try:
-                wc.draw_wordcloud(selector, imgurl)     # 進行 WC 繪製
+                wc.draw_wordcloud(selector, imgurl, RUNNING_DEVSERVER)     # 進行 WC 繪製
                 return render(request, "Visual/wordcloud.html", locals())  # 重載頁面顯示結果
             except Exception as e:
-                return render(request, "error.html", locals())      # 失敗則導向至錯誤頁面
+                return render(request, "error_page/error.html", locals())      # 失敗則導向至錯誤頁面
 
     return render(request, "Visual/wordcloud.html", locals())
 
 
 def bubble(request):
+    """ 氣泡圖頁面 """
     return render(request, "Visual/bubble.html", locals())
 
 
 def bubble_json(request):
+    """ 回傳單獨的JSON Http response給前端JS """
     json_res = bubblechart.provide_bubble_chart_data()
     pprint(json_res)
     return JsonResponse(json_res)
 
 
 def bar_chart(request):
+    """ 直條圖頁面，自帶JSON而非用Http request """
     lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
     list = ldadata.topics_list(lda)
     data = [
@@ -108,7 +112,7 @@ def handler404(request, *args, **argv):
 
 def handler500(request, *args, **argv):
     """ Custom 505 Error Page """
-    response = render_to_response('error_page/500.html', {},
+    response = render_to_response('error_page/505.html', {},
                                   context_instance=RequestContext(request))
     response.status_code = 500
     return response
