@@ -26,7 +26,7 @@ class Corpora():
         file = self.__openFile(self.filePath, self.fileExtension)
         if(self.isDeleteUrl):
             for article in file:
-                file[file.index(article)] = self.__deleteUrl(article)
+                file[file.index(article)] = self.__removeUrl(article)
         self.corpus = self.__segmentWords(file)
         self.dictionary = corpora.Dictionary(self.corpus)
         if(self.stopwords != None):
@@ -46,21 +46,24 @@ class Corpora():
             "+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', text)
 
-    def remove_url(self, text):
-        '''改善刪除URL之正規表達式，用法同remove_emoji'''
-        urlregex = re.compile(u"(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
-        return urlregex.sub(r'', text)
-
-    def __deleteUrl(self, article, byWholeLine = False):
+    def __removeUrl(self, text):
         '''
-            刪除文中之url
+            刪除URL之正規表達式，用法同remove_emoji
             article: 欲刪除url文章
-            byWholeLine = False: 刪除依整行
         '''
-        if(byWholeLine):
-            return re.sub(r".*https?:\/\/.*\n", '', article, flags = (re.MULTILINE | re.IGNORECASE))#匹配頭尾、忽略大小寫
-        else:
-            return re.sub(r"https?:\/\/.*[\r\n]*", ' ', article, flags = (re.IGNORECASE))#匹配頭尾、忽略大小寫
+        urlregex = re.compile(u"(網址|連結|快速連結|捷徑|超連結)*(:|：| )*(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
+        return urlregex.sub(r'', text)
+#words = [self.remove_url(word) for word in words] # 移除URL
+    #def __deleteUrl(self, article, byWholeLine = False):
+    #    '''
+    #        刪除文中之url
+    #        article: 欲刪除url文章
+    #        byWholeLine = False: 刪除依整行
+    #    '''
+    #    if(byWholeLine):
+    #        return re.sub(r".*https?:\/\/.*\n", '', article, flags = (re.MULTILINE | re.IGNORECASE))#匹配頭尾、忽略大小寫
+    #    else:
+    #        return re.sub(r"https?:\/\/.*[\r\n]*", ' ', article, flags = (re.IGNORECASE))#匹配頭尾、忽略大小寫
 
     def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):
         words = ""
@@ -71,7 +74,6 @@ class Corpora():
             elif (extension == 'csv'):
                 reader = csv.DictReader(file, fieldnames)
                 words = [self.__remove_emoji(row['text']) for row in reader] #串列生成式
-                words = [self.remove_url(word) for word in words] # 移除URL
                 if (words[0] == "貼文內容"):
                     del words[0]
             else:

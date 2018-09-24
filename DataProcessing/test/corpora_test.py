@@ -31,18 +31,15 @@ class TestCorpora(unittest.TestCase):
         #csv
         contentCsv = self.mockCorpora._Corpora__openFile(self.CSV_FILE_PATH, 'csv', ['time', 'id', 'text', 'share', 'likecount', 'sharecount'])
         expectResult0 = "適當的使用動畫可以為你的作品加分"
-        expectResult1 = "你能畫出騙過 A* 的絕妙迷宮嗎？網址: "
+        expectResult1 = "你能畫出騙過 A* 的絕妙迷宮嗎？網址: http://qiao.github.io/PathFinding.js/visual"
         self.assertEqual(expectResult0, contentCsv[0][:16])
-        self.assertEqual(expectResult1, contentCsv[99][-21:])
+        self.assertEqual(expectResult1, contentCsv[99][-64:])
 
-    def test_deleteUrl(self):
-        article = "第一行\n前https://www.ntut.edu.tw/\n第三行\nhttp://www.ntut.edu.tw/\n第五行"
+    def test_removeUrl(self):
+        article = "第一行\n快速連結  ： https://www.ntut.edu.tw/\n第三行\n網址: http://qiao.github.io/PathFinding.js/visual\n第五行"
         #whole line mode
-        expectResult = "第一行\n第三行\n第五行"
-        self.assertEqual(expectResult, self.mockCorpora._Corpora__deleteUrl(article, byWholeLine = True))
-        #not whole line mode
-        expectResult = "第一行\n前 第三行\n 第五行"
-        self.assertEqual(expectResult, self.mockCorpora._Corpora__deleteUrl(article))
+        expectResult = "第一行\n\n第三行\n\n第五行"
+        self.assertEqual(expectResult, self.mockCorpora._Corpora__removeUrl(article))
 
 
     def test_delDictStopwords(self):
