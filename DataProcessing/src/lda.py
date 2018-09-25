@@ -74,16 +74,22 @@ class Lda():
         self.ldaModel.save(fname = name)
 
     def showTopicsStr(self, topn = 10):
-        '''以字串顯示訓練lda主題'''
+        '''
+            以字串顯示訓練lda主題
+            topn: 欲顯示的詞彙個數
+        '''
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
     def showTopicsList(self, topn = 10):
-        '''以list of tuple 顯示主題'''
+        '''
+            以list of tuple 顯示主題
+            topn: 欲顯示的詞彙個數
+        '''
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn, formatted = False)
 
     def topicsDistribution(self, tfidf = None):
         '''
-        以該模型分析代定之結構化文檔
+        以該模型分析待定之結構化文檔
         Input:
             tfidf: 2d_list: tfidf矩陣
         output:
@@ -93,29 +99,28 @@ class Lda():
             tfidf = self.corpora.TfidfPair
         return [self.ldaModel[article] for article in tfidf]
 
-    def classifyTopic(self, tfidf = None):
+    def classifyTopic(self, topicsDistr = None):
         '''回傳存有文本對應主題之list'''
-        if(tfidf == None):
-            tfidf = self.corpora.TfidfPair
+        if(topicsDistr == None):
+            topicsDistr = self.topicsDistribution()
         result = []
-        for article in tfidf:
-            topicId = 0
-            distribution = self.ldaModel[article]
-            for pb in distribution:
-                if(pb[1] > distribution[topicId][1]):
-                    topicId = pb[0]
-            result.append(topicId)
+        for article in topicsDistr: #針對每一篇文章測試
+            topicID = 0 #預設主題為0
+            for topic in article: #依序迭代每一主題
+                if(topic[1] > article[topicID][1]): #該則主題概率更高則取代預設
+                    topicID = topic[0]
+            result.append(topicID)
         return result
 
-    def findArticleMatched(self):
+    def findArticleMatched(self, classifiedTopic = None):
         '''將文本依主題歸類後做成list回傳'''
-        # if(topicId != 'all'):
-        #     return [index for index,tid in enumerate(self.classifyTopic()) if tid == topicId]
-        result = [[] for num in range(0, self.numTopics)]
-        classified = self.classifyTopic()
+        if(classifiedTopic == None):
+            classifiedTopic = self.classifyTopic()
+        numOfTopic = max(classifiedTopic) + 1
+        result = [[] for num in range(0, numOfTopic)]
         counter = 0
-        while (counter < len(self.corpora)):
-            result[classified[counter]].append(counter)
+        while (counter < len(classifiedTopic)):
+            result[classifiedTopic[counter]].append(counter) #把文章丟進對應的主題桶子
             counter += 1
         return result
 
