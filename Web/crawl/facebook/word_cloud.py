@@ -1,25 +1,33 @@
 from os import path
-# from mlab import getVocabularyByTheme
 from facebook.mlab import getVocabularyByTheme
 from wordcloud import WordCloud
-from scipy.misc import imread
-import matplotlib.pyplot as plt
+# from scipy.misc import imread
+# import matplotlib.pyplot as plt
 from pprint import pprint
 import numpy as np
 from PIL import Image
+import urllib
 
 
-def draw_wordcloud(title, imgurl):
+def draw_wordcloud(title, imgurl, RUNNING_DEVSERVER=True):
     cursor = getVocabularyByTheme(title)
     for document in cursor:
         vocabularyDict = document['vocabulary']
         print("[word_cloud.py]\t\tData from DB as following:")
         pprint(vocabularyDict)  # 把document print出來
 
-    FONT_PATH = "fonts/NotoSansCJKtc-Light.otf"
-    MASK_PATH = "facebook/mask.png"    # 用Python測試請改成 "mask.png"
-    d = path.dirname('.')
-    mask = np.array(Image.open(path.join(d, MASK_PATH)))
+    if RUNNING_DEVSERVER:
+        d = path.dirname('.')
+        save_path = path.join(d, imgurl)
+        MASK_PATH = "static/media/mask.png"
+        mask = np.array(Image.open(path.join(d, MASK_PATH)))
+    else:
+        save_path = urllib.request.urlopen(imgurl)
+        MASK_PATH = "https://storage.googleapis.com/crawl-curation.appspot.com/static/media/mask.png"
+        file = urllib.request.urlopen(MASK_PATH)
+        mask = np.array(Image.open(file))
+
+    FONT_PATH = "https://storage.googleapis.com/crawl-curation.appspot.com/static/NotoSansCJKtc-Light.otf"
 
     wc = WordCloud(font_path=FONT_PATH,
                    background_color="rgba(255, 255, 255, 0)", mode="RGBA",
@@ -34,14 +42,16 @@ def draw_wordcloud(title, imgurl):
 
     wc.generate_from_frequencies(vocabularyDict)
 
-    plt.figure()
-    # matplotlib 繪圖
-    plt.imshow(wc)
-    plt.axis("off")
+    # # matplotlib只用於debug
+    # plt.figure()
+    # # matplotlib 繪圖
+    # plt.imshow(wc)
+    # plt.axis("off")
     # plt.show()
     # plt.savefig(imgurl)
-    plt.clf()
-    plt.close()
+    # plt.clf()
+    # plt.close()
 
+# TODO: R/W WC images from google cloud storage via API
     # 保存圖檔
-    wc.to_file(path.join(d, imgurl))
+    wc.to_file(save_path)

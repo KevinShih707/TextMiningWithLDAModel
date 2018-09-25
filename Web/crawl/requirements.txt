@@ -8,5 +8,5 @@ parse==1.8.4
 jieba==0.39
 gensim==3.4.0
 wordcloud==1.5.0
-matplotlib==2.2.2
 numpy==1.14.2
+matplotlib==2.2.2

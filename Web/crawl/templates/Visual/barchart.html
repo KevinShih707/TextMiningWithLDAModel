@@ -2,12 +2,11 @@
 
 {% block head_script %}
     {% load static %}
-    <script src="{% static 'js/d3.v3.js' %}"></script><!-- D3一定要先載入 NVD3一定要後載 -->
+    <script type="text/javascript" src="{% static 'js/d3.v3.js' %}"></script><!-- D3一定要先載入 NVD3一定要後載 -->
 {% endblock %}
 
 {% block stylesheet %}
-    {% load static %}
-    <link href="{% static 'css/nv.d3.css' %}" rel="stylesheet" />
+    <link type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css" rel="stylesheet" />
     <style type="text/css">
     /* 圖表文字 字體 */
     .nvd3 text {
@@ -55,7 +54,7 @@
 </div>
 <!-- 把 script 載入標籤盡量放在body尾端 速度考量 -->
 <script>var data_discreteBarChart = {{ data|safe }};</script>
-<script src="{% static 'js/nv.d3.js' %}"></script>
-<script src="{% static 'js/barchart.js' %}" type="text/javascript">var ;</script>
-<script src="{% static 'js/responsive.d3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/nv.d3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/barchart.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/responsive.d3.js' %}"></script>
 {% endblock %}
