@@ -26,33 +26,27 @@ print('[django urls.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 handler404 = 'facebook.views.handler404'
 handler500 = 'facebook.views.handler500'
 
-if RUNNING_DEVSERVER:
-    urlpatterns = [
-        url(r'^admin/', include(admin.site.urls)),
-        url(r'^$', views.index),
-        url(r'^index/(\d+)/$', views.index),
-        url(r'^text/$', views.text),
-        url(r'^get/$', views.get),
-        url(r'^help/', views.help),
-        url(r'^error/$', views.error),
-        url(r'^wc/', views.word_cloud),
-        url(r'^bubble/$', views.bubble),
-        url(r'^bubble_json/', views.bubble_json),
-        url(r'^bar_chart/$', views.bar_chart),
-        url(r'^login/$', views.login),
-        url(r'^sign_up/', views.sign_up)
-    ]
-elif not RUNNING_DEVSERVER:
-    urlpatterns = [
-        url(r'^admin/', include(admin.site.urls)),
-        url(r'^$', views.index),
-        url(r'^index/(\d+)/$', views.index),
-        url(r'^text/$', views.text),
-        url(r'^get/$', views.get),
-        url(r'^help/', views.help),
-        url(r'^error/$', views.error),
-        url(r'^wc/', views.word_cloud),
-        url(r'^bubble/$', views.bubble),
-        url(r'^bubble_json/', views.bubble_json),
-        url(r'^bar_chart/$', views.bar_chart),
-    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', views.index),
+    url(r'^index/(\d+)/$', views.index),
+    url(r'^text/$', views.text),
+    url(r'^get/$', views.get),
+    url(r'^help/', views.help),
+    url(r'^error/$', views.error),
+    url(r'^wc/', views.word_cloud),
+    url(r'^bubble/$', views.bubble),
+    url(r'^bubble_json/', views.bubble_json),
+    url(r'^bar_chart/$', views.bar_chart),
+    url(r'^login/$', views.login),
+    url(r'^sign_up/', views.sign_up),
+    url(r'^logout/$', views.logout),
+]
+
+if not RUNNING_DEVSERVER:
+    urlpatterns  += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#Add Django site authentication urls (for login, logout, password management)
+urlpatterns += [
+    url('accounts/', include('django.contrib.auth.urls')),
+]

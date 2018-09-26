@@ -6,11 +6,11 @@
         {% csrf_token %}
         <div class="uk-inline uk-margin-small uk-width-1-1">
             <span class="uk-form-icon" uk-icon="icon: mail"></span>
-            <input class="uk-input" type="text" name="email" placeholder="Your Email" />
+            <input class="uk-input" type="text" name="email" placeholder="Your Email" required/>
         </div>
         <div class="uk-inline uk-margin-small uk-width-1-1">
             <span class="uk-form-icon" uk-icon="icon: lock"></span>
-            <input class="uk-input" type="text" name="meema" placeholder="Password"/>
+            <input class="uk-input" type="password" name="meema" placeholder="Password" required/>
         </div>
         <input class="uk-button-primary uk-button uk-align-center uk-margin-small noto"
                type="submit" style="font-size: 16px" value="登入"/>

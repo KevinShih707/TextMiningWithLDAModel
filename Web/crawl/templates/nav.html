@@ -116,7 +116,7 @@
                         <!--登入和註冊視窗-->
                         <div class="uk-navbar-right">
                             <ul class="uk-navbar-nav">
-                                {% if not email %}
+                                {% if not request.session.idToken %}
                                 <li><button class="uk-button uk-button-text noto" uk-toggle="target: #sign-up" style="transform: translate(-10px,0);">sign up</button></li>
 
                                 <div id="sign-up" class="uk-flex-top noto" uk-modal>
@@ -134,12 +134,11 @@
                                         {% include "account/login_form.html" %}
                                     </div>
                                 </div>
-                                {% endif %}
-
-                                {% if email %}
-                                <li class="noto">
-                                    {{ email }}
+                                {% else %}
+                                <li class="uk-margin noto">
+                                    <a href="#" style="color: #f2f2f2; font-size: 15px;">Hi, {{ request.session.username }}!</a>
                                 </li>
+                                <li><a href="/logout/"><button class="uk-button uk-button-muted uk-button-small noto" style="color: #222222;">登出</button></a></li>
                                 {% endif %}
                             </ul>
                         </div>

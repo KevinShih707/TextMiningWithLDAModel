@@ -1,17 +1,17 @@
 import sys
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
 from facebook.visual import bubblechart
-from facebook.account import signup_db
+from facebook.account import signup_db, login_db
 import DataProcessing.ldadata as ldadata
 import json
 import numpy as np
 from pprint import pprint
 import pyrebase
-import requests
 
 # 重要Authentication API Key 請勿推上Github!!!
 config = {
@@ -32,34 +32,62 @@ RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 
 def index(request):
     return render(request, 'index.html')
 
+
 def login(request):
     email = request.POST.get('email')
     meema = request.POST.get('meema')
     try:
-        user = auth.sign_in_with_email_and_password(email, meema)
+        user = auth.sign_in_with_email_and_password(email, meema) # 從 Firebase Auth 驗證
+        firstname = login_db.get_user(email, "firstname")   # 取得使用者名稱
     except Exception as e:
         message = "Email 或密碼錯誤"
-        return render(request, "index.html", {"message": message})
-    pprint(user)
-    return render(request, "index.html", {"email": email})
+        return render(request, "index.html", {"message": message})  # 登入失敗，強制回歸
+
+    if user['registered']:
+        # user_info = authentication.get_account_info(user['idToken'])
+        request.session['idToken'] = user['idToken']    # token有時效性
+        request.session['localId'] = user['localId']    # 唯一的User ID
+        request.session['username'] = firstname
+        return render(request, "index.html")
+    else:
+        message = "Unknown Error"
+        return render(request, 'index.html', {"message": message})
+
 
 def sign_up(request):
+    """註冊"""
     firstname = request.POST.get('first')
     lastname = request.POST.get('last')
     email = request.POST.get('email')
     meema = request.POST.get('meema')
     try:
+        if login_db.get_user(email, "uid"):
+            message = "此 email 已經註冊"
+            return render(request, "index.html", {"signup_error": message})
         user = auth.create_user_with_email_and_password(email, meema)
         uid = user['localId']
-        data = {"name": firstname, "status": "1"}
         signup_db.user_to_mongo(firstname, lastname, uid, email)
     except Exception as e:
         print(e)
         message = "註冊失敗，請再試一次"
         print(message)
-
         return render(request, "index.html", {"signup_error": message})
+    request.session['idToken'] = user['idToken']  # token有時效性
+    request.session['localId'] = user['localId']  # 唯一的User ID
+    request.session['username'] = firstname
     return render(request, "index.html")
+
+
+def logout(request):
+    """登出"""
+    try:
+        # 清除 Session
+        del request.session['idToken']
+        del request.session['localId']
+        del request.session['username']
+    except KeyError:
+        pass
+    return HttpResponseRedirect('/')
 
 
 def text(request):
