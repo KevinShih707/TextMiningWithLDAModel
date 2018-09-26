@@ -5,16 +5,61 @@ from django.http import JsonResponse
 from facebook.mlab import getAllDoc, getAllText
 from facebook.crawlFB import crawl
 from facebook.visual import bubblechart
+from facebook.account import signup_db
 import DataProcessing.ldadata as ldadata
 import json
 import numpy as np
 from pprint import pprint
+import pyrebase
+import requests
+
+# 重要Authentication API Key 請勿推上Github!!!
+config = {
+    'apiKey': "Your API Key",
+    'authDomain': "your app",
+    'databaseURL': "mtfking url",
+    'projectId': "ur id",
+    'storageBucket': "rehrerh",
+    'messagingSenderId': "idididid"
+}
+# Firebase Authentication 初始化
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 
 
 def index(request):
     return render(request, 'index.html')
+
+def login(request):
+    email = request.POST.get('email')
+    meema = request.POST.get('meema')
+    try:
+        user = auth.sign_in_with_email_and_password(email, meema)
+    except Exception as e:
+        message = "Email 或密碼錯誤"
+        return render(request, "index.html", {"message": message})
+    pprint(user)
+    return render(request, "index.html", {"email": email})
+
+def sign_up(request):
+    firstname = request.POST.get('first')
+    lastname = request.POST.get('last')
+    email = request.POST.get('email')
+    meema = request.POST.get('meema')
+    try:
+        user = auth.create_user_with_email_and_password(email, meema)
+        uid = user['localId']
+        data = {"name": firstname, "status": "1"}
+        signup_db.user_to_mongo(firstname, lastname, uid, email)
+    except Exception as e:
+        print(e)
+        message = "註冊失敗，請再試一次"
+        print(message)
+
+        return render(request, "index.html", {"signup_error": message})
+    return render(request, "index.html")
 
 
 def text(request):

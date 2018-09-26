@@ -53,6 +53,19 @@ def getNewsContent(collection_input):
         print('Got an error!')
         print(e)
 
+
+def getNewsInStringList(collection_input, col="content"):
+    """
+    抓下資料庫的文章(內文)
+    :param collection_input:mongoDB上面的collection
+    :param col:預設為content
+    :return:文章內容(List of Strings)
+    """
+    news = getNewsContent(collection_input)
+    list = [m[col] for m in news]
+    return list
+
+
 def getAllText(collection_input):
     try:
         collection = connect_mongo(collection_input)

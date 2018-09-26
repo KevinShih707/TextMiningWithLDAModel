@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 from facebook import views
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
-
 print('[django urls.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 
 # 處理404/505顯示錯誤訊息頁面，這樣失敗時心情會好一些
@@ -40,6 +39,8 @@ if RUNNING_DEVSERVER:
         url(r'^bubble/$', views.bubble),
         url(r'^bubble_json/', views.bubble_json),
         url(r'^bar_chart/$', views.bar_chart),
+        url(r'^login/$', views.login),
+        url(r'^sign_up/', views.sign_up)
     ]
 elif not RUNNING_DEVSERVER:
     urlpatterns = [

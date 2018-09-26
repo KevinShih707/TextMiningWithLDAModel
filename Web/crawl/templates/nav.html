@@ -7,7 +7,7 @@
             <nav class="uk-navbar-container" >
                 <div class="uk-container uk-container-large">
                     <div uk-navbar style="z-index: 99;">
-
+                        <div class="uk-navbar-left">
                         <ul class="uk-navbar-nav uk-transition-toggle" tabindex="0" >
                             <div class="uk-offcanvas-content">
 
@@ -112,7 +112,37 @@
                                 <span uk-icon="icon: home;" class="uk-dark uk-margin-small-right"></span>CSIE</a>
                             </li>
                         </ul>
+                        </div>
+                        <!--登入和註冊視窗-->
+                        <div class="uk-navbar-right">
+                            <ul class="uk-navbar-nav">
+                                {% if not email %}
+                                <li><button class="uk-button uk-button-text noto" uk-toggle="target: #sign-up" style="transform: translate(-10px,0);">sign up</button></li>
 
+                                <div id="sign-up" class="uk-flex-top noto" uk-modal>
+                                    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                                        {% include "account/signup_form.html" %}
+                                    </div>
+                                </div>
+
+                                <li><button class="uk-button uk-button-muted uk-button-small noto" style="color: #222222;" uk-toggle="target: #login">login</button></li>
+
+                                <div id="login" class="uk-flex-top noto" uk-modal>
+                                    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                                        {% include "account/login_form.html" %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if email %}
+                                <li class="noto">
+                                    {{ email }}
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
