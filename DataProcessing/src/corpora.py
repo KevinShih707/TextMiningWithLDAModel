@@ -5,14 +5,21 @@ from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
 class Corpora():
-    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = "DataProcessing/src/stopwords.txt", isDeleteUrl = True):
+    def __init__(self,
+                 file = None,
+                 filePath = "DataProcessing/test_data/testData.csv",
+                 fileExtension = 'csv',
+                 stopwords = "DataProcessing/src/stopwords.txt",
+                 isDeleteUrl = True):
         '''
         Input:
+            file:已整理成stringList的檔案
             filePath:str 欲開啟檔案路徑
             fileExtension: str = 'csv' 副檔名接受'txt'及'csv'檔案格式
             stopwords:停用詞 接受list或txt file路徑(格是參考.stopwords.txt)
             isDelLinesHasUrl:bool = true 是否刪除文當中含URl的行
         '''
+        self.file = file
         self.filePath = filePath
         self.fileExtension = fileExtension
         self.stopwords = stopwords
@@ -23,11 +30,12 @@ class Corpora():
         '''
             簡易的proxy當需要文檔資訊時才實際依建構元參數建立文檔
         '''
-        file = self.__openFile(self.filePath, self.fileExtension)
+        if (self.file == None):
+            self.file = self.__openFile(self.filePath, self.fileExtension)
         if(self.isDeleteUrl):
-            for article in file:
-                file[file.index(article)] = self.__removeUrl(article)
-        self.corpus = self.__segmentWords(file)
+            for article in self.file:
+                self.file[self.file.index(article)] = self.__removeUrl(article)
+        self.corpus = self.__segmentWords(self.file)
         self.dictionary = corpora.Dictionary(self.corpus)
         if(self.stopwords != None):
             self.__delDictStopwords()
@@ -53,8 +61,11 @@ class Corpora():
         '''
         urlregex = re.compile(u"(網址|連結|快速連結|捷徑|超連結)*(:|：| )*(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
         return urlregex.sub(r'', text)
-        
+
     def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):
+        '''
+            回傳文章所乘的 string list
+        '''
         words = ""
         with open(path, encoding = 'utf-8') as file:
             if (extension == 'txt'):

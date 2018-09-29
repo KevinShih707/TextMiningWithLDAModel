@@ -65,6 +65,18 @@ class TestCorporaProperties(unittest.TestCase):
     def tearDown(self):
         del self.corporaTxt
 
+    def test_creatByStringList(self):
+        testData = ["孔子曰：「大道之行也，與三代之英，丘未之逮也，而有志焉。",
+                    "大道之行也，天下為公。選賢與能，講信修睦，故人不獨親其親，不獨子其子",
+                    "使老有所終，壯有所用，幼有所長，矜寡孤獨廢疾者皆有所養。男有分，女有歸。",
+                    "貨惡其棄於地也，不必藏於己；力惡其不出於身也，不必為己。",
+                    "是故謀閉而不興，盜竊亂賊而不作，故外戶而不閉，是謂『大同』"]
+        corpora = Corpora(testData)
+        self.assertEqual("三代",corpora.Dictionary.get(0))
+        corpora.DtPair
+        corpora.TfidfPair
+        self.assertEqual(5, len(corpora))
+
     def test_Dictionary(self):
         self.assertEqual('不肖', self.corporaTxt.Dictionary.get(0))
         self.assertEqual(None, self.corporaTxt.Dictionary.get(-1))
