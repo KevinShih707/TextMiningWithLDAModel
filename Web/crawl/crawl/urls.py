@@ -41,12 +41,9 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^sign_up/', views.sign_up),
     url(r'^logout/$', views.logout),
+    url(r'^site_options/', views.site_options),
 ]
 
 if not RUNNING_DEVSERVER:
     urlpatterns  += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-#Add Django site authentication urls (for login, logout, password management)
-urlpatterns += [
-    url('accounts/', include('django.contrib.auth.urls')),
-]

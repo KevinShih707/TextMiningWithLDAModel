@@ -8,6 +8,7 @@ from facebook.crawlFB import crawl
 from facebook.visual import bubblechart
 from facebook.account import signup_db, login_db
 import DataProcessing.ldadata as ldadata
+
 import json
 import numpy as np
 from pprint import pprint
@@ -15,12 +16,12 @@ import pyrebase
 
 # 重要Authentication API Key 請勿推上Github!!!
 config = {
-    'apiKey': "Your API Key",
-    'authDomain': "your app",
-    'databaseURL': "mtfking url",
-    'projectId': "ur id",
-    'storageBucket': "rehrerh",
-    'messagingSenderId': "idididid"
+    'apiKey': "AIzaSyCGX5tsWBvFpGn8rnCpiF7iL1Up0cgh7n4",
+    'authDomain': "crawl-curation.firebaseapp.com",
+    'databaseURL': "https://crawl-curation.firebaseio.com",
+    'projectId': "crawl-curation",
+    'storageBucket': "crawl-curation.appspot.com",
+    'messagingSenderId': "580403719490"
 }
 # Firebase Authentication 初始化
 firebase = pyrebase.initialize_app(config)
@@ -34,6 +35,7 @@ def index(request):
 
 
 def login(request):
+    """登入"""
     email = request.POST.get('email')
     meema = request.POST.get('meema')
     try:
@@ -48,6 +50,7 @@ def login(request):
         request.session['idToken'] = user['idToken']    # token有時效性
         request.session['localId'] = user['localId']    # 唯一的User ID
         request.session['username'] = firstname
+        request.session.set_expiry(1800)
         return render(request, "index.html")
     else:
         message = "Unknown Error"
@@ -75,6 +78,7 @@ def sign_up(request):
     request.session['idToken'] = user['idToken']  # token有時效性
     request.session['localId'] = user['localId']  # 唯一的User ID
     request.session['username'] = firstname
+    request.session.set_expiry(1800)
     return render(request, "index.html")
 
 
@@ -173,6 +177,16 @@ def bar_chart(request):
     # print(data)
     json.dumps(data, ensure_ascii=False)
     return render_to_response('Visual/barchart.html', locals())
+
+
+def site_options(request):
+    """網站按鈕選單頁面 ex.蘋果, 中時等等"""
+    if request.session.get('idToken') != None:
+        from facebook.news_mgr import site_list
+        SITE_LIST = site_list.get()
+        return render(request, "Visual/site_options.html", locals())
+    else:
+        return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def handler404(request, *args, **argv):

@@ -73,7 +73,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'crawl.wsgi.application'
 
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+# Session settings
+# SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
