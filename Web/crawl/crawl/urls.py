@@ -17,14 +17,14 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from facebook import views
+from CrawlCuration import views
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 print('[django urls.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 
 # 處理404/505顯示錯誤訊息頁面，這樣失敗時心情會好一些
-handler404 = 'facebook.views.handler404'
-handler500 = 'facebook.views.handler500'
+handler404 = 'CrawlCuration.views.handler404'
+handler500 = 'CrawlCuration.views.handler500'
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

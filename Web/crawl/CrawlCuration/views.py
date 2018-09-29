@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
 
-from facebook.mlab import getAllDoc, getAllText
-from facebook.crawlFB import crawl
-from facebook.visual import bubblechart
-from facebook.account import signup_db, login_db
+from CrawlCuration.mlab import getAllDoc, getAllText
+# from CrawlCuration.crawlFB import crawl
+from CrawlCuration.visual import bubblechart
+from CrawlCuration.account import signup_db, login_db
 import DataProcessing.ldadata as ldadata
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 import json
@@ -122,7 +122,7 @@ def word_cloud(request):
     建立 theme 選單，選擇後
     呼叫繪製 Wordcloud 並顯示於網頁
     """
-    from facebook import word_cloud as wc
+    from CrawlCuration import word_cloud as wc
     # 繪製圖檔，供網頁讀取用
     if not RUNNING_DEVSERVER:
         imgurl = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/media/wordcloud_plot.png'
@@ -175,7 +175,7 @@ def bar_chart(request):
 def site_options(request):
     """網站按鈕選單頁面 ex.蘋果, 中時等等"""
     if request.session.get('idToken') != None:
-        from facebook.news_mgr import site_list
+        from CrawlCuration.news_mgr import site_list
         SITE_LIST = site_list.get()
         return render(request, "Visual/site_options.html", locals())
     else:
