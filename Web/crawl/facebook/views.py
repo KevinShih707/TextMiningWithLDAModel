@@ -8,22 +8,15 @@ from facebook.crawlFB import crawl
 from facebook.visual import bubblechart
 from facebook.account import signup_db, login_db
 import DataProcessing.ldadata as ldadata
-
+from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 import json
 import numpy as np
 from pprint import pprint
 import pyrebase
 
-# 重要Authentication API Key 請勿推上Github!!!
-config = {
-    'apiKey': "AIzaSyCGX5tsWBvFpGn8rnCpiF7iL1Up0cgh7n4",
-    'authDomain': "crawl-curation.firebaseapp.com",
-    'databaseURL': "https://crawl-curation.firebaseio.com",
-    'projectId': "crawl-curation",
-    'storageBucket': "crawl-curation.appspot.com",
-    'messagingSenderId': "580403719490"
-}
-# Firebase Authentication 初始化
+
+# Firebase Authentication 初始化: https://firebase.google.com/docs/web/setup
+config = apikey.firebase_key()
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
