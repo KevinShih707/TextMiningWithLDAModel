@@ -7,6 +7,21 @@
 
 {% block stylesheet %}
 <style>
+    #bg {
+        position: fixed;
+        left: 0;
+        right: 0;
+        display: block;
+        z-index: -1;
+        width: auto;
+        height: 100vh;
+        background-repeat:no-repeat;
+        background-image: url('{% static 'media/index_bg.jpg' %}');
+        background-repeat: no-repeat;
+        background-position: center top;
+        filter: brightness(0.2) grayscale(90%);
+        opacity: .9;
+    }
     .center-overlap {
             position: absolute;
             top: 50%;
@@ -16,6 +31,7 @@
             width: auto;
             height: auto;
             text-align:center;
+            z-index: 3;
     }
     .chevron-down-position {
             position: absolute;
@@ -74,31 +90,33 @@
 
 {% block mainbody %}
 {% if message %}
-    <div id="snackbar" class="uk-alert-danger noto" uk-alert>
+    <div id="snackbar" class="uk-alert-danger noto" uk-alert style="z-index:99;">
         <a class="uk-alert-close" uk-close></a>
         <p>{{ message }}</p>
     </div>
 {% elif signup_error %}
-    <div id="snackbar" class="uk-alert-danger noto" uk-alert>
+    <div id="snackbar" class="uk-alert-danger noto" uk-alert style="z-index:99;">
         <a class="uk-alert-close" uk-close></a>
         <p>{{ signup_error }}</p>
     </div>
 {% endif %}
 <!--首頁-->
-<div id="heading" class="uk-background-secondary">
-
+<div id="heading" class="" uk-height-viewport="offset-top: true">
+    <div id="color_bubble" style="z-index: 1; filter: grayscale(20%); opacity: .6">
     {% include "index_bg.html" %}
+    </div>
 
-    <div class="center-overlap uk-container uk-background-transparent" uk-scrollspy="cls:uk-animation-fade;">
-        <h1 class="noto uk-text-center uk-heading-primary uk-light"><span>Crawl Curation</span></h1>
-        <h3 class="noto uk-text-center uk-light">CSIE Independent Study</h3><br>
+    <div class="center-overlap uk-container uk-background-transparent uk-animation-fade">
+        <h1 class="noto uk-text-center uk-heading-primary uk-light uk-visible@s"><span>Crawl Curation</span></h1>
+        <h1 class="noto uk-text-center  uk-light uk-hidden@s">Crawl Curation</h1>
+        <h3 class="noto uk-text-center uk-light uk-visible@s">CSIE Independent Study</h3><br>
         <a href="#about" uk-scroll>
             <button class="noto uk-button uk-align-center uk-button-default uk-light">
             START
             </button>
         </a>
     </div>
-    <div class="chevron-down-position uk-visible@m">
+    <div class="chevron-down-position" style="z-index: 3;">
         <a href="#about" uk-scroll>
         <span uk-icon="icon: chevron-down; ratio: 2" class="uk-light fade"></span>
         </a>
@@ -106,8 +124,7 @@
 </div>
 
 <div class="uk-section-secondary uk-preserve-color" id="about">
-    <div class="uk-section uk-preserve-color" style="background-color: #222222;"></div>
-    <div class="uk-dark" uk-height-viewport="expand: true">
+    <div class="uk-dark">
         <!-- 第一排 -->
         <div class="uk-container uk-container-expand" style="background-color: #404040;">
             <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@m uk-flex uk-flex-center" uk-grid

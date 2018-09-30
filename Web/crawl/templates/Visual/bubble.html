@@ -42,14 +42,15 @@
 {% endblock %}
 
 {% block mainbody %}
-<div class="uk-section-secondary uk-padding uk-preserve-color">
+<div class="uk-section-secondary  uk-preserve-color" uk-height-viewport="offset-top: true">
     <div class="uk-container uk-container-expand">
-        <legend class="uk-legend noto uk-heading-bullet uk-light" style="z-index:2;">
+        <legend class="uk-padding uk-legend noto uk-heading-bullet uk-light" style="z-index:2;">
             Bubble Chart
         </legend>
     </div>
+    <svg id="chart" width="960" height="800"></svg>
 </div>
-<svg id="chart" width="960" height="800"></svg>
+
 
 {% load static %}
 <script type="text/javascript" src="{% static 'js/bubblechart.js' %}"></script>

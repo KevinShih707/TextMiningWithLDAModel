@@ -1,7 +1,7 @@
 {% extends "basic.html" %}
 
 {% block mainbody %}
-
+{% load static %}
 <div class="uk-section-secondary uk-padding uk-preserve-color">
     <div class="uk-container uk-container-expand">
         <fieldset class="uk-fieldset">
@@ -33,11 +33,11 @@
             </form>
             <!-- Wordcloud 即時繪製的詞雲圖片 -->
             <div class="uk-width-expand">
-            {% load static %}
-            <img data-src="{% static 'media/wordcloud_plot.png' %}" class="uk-align-left uk-animation-fade" uk-img>
+            <img data-src="{{ url }}" class="uk-align-left uk-animation-fade" uk-img>
             </div>
         </div>
         </fieldset>
     </div>
 </div>
+<script src="{% static 'js/navbar.bg.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,1 @@
+document.getElementById("navbar-bg").classList.add("uk-section-secondary");

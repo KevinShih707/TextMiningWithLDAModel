@@ -17,21 +17,21 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from facebook import views
+from CrawlCuration import views
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 print('[django urls.py]\tRunning on devserver:', RUNNING_DEVSERVER)
 
 # 處理404/505顯示錯誤訊息頁面，這樣失敗時心情會好一些
-handler404 = 'facebook.views.handler404'
-handler500 = 'facebook.views.handler500'
+handler404 = 'CrawlCuration.views.handler404'
+handler500 = 'CrawlCuration.views.handler500'
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index),
     url(r'^index/(\d+)/$', views.index),
     url(r'^text/$', views.text),
-    url(r'^get/$', views.get),
+    # url(r'^get/$', views.get),
     url(r'^help/', views.help),
     url(r'^error/$', views.error),
     url(r'^wc/', views.word_cloud),
@@ -41,12 +41,9 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^sign_up/', views.sign_up),
     url(r'^logout/$', views.logout),
+    url(r'^site_options/', views.site_options),
 ]
 
 if not RUNNING_DEVSERVER:
     urlpatterns  += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-#Add Django site authentication urls (for login, logout, password management)
-urlpatterns += [
-    url('accounts/', include('django.contrib.auth.urls')),
-]

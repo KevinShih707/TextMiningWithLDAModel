@@ -1,10 +1,10 @@
 <div id="navbar">
-    <div class="uk-section-secondary uk-preserve-color">
+    <div class="">
         <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container;
         cls-active: uk-navbar-sticky uk-navbar-transparent uk-background-secondary uk-light;
-        cls-inactive: uk-navbar-transparent uk-light; top: 200" style="z-index: 98;">
+        cls-inactive: uk-navbar-transparent uk-light; top: 1000;" style="z-index: 1;">
 
-            <nav class="uk-navbar-container" >
+            <nav id="navbar-bg" class="uk-navbar-container" >
                 <div class="uk-container uk-container-large">
                     <div uk-navbar style="z-index: 99;">
                         <div class="uk-navbar-left">
@@ -63,15 +63,20 @@
                             </li>
                             <!-- 電腦板選單 -->
                             <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
+                                <a href="/site_options/">
+                                    新聞分析
+                                </a>
+                            </li>
+                            <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
                                 <a href="#" class="noto">Services</a>
                                 <div class="uk-navbar-dropdown uk-navbar-dropdown-width-2">
                                     <ul class="uk-nav uk-text-left uk-navbar-dropdown-nav">
-                                        <li><a href="/wc/" class="noto">
+                                        <li><a href="/wc/" class="noto" style="color: #a1a1a1;">
                                             <span uk-icon="icon: quote-right;" class="uk-dark uk-margin-small-right">
                                             </span>
                                             詞雲 Word Cloud
                                         </a></li>
-                                        <li><a href="/bar_chart/" class="noto">
+                                        <li><a href="/bar_chart/" class="noto" style="color: #a1a1a1;">
                                             {% load static %}
                                             <span class="uk-icon uk-dark uk-margin-small-right">
                                             <svg fill="#999999" width="20" height="20">
@@ -80,7 +85,7 @@
                                             </span>
                                             直條圖 Bar Chart
                                         </a></li>
-                                        <li><a href="/bubble/" class="noto">
+                                        <li><a href="/bubble/" class="noto" style="color: #a1a1a1;">
                                             {% load static %}
                                             <span class="uk-icon uk-dark uk-margin-small-right">
                                             <svg fill="#999999" width="20" height="20">
@@ -89,12 +94,12 @@
                                             </span>
                                             氣泡圖 Bubble Chart
                                         </a></li>
-                                        <li><a href="/text/" class="noto">
+                                        <li><a href="/text/" class="noto" style="color: #a1a1a1;">
                                             <span uk-icon="icon: database;" class="uk-dark uk-margin-small-right">
                                             </span>
                                             資料文本
                                         </a></li>
-                                        <li><a href="/get/" class="noto">
+                                        <li><a href="/get/" class="noto" style="color: #a1a1a1;">
                                             <span uk-icon="icon: facebook;" class="uk-dark uk-margin-small-right">
                                             </span>
                                             <del>臉書爬蟲</del>
@@ -126,7 +131,7 @@
                                     </div>
                                 </div>
 
-                                <li><button class="uk-button uk-button-muted uk-button-small noto" style="color: #222222;" uk-toggle="target: #login">login</button></li>
+                                <li><button id="loginClick" class="uk-button uk-button-muted uk-button-small noto" style="color: #222222;" uk-toggle="target: #login">login</button></li>
 
                                 <div id="login" class="uk-flex-top noto" uk-modal>
                                     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -148,3 +153,8 @@
         </div>
     </div>
 </div>
+{% if login_trigger %}
+<script type="text/javascript">
+    document.getElementById("loginClick").click();
+</script>
+{% endif %}
