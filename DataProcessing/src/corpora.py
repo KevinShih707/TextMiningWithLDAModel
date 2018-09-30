@@ -1,6 +1,7 @@
 import csv
 import re
 from .. import jieba
+from ..jieba import analyse
 from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
@@ -82,6 +83,7 @@ class Corpora():
 
     def __segmentWords(self, articles):
         '''斷詞'''
+        #return([jieba.analyse.extract_tags(article, 20) for article in articles])#透過TF-IDF 萃取出前20代表性詞彙
         return [jieba.lcut(article) for article in articles]
 
     def __delDictStopwords(self):
