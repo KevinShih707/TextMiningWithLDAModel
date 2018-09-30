@@ -4,7 +4,6 @@ from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
 
 from CrawlCuration.mlab import getAllDoc, getAllText
-# from CrawlCuration.crawlFB import crawl
 from CrawlCuration.visual import bubblechart
 from CrawlCuration.account import signup_db, login_db
 import DataProcessing.ldadata as ldadata
@@ -19,6 +18,7 @@ import pyrebase
 config = apikey.firebase_key()
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
+storage = firebase.storage()
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 
@@ -100,21 +100,21 @@ def error(request):
     return render(request, 'error_page/error.html')
 
 
-def get(request):
-    if request.method == "POST":		# 如果是以POST方式才處理
-        mess = request.POST['token']
-        mess2 = request.POST['page_id']
-        if mess == '':
-            mess = "請輸入token"
-        elif mess2 == '':
-            mess2 = "請輸入粉絲專頁ID"
-        else:
-            crawl(mess, mess2)
-            return redirect('/text/')
-    else:
-        mess = "token尚未送出!"
-        mess2 = "粉絲專頁ID尚未送出!"
-    return render(request, "get.html", locals())
+# def get(request):
+#     if request.method == "POST":		# 如果是以POST方式才處理
+#         mess = request.POST['token']
+#         mess2 = request.POST['page_id']
+#         if mess == '':
+#             mess = "請輸入token"
+#         elif mess2 == '':
+#             mess2 = "請輸入粉絲專頁ID"
+#         else:
+#             crawl(mess, mess2)
+#             return redirect('/text/')
+#     else:
+#         mess = "token尚未送出!"
+#         mess2 = "粉絲專頁ID尚未送出!"
+#     return render(request, "get.html", locals())
 
 
 def word_cloud(request):
@@ -122,7 +122,7 @@ def word_cloud(request):
     建立 theme 選單，選擇後
     呼叫繪製 Wordcloud 並顯示於網頁
     """
-    from CrawlCuration import word_cloud as wc
+    from CrawlCuration.visual import word_cloud as wc
     # 繪製圖檔，供網頁讀取用
     if not RUNNING_DEVSERVER:
         imgurl = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/media/wordcloud_plot.png'
@@ -132,9 +132,10 @@ def word_cloud(request):
     # 如果接收到前端 theme 選單回傳的POST請求
     if request.method == "POST":
         selector = request.POST['theme']    # 由前端選單回傳的 theme 選項
+        user_id = request.session['localId']
         if selector != '':
             try:
-                wc.draw_wordcloud(selector, imgurl, RUNNING_DEVSERVER)     # 進行 WC 繪製
+                url = wc.draw_wordcloud(selector, user_id, RUNNING_DEVSERVER, imgurl)     # 進行 WC 繪製
                 return render(request, "Visual/wordcloud.html", locals())  # 重載頁面顯示結果
             except Exception as e:
                 return render(request, "error_page/error.html", locals())      # 失敗則導向至錯誤頁面
