@@ -11,4 +11,4 @@ wordcloud==1.5.0
 numpy==1.14.2
 matplotlib==2.2.2
 pyrebase==3.0.27
-opencv-python==3.4.3.18
+google-cloud-storage==1.12.0

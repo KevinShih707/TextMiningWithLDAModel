@@ -34,7 +34,7 @@ urlpatterns = [
     # url(r'^get/$', views.get),
     url(r'^help/', views.help),
     url(r'^error/$', views.error),
-    url(r'^wc/', views.word_cloud),
+    url(r'^word_cloud/$', views.word_cloud),
     url(r'^bubble/$', views.bubble),
     url(r'^bubble_json/', views.bubble_json),
     url(r'^bar_chart/$', views.bar_chart),
