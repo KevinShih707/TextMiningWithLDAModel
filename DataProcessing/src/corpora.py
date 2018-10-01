@@ -1,6 +1,6 @@
 import csv
 import re
-import jieba
+from .. import jieba
 from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
