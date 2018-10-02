@@ -38,7 +38,7 @@ def remove_DB(office,classification):
         print('saving got an error!')
         print(e)
 
-def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, page_num):  #爬新聞 base_url:基本 url:某議題版面(頁面含多條連結)可能與base_url相同
+def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, page_num, news_num):  #爬新聞 base_url:基本 url:某議題版面(頁面含多條連結)可能與base_url相同
     remove_DB(office,classification)
     pages = range(1, page_num)  # scrape for 40 pages, for each page with 25 news.
     links = []
@@ -47,7 +47,7 @@ def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, pag
         print("===")
         yahoo_r = requests.get(url + str(page))
         yahoo_soup = BeautifulSoup(yahoo_r.text, 'html.parser')
-        finance = yahoo_soup.findAll(tag,{'class':liclass})[:10]
+        finance = yahoo_soup.findAll(tag,{'class':liclass})[:news_num]
         for info in finance:
             link = ""
             try:
@@ -79,3 +79,41 @@ def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, pag
         except:
             print("error!!!")
         continue
+
+def crawlToDB(office, classification, number):
+    if office == "free" and classification == "finance":
+        crawlNews("free", "finance", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', 2, number)
+    if office == "free" and classification == "3c":
+        crawlNews("free", "3c", "http://3c.ltn.com.tw/", "http://3c.ltn.com.tw/menu/internet/", 'li', 'list_box', '', 2, number)
+    if office == "free" and classification == "health":
+        crawlNews("free", "health", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', 2, number)
+
+    if office == "apple" and classification == "iphone":
+        crawlNews("apple", "iphone", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/768/", 'div','aht_title', "", 2, number)
+    if office == "apple" and classification == "career":
+        crawlNews("apple", "career", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/540/", 'div','aht_title', "", 2, number)
+    if office == "apple" and classification == "liveStream":
+        crawlNews("apple", "liveStream", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/532/", 'div', 'aht_title', "", 2, number)
+    if office == "apple" and classification == "trading":
+        crawlNews("apple", "trading", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/660/", 'div', 'aht_title', "", 2, number)
+
+    if office == "china" and classification == "sport":
+        crawlNews("china", "sport", "http:", "http://www.chinatimes.com/sports/total/?page=", 'h3', '', "", 2, number)
+    if office == "china" and classification == "military":
+        crawlNews("china", "military", "https://www.chinatimes.com", "https://www.chinatimes.com/armament/total?page=", 'h3', '', "", 2, number)
+    if office == "china" and classification == "entertainment":
+        crawlNews("china", "entertainment", "https:", "https://www.chinatimes.com/star/total/?page=", 'h3', '', "", 2, number)
+    if office == "china" and classification == "election":
+        crawlNews("china", "election", "", "https://www.chinatimes.com/vote2018/total?page=", 'h3', '', "", 2, number)
+    if office == "china" and classification == "travel":
+        crawlNews("china", "travel", "https:", "https://www.chinatimes.com/travel/total?page=", 'h3', '', "", 2, number)
+
+def getUpdatedNews(office, classification, number):
+    collection = connect_mongo("updated_news")
+    try:
+        news = collection.find({"$and": [{"office": office}, {"classification": classification}]}).limit(number).sort("date",-1)
+        list = [m["content"] for m in news]
+        return list
+    except Exception as e:
+        print('saving got an error!')
+        print(e)
