@@ -16,7 +16,7 @@ class TestCorpora(unittest.TestCase):
 
     def test_segmentWoeds(self):
         articles = ["智者守時而盡其智，\n不肖者守命而盡其力。", "夫戰勝攻取，而不修其攻者凶，命曰費留。", "主不可以怒而興師，將不可以慍而致戰；合于利而動，不合于利而止。"]
-        segmentedArticle = self.mockCorpora._Corpora__segmentWords(articles)
+        segmentedArticle = self.mockCorpora._Corpora__segmentWords(articles, getAll = True)
         expectResult = ["智者", "守時", "而", "盡", "其智", "，", "\n","不肖", "者", "守命", "而", "盡", "其力", "。"]
         self.assertEqual(expectResult, segmentedArticle[0])
 
@@ -82,27 +82,6 @@ class TestCorporaProperties(unittest.TestCase):
         self.assertEqual(None, self.corporaTxt.Dictionary.get(-1))
         self.assertEqual(0, self.corporaTxt.InvertDictionary.get('不肖'))
         self.assertEqual(None, self.corporaTxt.InvertDictionary.get('zzz'))
-
-    def test_getDtPair(self):
-        expectResult = np.array([[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 1), (8, 2)],
-                                 [(0, 1), (3, 1), (4, 1), (5, 1), (7, 1)]])
-        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtPair))
-
-    def test_getDtMatrix(self):
-        expectResult = np.array([[1., 1., 1., 1., 1., 1., 2., 1., 2.],
-                                 [1., 0., 0., 1., 1., 1., 0., 1., 0.]])
-        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.DtMatrix))
-
-    def test_getTfidfPair(self):
-        expectResult = [[(1, 0.31622776601683794), (2, 0.31622776601683794), (6, 0.6324555320336759), (8, 0.6324555320336759)],[ ]]
-        self.assertTrue(np.array_equal(expectResult, self.corporaTxt.TfidfPair))
-
-    def test_getTfidfMatrix(self):
-        expectResult = np.array([[0., 0.31622776, 0.31622776, 0., 0., 0., 0.6324555 , 0., 0.6324555],[0., 0., 0., 0., 0., 0., 0., 0., 0.]])
-        minus = self.corporaTxt.TfidfMatrix - expectResult
-        for row in minus:
-            for a in row:
-                self.assertTrue(abs(a) < 0.0000001)
 
     def test_lenOfCorpus(self):
         self.assertEqual(2, len(self.corporaTxt))
