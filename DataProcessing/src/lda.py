@@ -126,6 +126,14 @@ class Lda():
             counter += 1
         return result
 
+    def getArticleCount(self, ArticleMached = None):
+        '''回傳分類後各組題包含幾篇文章'''
+        if(ArticleMached == None):
+            ArticleMached = self.findArticleMatched()
+        count = [len(mached) for mached in ArticleMached]
+        index = [x for x in range(len(ArticleMached))]
+        return list(zip(index, count))
+
     def __relativeEntropy(self, p , q):#q編碼p所需額外位元
         '''sum(p*log(p/q))'''
         if(0 in q):
