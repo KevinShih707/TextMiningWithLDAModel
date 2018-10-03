@@ -81,10 +81,11 @@ class Corpora():
                 raise Exception("Undefined file Extension")
         return words
 
-    def __segmentWords(self, articles):
+    def __segmentWords(self, articles, getAll = False):
         '''斷詞'''
-        #return([jieba.analyse.extract_tags(article, 20) for article in articles])#透過TF-IDF 萃取出前20代表性詞彙
-        return [jieba.lcut(article) for article in articles]
+        if(getAll):
+            return [jieba.lcut(article) for article in articles]
+        return([jieba.analyse.extract_tags(article, round(len(jieba.lcut(article))*0.8)) for article in articles])#透過TF-IDF 萃取出前80%代表性詞彙
 
     def __delDictStopwords(self):
         if(type(self.stopwords) == str):

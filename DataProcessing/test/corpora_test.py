@@ -16,7 +16,7 @@ class TestCorpora(unittest.TestCase):
 
     def test_segmentWoeds(self):
         articles = ["智者守時而盡其智，\n不肖者守命而盡其力。", "夫戰勝攻取，而不修其攻者凶，命曰費留。", "主不可以怒而興師，將不可以慍而致戰；合于利而動，不合于利而止。"]
-        segmentedArticle = self.mockCorpora._Corpora__segmentWords(articles)
+        segmentedArticle = self.mockCorpora._Corpora__segmentWords(articles, getAll = True)
         expectResult = ["智者", "守時", "而", "盡", "其智", "，", "\n","不肖", "者", "守命", "而", "盡", "其力", "。"]
         self.assertEqual(expectResult, segmentedArticle[0])
 
