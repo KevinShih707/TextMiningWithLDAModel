@@ -77,6 +77,7 @@ class Lda():
         '''
             以字串顯示訓練lda主題
             topn: 欲顯示的詞彙個數
+            EX:[(0, '0.001*"網址" + 0.001*"https"'), (1, '0.001*"我們" + 0.001*"www"')]
         '''
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
@@ -84,6 +85,7 @@ class Lda():
         '''
             以list of tuple 顯示主題
             topn: 欲顯示的詞彙個數
+            EX:[(0, [('網址', 0.00094305066), ('https', 0.0008922861)]), (1, [('我們', 0.00081777375), ('www', 0.0008147125)])]
         '''
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn, formatted = False)
 
@@ -138,7 +140,7 @@ class Lda():
         candidatesIds = self.findArticleMatched()[topicId]#取得歸類於給定主題之文本
         for id in candidatesIds:
             dtm = dtMatrix[id]
-            totalWordCount = sum(dtm)#取得文章總辭彙數用於醬詞頻轉為概率
+            totalWordCount = sum(dtm)#取得文章總辭彙數用於將詞頻轉為概率
             q = list()
             for prob in dtm:
                 if (prob == 0):

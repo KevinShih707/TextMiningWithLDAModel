@@ -13,26 +13,6 @@ class TestLda(unittest.TestCase):
         self.corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = False)
         self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
 
-    # def test_showTopicsStr(self):
-    #     expectResult = [(0, '0.001*"圖表" + 0.001*"覺化" + 0.001*"我們" + 0.001*"為" + 0.001*"圖" + 0.001*"視" + 0.001*"看" + 0.001*"地圖" + 0.001*"到" + 0.001*"網址"'),
-    #                     (1, '0.001*"圖表" + 0.001*"網站" + 0.001*"讓" + 0.001*"圖" + 0.001*"www" + 0.001*"製" + 0.001*"覺化" + 0.001*"用" + 0.001*"https" + 0.001*"工具"')]
-    #     self.assertEqual(expectResult, self.lda.showTopicsStr())
-    #
-    # def test_showTopicsList(self):
-    #     result = self.lda.showTopicsList()[0][1]
-    #     expectResult = [('圖表', 0.00095605757), ('覺化', 0.0007138438), ('我們', 0.000669788), ('為', 0.00065392844), ('圖', 0.0006407069),
-    #                     ('視', 0.00063143723), ('看', 0.00062479294), ('地圖', 0.00062458095), ('到', 0.00062102964), ('網址', 0.00060864916)]
-    #     count = len(result) - 1
-    #     while(count >= 0):
-    #         self.assertEqual(expectResult[count][0], result[count][0])
-    #         self.assertTrue(abs(expectResult[count][1] - result[count][1]), 0.00000000001)
-    #         count -= 1
-
-    # def test_topicsDistribution(self):
-    #     from pprint import pprint
-    #     pprint(self.lda.topicsDistribution(tfidf = self.corpora.TfidfPair)[:20])
-    #     # [(0, 0.91490805), (1, 0.08509194)]
-
 
     def test_isWellClassify(self):
         fakedata = [[(0,0.1), (1,0.4), (2,0.5)],

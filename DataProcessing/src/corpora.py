@@ -124,14 +124,20 @@ class Corpora():
 
     @property
     def DtPair(self):
-        '''以tuple方式回傳詞頻矩陣(wordID, count)'''
+        '''以tuple方式回傳詞頻矩陣(wordID, count)
+           EX:[[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 1), (8, 2)],
+               [(0, 1), (3, 1), (4, 1), (5, 1), (7, 1)]]
+        '''
         if(self.corpus == None):
             self.__createCorpus()
         return [self.dictionary.doc2bow(text) for text in self.corpus]
 
     @property
     def DtMatrix(self):
-        '''以矩陣方式回傳詞頻矩陣'''
+        '''以矩陣方式回傳詞頻矩陣
+           EX:[[1., 1., 1., 1., 1., 1., 2., 1., 2.],
+               [1., 0., 0., 1., 1., 1., 0., 1., 0.]]
+        '''
         return corpus2dense(self.DtPair, len(self.dictionary)).T
 
     @property
