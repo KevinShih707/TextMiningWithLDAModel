@@ -36,10 +36,10 @@
         <div>
             <div class="uk-tile uk-transition-toggle uk-background-center-center uk-padding-large uk-height-medium"
                   style="background-image: url({% static img %}); background-repeat: no-repeat; background-size: cover;"
-            uk-toggle="target: #toggle-animation; animation: uk-animation-fade">
+            uk-toggle="target: .toggle-{{ forloop.counter }}; animation: uk-animation-fade">
                 <div class="uk-transition-slide-top-small uk-overlay-primary uk-position-cover">
                     <h3 class="noto uk-position-center" style="color: #fff;">{{ site.name }}
-                        <div id="toggle-animation" class="uk-text-meta uk-margin-small-top" style="font-size: 16px" hidden>
+                        <div id="toggle-animation" class="uk-text-meta uk-margin-small-top toggle-{{ forloop.counter }}" style="font-size: 16px" hidden>
                             {% for topic in site.topics %}
                             <ul><li><a href="{{ topic.url }}">{{ topic.topicname }}</a></li></ul>
                             {% endfor %}

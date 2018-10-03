@@ -2,11 +2,6 @@ import sys
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
-
-from CrawlCuration.mlab import getAllDoc, getAllText
-from CrawlCuration.visual import bubblechart
-from CrawlCuration.account import signup_db, login_db
-import DataProcessing.ldadata as ldadata
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 import json
 import numpy as np
@@ -29,6 +24,7 @@ def index(request):
 
 def login(request):
     """登入"""
+    from CrawlCuration.account import login_db
     email = request.POST.get('email')
     meema = request.POST.get('meema')
     try:
@@ -52,6 +48,7 @@ def login(request):
 
 def sign_up(request):
     """註冊"""
+    from CrawlCuration.account import signup_db, login_db
     firstname = request.POST.get('first')
     lastname = request.POST.get('last')
     email = request.POST.get('email')
@@ -88,6 +85,7 @@ def logout(request):
 
 
 def text(request):
+    from CrawlCuration.mlab import getAllDoc, getAllText
     units = getAllDoc("post")
     return render(request, "text.html", locals())
 
@@ -135,11 +133,12 @@ def word_cloud(request):
         user_id = request.session['localId']
         if selector != '':
             try:
+                print("Try to call WC...")
                 url = wc.draw_wordcloud(selector, user_id, RUNNING_DEVSERVER, imgurl)     # 進行 WC 繪製
                 return render(request, "Visual/wordcloud.html", locals())  # 重載頁面顯示結果
             except Exception as e:
                 return render(request, "error_page/error.html", locals())      # 失敗則導向至錯誤頁面
-
+    print("No Selector!")
     return render(request, "Visual/wordcloud.html", locals())
 
 
@@ -150,6 +149,7 @@ def bubble(request):
 
 def bubble_json(request):
     """ 回傳單獨的JSON Http response給前端JS """
+    from CrawlCuration.visual import bubblechart
     json_res = bubblechart.provide_bubble_chart_data()
     pprint(json_res)
     return JsonResponse(json_res)
@@ -157,6 +157,7 @@ def bubble_json(request):
 
 def bar_chart(request):
     """ 直條圖頁面，自帶JSON而非用Http request """
+    import DataProcessing.ldadata as ldadata
     lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
     list = ldadata.topics_list(lda)
     data = [
@@ -192,8 +193,8 @@ def handler404(request, *args, **argv):
 
 
 def handler500(request, *args, **argv):
-    """ Custom 505 Error Page """
-    response = render_to_response('error_page/505.html', {},
+    """ Custom 500 Error Page """
+    response = render_to_response('error_page/500.html', {},
                                   context_instance=RequestContext(request))
     response.status_code = 500
     return response
