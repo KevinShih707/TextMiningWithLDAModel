@@ -81,7 +81,7 @@ class Corpora():
                 raise Exception("Undefined file Extension")
         return words
 
-    def __segmentWords(self, articles, getAll = False):
+    def __segmentWords(self, articles, getAll = True):
         '''斷詞'''
         if(getAll):
             return [jieba.lcut(article) for article in articles]
