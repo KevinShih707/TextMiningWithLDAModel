@@ -5,7 +5,7 @@ import operator
 import math
 
 class Lda():
-    def __init__(self, corpora = None, savedModle = None, numTopics = 10, seed = None, autoAproach = False):
+    def __init__(self, corpora = None, savedModel = None, numTopics = 10, seed = None, autoAproach = False):
         '''
             corpora: Corpora 結構化之文本數據
             saveModel: str = None 欲載入之model路徑
@@ -17,17 +17,17 @@ class Lda():
         self.numTopics = numTopics
         self.seed = seed
 
-        if(savedModle == None):
+        if(savedModel == None):
             self.__trainingModel()
         else:
-            self.ldaModel = LdaModel.load(savedModle)
+            self.ldaModel = LdaModel.load(savedModel)
 
         if(autoAproach):
             wellLastTime = False
             while(self.__isWellClassify() or not wellLastTime):
                 if(self.__isWellClassify()):
                     wellLastTime = True
-                    savedModle(name = "temp")
+                    savedModel(name = "temp")
                     self.numTopics -= 1
                     self.__trainingModel()
                 elif(not wellLastTime):
