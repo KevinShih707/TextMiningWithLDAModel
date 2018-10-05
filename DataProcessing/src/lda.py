@@ -1,4 +1,5 @@
 from gensim.models.ldamodel import LdaModel
+from gensim import corpora
 import numpy as np
 import scipy.stats
 from functools import reduce
@@ -20,7 +21,7 @@ class Lda():
 
         if(savedModel != None):
             self.ldaModel = LdaModel.load(savedModel+".pkl")
-            self.corpora.Dictionary.load_from_text(savedModel)
+            self.corpora.changeDictionary(corpora.Dictionary.load_from_text(savedModel))
         else:
             self.ldaModel = None
 

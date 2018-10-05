@@ -63,6 +63,7 @@ class TestLda(unittest.TestCase):
     #     )
 
 class TestLdaSave(unittest.TestCase):
+    TEXT_FILE_PATH = "DataProcessing/test_data/testData.txt"
     CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
     STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
     MODEL_SAVING_PATH = "DataProcessing/test_data/model_test"
@@ -84,10 +85,18 @@ class TestLdaSave(unittest.TestCase):
         self.assertTrue(os.path.exists(self.MODEL_SAVING_PATH))
 
     def test_createBySavingModel(self):
-        self.lda.saveModel(self.MODEL_SAVING_PATH)
+        if(not os.path.exists(self.MODEL_SAVING_PATH_WITH_EXTENSION)):
+            self.lda.saveModel(self.MODEL_SAVING_PATH)
         corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = True)
         lda = Lda(corpora = corpora, savedModel = self.MODEL_SAVING_PATH)
         lda.showTopicsList()
+
+    def test_createBySavingDictLoading(self):
+        corpora1 = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', isDeleteUrl = True)
+        corpora2 = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt', isDeleteUrl = True)
+        ldaBySaving = Lda(corpora1, self.MODEL_SAVING_PATH)
+        ldaDirectTraining = Lda(corpora2, savedModel = None)
+        self.assertNotEqual(ldaBySaving.corpora.DtPair, ldaDirectTraining.corpora.DtPair)
 
 if __name__ == "__main__":
     unittest.main()
