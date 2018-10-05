@@ -14,9 +14,9 @@ class TestLda(unittest.TestCase):
         self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
 
     def test_createBySavingModel(self):
-        self.lda.saveModel("DataProcessing/test_data/model_test.pkl")
+        self.lda.saveModel("DataProcessing/test_data/model_test")
         corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = True)
-        lda = Lda(corpora = corpora, savedModel = "DataProcessing/test_data/model_test.pkl")
+        lda = Lda(corpora = corpora, savedModel = "DataProcessing/test_data/model_test")
         lda.showTopicsList()
 
     def test_isWellClassify(self):
@@ -30,9 +30,13 @@ class TestLda(unittest.TestCase):
     def test_saveModel(self):
         if(os.path.exists("DataProcessing/test_data/model_test.pkl")):
             os.remove("DataProcessing/test_data/model_test.pkl")
+        if(os.path.exists("DataProcessing/test_data/model_test")):
+            os.remove("DataProcessing/test_data/model_test")
         self.assertFalse(os.path.exists("DataProcessing/test_data/model_test.pkl"))
-        self.lda.saveModel("DataProcessing/test_data/model_test.pkl")
+        self.assertFalse(os.path.exists("DataProcessing/test_data/model_test"))
+        self.lda.saveModel("DataProcessing/test_data/model_test")
         self.assertTrue(os.path.exists("DataProcessing/test_data/model_test.pkl"))
+        self.assertTrue(os.path.exists("DataProcessing/test_data/model_test"))
 
     def test_classifyTopic(self):
         fakedata = [[(0,0.2), (1,0.5), (2,0.3)],

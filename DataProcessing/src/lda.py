@@ -18,10 +18,11 @@ class Lda():
         self.numTopics = numTopics
         self.seed = seed
 
-        if(savedModel == None):
-            self.__trainingModel()
+        if(savedModel != None):
+            self.ldaModel = LdaModel.load(savedModel+".pkl")
+            self.corpora.Dictionary.load_from_text(savedModel)
         else:
-            self.ldaModel = LdaModel.load(savedModel)
+            self.ldaModel = None
 
         if(autoAproach):
             wellLastTime = False
@@ -72,7 +73,10 @@ class Lda():
             儲存訓練完成之model
             name: str = "my_modle" 儲存路徑
         '''
-        self.ldaModel.save(fname = name)
+        if(self.ldaModel == None):
+            self.__trainingModel()
+        self.ldaModel.save(fname = name+".pkl")
+        self.corpora.Dictionary.save_as_text(fname = name)
 
     def showTopicsStr(self, topn = 10):
         '''
@@ -80,6 +84,8 @@ class Lda():
             topn: 欲顯示的詞彙個數
             EX:[(0, '0.001*"網址" + 0.001*"https"'), (1, '0.001*"我們" + 0.001*"www"')]
         '''
+        if(self.ldaModel == None):
+            self.__trainingModel()
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
     def showTopicsList(self, topn = 10):
@@ -88,6 +94,8 @@ class Lda():
             topn: 欲顯示的詞彙個數
             EX:[(0, [('網址', 0.00094305066), ('https', 0.0008922861)]), (1, [('我們', 0.00081777375), ('www', 0.0008147125)])]
         '''
+        if(self.ldaModel == None):
+            self.__trainingModel()
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn, formatted = False)
 
     def topicsDistribution(self, tfidf = None):
@@ -100,6 +108,8 @@ class Lda():
         '''
         if(tfidf == None):
             tfidf = self.corpora.TfidfPair
+        if(self.ldaModel == None):
+            self.__trainingModel()
         return [self.ldaModel[article] for article in tfidf]
 
     def classifyTopic(self, topicsDistr = None):
@@ -131,6 +141,8 @@ class Lda():
         '''回傳分類後各組題包含幾篇文章'''
         if(ArticleMached == None):
             ArticleMached = self.findArticleMatched()
+        if(self.ldaModel == None):
+            self.__trainingModel()
         count = [len(mached) for mached in ArticleMached]
         index = [x for x in range(len(ArticleMached))]
         return list(zip(index, count))
@@ -143,7 +155,13 @@ class Lda():
         return scipy.stats.entropy(p, q)
 
     def showRelativeEntropy(self, topicId, dtMatrix):
-        '''計算給定詞頻矩陣與該model之相對熵'''
+        '''
+            計算給定詞頻矩陣與該model之相對熵
+            topicId: 愈比對之主題ID
+            dtMatrix: 愈比對之文本[[], [], []...]
+        '''
+        if(self.ldaModel == None):
+            self.__trainingModel()
         klMeans = list()
         p = self.ldaModel.get_topics()[topicId]
         #q
