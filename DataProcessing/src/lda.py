@@ -1,5 +1,6 @@
 from gensim.models.ldamodel import LdaModel
 import numpy as np
+import scipy.stats
 from functools import reduce
 import operator
 import math
@@ -134,11 +135,12 @@ class Lda():
         index = [x for x in range(len(ArticleMached))]
         return list(zip(index, count))
 
-    def __relativeEntropy(self, p , q):#q編碼p所需額外位元
+    def __relativeEntropy(self, p , q):#KL-mean
         '''sum(p*log(p/q))'''
-        if(0 in q):
-            return math.inf #infinity
-        return reduce(operator.add, map(lambda x, y: x*math.log(x/y), p, q))
+        # if(0 in q):
+        #     return math.inf #infinity
+        # return reduce(operator.add, map(lambda x, y: x*math.log(x/y), p, q))
+        return scipy.stats.entropy(p, q)
 
     def showRelativeEntropy(self, topicId, dtMatrix):
         '''計算給定詞頻矩陣與該model之相對熵'''

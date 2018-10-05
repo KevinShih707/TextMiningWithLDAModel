@@ -63,7 +63,7 @@ class TestLda(unittest.TestCase):
         q = [0.4, 0.3, 0.2, 0.1]
         r = [0.0, 0.1, 0.2, 0.3]
         self.assertEqual(0.0, self.lda._Lda__relativeEntropy(p, p))
-        self.assertEqual(0.4564348191467835, self.lda._Lda__relativeEntropy(p, q))
+        self.assertEqual(0.45643481914678347, self.lda._Lda__relativeEntropy(p, q))
         self.assertEqual(math.inf, self.lda._Lda__relativeEntropy(p, r))
 
     # def test_showRelativeEntropy(self):
