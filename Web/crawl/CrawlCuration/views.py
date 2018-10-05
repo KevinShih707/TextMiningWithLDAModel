@@ -184,6 +184,24 @@ def site_options(request):
         return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
+def recommendation(request):
+    import DataProcessing.ldadata as ldadata
+    lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
+    list = ldadata.topics_list(lda)
+    data = [
+        {
+            'values': [],
+            'key': 'Serie 1',
+            'yAxis': '1'
+        }
+    ]
+    for l in list:
+        data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
+    # print(data)
+    json.dumps(data, ensure_ascii=False)
+    return render(request, "Visual/recommendation.html", locals())
+
+
 def handler404(request, *args, **argv):
     """ Custom 404 Error Page """
     response = render_to_response('error_page/404.html', {},
