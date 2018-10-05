@@ -6,18 +6,10 @@ import os
 import math
 
 class TestLda(unittest.TestCase):
-    CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
-    STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
 
     def setUp(self):
-        self.corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = False)
+        self.corpora = Corpora()
         self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
-
-    def test_createBySavingModel(self):
-        self.lda.saveModel("DataProcessing/test_data/model_test")
-        corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = True)
-        lda = Lda(corpora = corpora, savedModel = "DataProcessing/test_data/model_test")
-        lda.showTopicsList()
 
     def test_isWellClassify(self):
         fakedata = [[(0,0.1), (1,0.4), (2,0.5)],
@@ -26,17 +18,6 @@ class TestLda(unittest.TestCase):
                     [(0,0.4), (1,0.1), (2,0.5)]]
         self.assertFalse(self.lda._Lda__isWellClassify(0.6,fakedata))
         self.assertTrue(self.lda._Lda__isWellClassify(0.5,fakedata))
-
-    def test_saveModel(self):
-        if(os.path.exists("DataProcessing/test_data/model_test.pkl")):
-            os.remove("DataProcessing/test_data/model_test.pkl")
-        if(os.path.exists("DataProcessing/test_data/model_test")):
-            os.remove("DataProcessing/test_data/model_test")
-        self.assertFalse(os.path.exists("DataProcessing/test_data/model_test.pkl"))
-        self.assertFalse(os.path.exists("DataProcessing/test_data/model_test"))
-        self.lda.saveModel("DataProcessing/test_data/model_test")
-        self.assertTrue(os.path.exists("DataProcessing/test_data/model_test.pkl"))
-        self.assertTrue(os.path.exists("DataProcessing/test_data/model_test"))
 
     def test_classifyTopic(self):
         fakedata = [[(0,0.2), (1,0.5), (2,0.3)],
@@ -80,5 +61,33 @@ class TestLda(unittest.TestCase):
     #     print(
     #     self.lda.showAuthenticArticle(0, num = 3)
     #     )
+
+class TestLdaSave(unittest.TestCase):
+    CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
+    STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
+    MODEL_SAVING_PATH = "DataProcessing/test_data/model_test"
+    MODEL_SAVING_PATH_WITH_EXTENSION = MODEL_SAVING_PATH + ".pkl"
+
+    def setUp(self):
+        self.corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = False)
+        self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
+
+    def test_saveModel(self):
+        if(os.path.exists(self.MODEL_SAVING_PATH_WITH_EXTENSION)):
+            os.remove(self.MODEL_SAVING_PATH_WITH_EXTENSION)
+        if(os.path.exists(self.MODEL_SAVING_PATH)):
+            os.remove(self.MODEL_SAVING_PATH)
+        self.assertFalse(os.path.exists(self.MODEL_SAVING_PATH_WITH_EXTENSION))
+        self.assertFalse(os.path.exists(self.MODEL_SAVING_PATH))
+        self.lda.saveModel(self.MODEL_SAVING_PATH)
+        self.assertTrue(os.path.exists(self.MODEL_SAVING_PATH_WITH_EXTENSION))
+        self.assertTrue(os.path.exists(self.MODEL_SAVING_PATH))
+
+    def test_createBySavingModel(self):
+        self.lda.saveModel(self.MODEL_SAVING_PATH)
+        corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = True)
+        lda = Lda(corpora = corpora, savedModel = self.MODEL_SAVING_PATH)
+        lda.showTopicsList()
+
 if __name__ == "__main__":
     unittest.main()
