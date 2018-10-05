@@ -37,7 +37,8 @@ class Corpora():
             for article in self.file:
                 self.file[self.file.index(article)] = self.__removeUrl(article)
         self.corpus = self.__segmentWords(self.file)
-        self.dictionary = corpora.Dictionary(self.corpus)
+        self.dictionary = corpora.Dictionary(self.__segmentWords(self.file, False))#直接丟棄不去代表性詞彙
+        # self.dictionary = corpora.Dictionary(self.corpus)
         if(self.stopwords != None):
             self.__delDictStopwords()
 

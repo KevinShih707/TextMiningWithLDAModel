@@ -13,6 +13,11 @@ class TestLda(unittest.TestCase):
         self.corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = False)
         self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
 
+    def test_createBySavingModel(self):
+        self.lda.saveModel("DataProcessing/test_data/model_test.pkl")
+        corpora = Corpora(filePath = self.CSV_FILE_PATH, isDeleteUrl = True)
+        lda = Lda(corpora = corpora, savedModel = "DataProcessing/test_data/model_test.pkl")
+        lda.showTopicsList()
 
     def test_isWellClassify(self):
         fakedata = [[(0,0.1), (1,0.4), (2,0.5)],
@@ -30,11 +35,11 @@ class TestLda(unittest.TestCase):
         self.assertTrue(os.path.exists("DataProcessing/test_data/model_test.pkl"))
 
     def test_classifyTopic(self):
-        expectResult = [1, 0, 2, 2]
         fakedata = [[(0,0.2), (1,0.5), (2,0.3)],
                     [(0,0.8), (1,0.1), (2,0.1)],
                     [(0,0.0), (1,0.0), (2,1.0)],
                     [(0,0.4), (1,0.1), (2,0.5)]]
+        expectResult = [1, 0, 2, 2]
         self.assertEqual(expectResult, self.lda.classifyTopic(fakedata))
 
     def test_findArticleMatched(self):
