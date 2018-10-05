@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^sign_up/', views.sign_up),
     url(r'^logout/$', views.logout),
     url(r'^site_options/', views.site_options),
+    url(r'^recommendation/$', views.recommendation),
 ]
 
 if not RUNNING_DEVSERVER:
