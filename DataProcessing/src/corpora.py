@@ -11,6 +11,7 @@ class Corpora():
                  filePath = "DataProcessing/test_data/testData.csv",
                  fileExtension = 'csv',
                  stopwords = "DataProcessing/src/stopwords.txt",
+                 dictionary = None,
                  isDeleteUrl = True):
         '''
         Input:
@@ -24,6 +25,7 @@ class Corpora():
         self.filePath = filePath
         self.fileExtension = fileExtension
         self.stopwords = stopwords
+        self.dictionary = dictionary
         self.isDeleteUrl = isDeleteUrl
         self.corpus = None
 
@@ -37,10 +39,11 @@ class Corpora():
             for article in self.file:
                 self.file[self.file.index(article)] = self.__removeUrl(article)
         self.corpus = self.__segmentWords(self.file)
-        self.dictionary = corpora.Dictionary(self.__segmentWords(self.file, False))#直接丟棄不去代表性詞彙
-        # self.dictionary = corpora.Dictionary(self.corpus)
-        if(self.stopwords != None):
-            self.__delDictStopwords()
+        if (self.dictionary == None):
+            self.dictionary = corpora.Dictionary(self.__segmentWords(self.file, False))#直接丟棄不去代表性詞彙
+            # self.dictionary = corpora.Dictionary(self.corpus)
+            if(self.stopwords != None):
+                self.__delDictStopwords()
 
     def __remove_emoji(self, text):
         '''使用正規表達法移除表情符號'''
@@ -98,6 +101,11 @@ class Corpora():
             if value in self.stopwords:
                 badIds.append(key)
         self.dictionary.filter_tokens(bad_ids = badIds)
+
+    def changeDictionary(self, dictionary):
+        '''運用其他(外部字典) 取代語料庫自動生成的字典'''
+        self.dictionary = dictionary
+
 
     def __len__(self):
         if(self.corpus == None):
