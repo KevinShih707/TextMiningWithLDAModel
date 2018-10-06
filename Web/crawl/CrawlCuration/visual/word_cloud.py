@@ -1,5 +1,4 @@
 import sys
-from io import BytesIO
 from os import path
 from CrawlCuration.mlab import getVocabularyByTheme
 from wordcloud import WordCloud
@@ -8,7 +7,7 @@ from pprint import pprint
 import numpy as np
 from PIL import Image
 import urllib
-# import cv2 # Google App Engine 的 Container 不能使用 open cv， 因為cv 使用到C語言的library但GAE卻沒有
+import cv2
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 # 初始化 Google Cloud Storage 並帶入 Credentials
@@ -48,7 +47,7 @@ def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
         file = urllib.request.urlopen(MASK_PATH)
         mask = np.array(Image.open(file))
 
-    FONT_PATH = "https://storage.googleapis.com/crawl-curation.appspot.com/static/NotoSansCJKtc-Light.otf"
+    FONT_PATH = "NotoSansCJKtc-Light.otf"
 
     wc = WordCloud(font_path=FONT_PATH,
                    background_color="rgba(255, 255, 255, 0)", mode="RGBA",
@@ -69,13 +68,9 @@ def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
 
     # OpenCV 編碼
     image_array = wc.to_array()
-    # image_encode = cv2.imencode('.png', image_array)
-    # img_bytes = image_encode[1].tobytes()
-    with BytesIO() as output:
-        with Image.fromarray(image_array) as pil_img:
-            pil_img.save(output, 'PNG')
-            img_bytes = output.getvalue()
-        print(img_bytes)
+    image_encode = cv2.imencode('.png', image_array)
+    img_bytes = image_encode[1].tobytes()
+
     # 存到 Google Cloud Storage
     blob = bucket.blob("static/media/wc/" + user_id + "/" + title + ".png")
     # blob.upload_from_string(data=img_bytes, content_type="image/png")

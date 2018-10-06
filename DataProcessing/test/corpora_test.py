@@ -72,10 +72,32 @@ class TestCorporaProperties(unittest.TestCase):
                     "貨惡其棄於地也，不必藏於己；力惡其不出於身也，不必為己。",
                     "是故謀閉而不興，盜竊亂賊而不作，故外戶而不閉，是謂『大同』"]
         corpora = Corpora(testData)
-        self.assertEqual("三代",corpora.Dictionary.get(0))
+        self.assertEqual("三代", corpora.Dictionary.get(0))
         corpora.DtPair
         corpora.TfidfPair
         self.assertEqual(5, len(corpora))
+
+    def test_createWithDictionary(self):
+        testData = ["你看我吾到",
+                    "你看不到我",
+                    "你看袂丟挖"]
+        corporaWithoutDict = Corpora(testData)
+        corporaWithDict = Corpora(testData, dictionary = self.corporaTxt.Dictionary)
+        self.assertEqual(corporaWithDict.Dictionary, self.corporaTxt.Dictionary)
+        self.assertNotEqual(corporaWithoutDict.Dictionary, self.corporaTxt.Dictionary)
+
+    def test_changeDictionary(self):
+        testData = ["你看我吾到",
+                    "你看不到我",
+                    "你看袂丟挖"]
+        corpora = Corpora(testData)
+        dtBefore = corpora.DtPair
+        self.assertNotEqual(corpora.Dictionary, self.corporaTxt.Dictionary)
+        corpora.changeDictionary(self.corporaTxt.Dictionary)
+        dtAfter = corpora.DtPair
+        self.assertEqual(corpora.Dictionary, self.corporaTxt.Dictionary)
+        self.assertNotEqual(dtBefore, dtAfter)
+
 
     def test_Dictionary(self):
         self.assertEqual('不肖', self.corporaTxt.Dictionary.get(0))
