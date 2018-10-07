@@ -2,6 +2,7 @@ import sys
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
+from .models import Post
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 import json
 import numpy as np

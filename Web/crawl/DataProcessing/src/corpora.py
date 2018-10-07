@@ -1,21 +1,31 @@
 import csv
 import re
-import jieba
+from .. import jieba
+from ..jieba import analyse
 from gensim import corpora, models
 from gensim.matutils import corpus2dense
 
 class Corpora():
-    def __init__(self, filePath = "DataProcessing/test_data/testData.csv", fileExtension = 'csv', stopwords = "DataProcessing/src/stopwords.txt", isDeleteUrl = True):
+    def __init__(self,
+                 file = None,
+                 filePath = "DataProcessing/test_data/testData.csv",
+                 fileExtension = 'csv',
+                 stopwords = "DataProcessing/src/stopwords.txt",
+                 dictionary = None,
+                 isDeleteUrl = True):
         '''
         Input:
+            file:已整理成stringList的檔案
             filePath:str 欲開啟檔案路徑
             fileExtension: str = 'csv' 副檔名接受'txt'及'csv'檔案格式
             stopwords:停用詞 接受list或txt file路徑(格是參考.stopwords.txt)
             isDelLinesHasUrl:bool = true 是否刪除文當中含URl的行
         '''
+        self.file = file
         self.filePath = filePath
         self.fileExtension = fileExtension
         self.stopwords = stopwords
+        self.dictionary = dictionary
         self.isDeleteUrl = isDeleteUrl
         self.corpus = None
 
@@ -23,16 +33,19 @@ class Corpora():
         '''
             簡易的proxy當需要文檔資訊時才實際依建構元參數建立文檔
         '''
-        file = self.__openFile(self.filePath, self.fileExtension)
+        if (self.file == None):
+            self.file = self.__openFile(self.filePath, self.fileExtension)
         if(self.isDeleteUrl):
-            for article in file:
-                file[file.index(article)] = self.__deleteUrl(article)
-        self.corpus = self.__segmentWords(file)
-        self.dictionary = corpora.Dictionary(self.corpus)
-        if(self.stopwords != None):
-            self.__delDictStopwords()
+            for article in self.file:
+                self.file[self.file.index(article)] = self.__removeUrl(article)
+        self.corpus = self.__segmentWords(self.file)
+        if (self.dictionary == None):
+            self.dictionary = corpora.Dictionary(self.__segmentWords(self.file, False))#直接丟棄不去代表性詞彙
+            # self.dictionary = corpora.Dictionary(self.corpus)
+            if(self.stopwords != None):
+                self.__delDictStopwords()
 
-    def remove_emoji(self, text):
+    def __remove_emoji(self, text):
         '''使用正規表達法移除表情符號'''
         emoji_pattern = re.compile(
             u"[\r?\n]|"
@@ -46,23 +59,18 @@ class Corpora():
             "+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', text)
 
-    def remove_url(self, text):
-        '''改善刪除URL之正規表達式，用法同remove_emoji'''
-        urlregex = re.compile(u"(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
+    def __removeUrl(self, text):
+        '''
+            刪除URL之正規表達式，用法同remove_emoji
+            article: 欲刪除url文章
+        '''
+        urlregex = re.compile(u"(網址|連結|快速連結|捷徑|超連結)*(:|：| )*(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]")
         return urlregex.sub(r'', text)
 
-    def __deleteUrl(self, article, byWholeLine = False):
-        '''
-            刪除文中之url
-            article: 欲刪除url文章
-            byWholeLine = False: 刪除依整行
-        '''
-        if(byWholeLine):
-            return re.sub(r".*https?:\/\/.*\n", '', article, flags = (re.MULTILINE | re.IGNORECASE))#匹配頭尾、忽略大小寫
-        else:
-            return re.sub(r"https?:\/\/.*[\r\n]*", ' ', article, flags = (re.IGNORECASE))#匹配頭尾、忽略大小寫
-
     def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):
+        '''
+            回傳文章所乘的 string list
+        '''
         words = ""
         with open(path, encoding = 'utf-8') as file:
             if (extension == 'txt'):
@@ -70,17 +78,18 @@ class Corpora():
                 words = reader.split('\n\n')
             elif (extension == 'csv'):
                 reader = csv.DictReader(file, fieldnames)
-                words = [self.remove_emoji(row['text']) for row in reader] #串列生成式
-                words = [self.remove_url(word) for word in words] # 移除URL
+                words = [self.__remove_emoji(row['text']) for row in reader] #串列生成式
                 if (words[0] == "貼文內容"):
                     del words[0]
             else:
                 raise Exception("Undefined file Extension")
         return words
 
-    def __segmentWords(self, articles):
+    def __segmentWords(self, articles, getAll = True):
         '''斷詞'''
-        return [jieba.lcut(article) for article in articles]
+        if(getAll):
+            return [jieba.lcut(article) for article in articles]
+        return([jieba.analyse.extract_tags(article, round(len(jieba.lcut(article))*0.8)) for article in articles])#透過TF-IDF 萃取出前80%代表性詞彙
 
     def __delDictStopwords(self):
         if(type(self.stopwords) == str):
@@ -92,6 +101,11 @@ class Corpora():
             if value in self.stopwords:
                 badIds.append(key)
         self.dictionary.filter_tokens(bad_ids = badIds)
+
+    def changeDictionary(self, dictionary):
+        '''運用其他(外部字典) 取代語料庫自動生成的字典'''
+        self.dictionary = dictionary
+
 
     def __len__(self):
         if(self.corpus == None):
@@ -119,14 +133,20 @@ class Corpora():
 
     @property
     def DtPair(self):
-        '''以tuple方式回傳詞頻矩陣(wordID, count)'''
+        '''以tuple方式回傳詞頻矩陣(wordID, count)
+           EX:[[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 1), (8, 2)],
+               [(0, 1), (3, 1), (4, 1), (5, 1), (7, 1)]]
+        '''
         if(self.corpus == None):
             self.__createCorpus()
         return [self.dictionary.doc2bow(text) for text in self.corpus]
 
     @property
     def DtMatrix(self):
-        '''以矩陣方式回傳詞頻矩陣'''
+        '''以矩陣方式回傳詞頻矩陣
+           EX:[[1., 1., 1., 1., 1., 1., 2., 1., 2.],
+               [1., 0., 0., 1., 1., 1., 0., 1., 0.]]
+        '''
         return corpus2dense(self.DtPair, len(self.dictionary)).T
 
     @property
