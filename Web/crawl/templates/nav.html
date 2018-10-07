@@ -2,7 +2,7 @@
     <div class="">
         <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container;
         cls-active: uk-navbar-sticky uk-navbar-transparent uk-background-secondary uk-light;
-        cls-inactive: uk-navbar-transparent uk-light; top: 1000;" style="z-index: 1;">
+        cls-inactive: uk-navbar-transparent uk-light; top: 900;" style="z-index: 1;">
 
             <nav id="navbar-bg" class="uk-navbar-container" >
                 <div class="uk-container uk-container-large">
@@ -64,6 +64,11 @@
                             <!-- 電腦板選單 -->
                             <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
                                 <a href="/site_options/">
+                                    目標選擇
+                                </a>
+                            </li>
+                            <li class="uk-button uk-button-text uk-visible@m uk-hidden-touch">
+                                <a href="/site_options/">
                                     新聞分析
                                 </a>
                             </li>
@@ -71,20 +76,6 @@
                                 <a href="#" class="noto">Services</a>
                                 <div class="uk-navbar-dropdown uk-navbar-dropdown-width-2">
                                     <ul class="uk-nav uk-text-left uk-navbar-dropdown-nav">
-                                        <li><a href="/word_cloud/" class="noto" style="color: #a1a1a1;">
-                                            <span uk-icon="icon: quote-right;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            詞雲 Word Cloud
-                                        </a></li>
-                                        <li><a href="/bar_chart/" class="noto" style="color: #a1a1a1;">
-                                            {% load static %}
-                                            <span class="uk-icon uk-dark uk-margin-small-right">
-                                            <svg fill="#999999" width="20" height="20">
-                                                <path xmlns="http://www.w3.org/2000/svg" d="M0 6h4v10H0zM6 0h4v16H6zM12 4h4v12h-4z"/>
-                                            </svg>
-                                            </span>
-                                            直條圖 Bar Chart
-                                        </a></li>
                                         <li><a href="/bubble/" class="noto" style="color: #a1a1a1;">
                                             {% load static %}
                                             <span class="uk-icon uk-dark uk-margin-small-right">
@@ -94,16 +85,11 @@
                                             </span>
                                             氣泡圖 Bubble Chart
                                         </a></li>
-                                        <li><a href="/text/" class="noto" style="color: #a1a1a1;">
-                                            <span uk-icon="icon: database;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            資料文本
-                                        </a></li>
-                                        <li><a href="/get/" class="noto" style="color: #a1a1a1;">
-                                            <span uk-icon="icon: facebook;" class="uk-dark uk-margin-small-right">
-                                            </span>
-                                            <del>臉書爬蟲</del>
-                                        </a></li>
+                                        <!--<li><a href="/text/" class="noto" style="color: #a1a1a1;">-->
+                                            <!--<span uk-icon="icon: database;" class="uk-dark uk-margin-small-right">-->
+                                            <!--</span>-->
+                                            <!--資料文本-->
+                                        <!--</a></li>-->
                                     </ul>
                                 </div>
                             </li>

@@ -7,7 +7,7 @@ nv.addGraph(function () {
     chart.color(d3.scale.category10().range())
         .staggerLabels(true);
     chart.xAxis;
-    chart.yAxis.tickFormat(d3.format('.05f'));
+    chart.yAxis.tickFormat(d3.format('.5f'));
     chart.tooltipContent(function (key, y, e, graph) {
         var x = String(graph.point.x);
         var y = String(graph.point.y);

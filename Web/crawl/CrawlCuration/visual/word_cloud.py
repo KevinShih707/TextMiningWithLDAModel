@@ -1,13 +1,12 @@
 import sys
 from os import path
-from CrawlCuration.mlab import getVocabularyByTheme
 from wordcloud import WordCloud
 from google.cloud import storage
-from pprint import pprint
 import numpy as np
 from PIL import Image
 import urllib
 import cv2
+from CrawlCuration.controller.ldaResult import Result
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 # 初始化 Google Cloud Storage 並帶入 Credentials
@@ -18,28 +17,31 @@ else:
         client = storage.Client()
     except Exception as e:
         print(e)
+
 # 指定本專案的 Bucket name
 bucket = client.get_bucket('crawl-curation.appspot.com')
 
 
-def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
+def draw_wordcloud(office, classification, user_id, topicId, RUNNING_DEVSERVER):
     """
     讀取topic list，用Word Cloud 繪製圖片(numpy array)，OpenCV 編碼成PNG，上傳至 Google Cloud Storage
-    :param title: 主題 ex.apple, free
-    :param imgurl: deprecated
+    :param office: 要爬哪一家網站
+    :param classification: 指定新聞分類
     :param user_id: 使用者ID 用於讀寫圖片
+    :param topicId: number 指定主題
     :param RUNNING_DEVSERVER: 是否為本地端
     :return: Google Cloud Storage上面的圖片URL
     """
-    cursor = getVocabularyByTheme(title)
-    for document in cursor:
-        vocabularyDict = document['vocabulary']
-        print("[word_cloud.py]\t\tData from DB as following:")
-        pprint(vocabularyDict)  # 把document print出來
+    result = Result("news_classify", office, classification, topicId=topicId)
+    topic_tuple = result.single_topic_list()
+    topic_dict = dict(topic_tuple)
+    print(topic_tuple)
+    for key, val in topic_dict.items():
+        topic_dict[key] = np.float64(val)
+    print(topic_dict)
 
     if RUNNING_DEVSERVER:
         d = path.dirname('.')
-        save_path = path.join(d, imgurl)
         MASK_PATH = "static/media/mask.png"
         mask = np.array(Image.open(path.join(d, MASK_PATH)))
     else:
@@ -51,7 +53,7 @@ def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
 
     wc = WordCloud(font_path=FONT_PATH,
                    background_color="rgba(255, 255, 255, 0)", mode="RGBA",
-                   max_words=len(vocabularyDict),   # 詞雲MAX數量
+                   max_words=len(topic_dict),   # 詞雲MAX數量
                    mask=mask,              # 背景圖片 做遮罩
                    max_font_size=180,
                    relative_scaling=0.9,
@@ -60,11 +62,7 @@ def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
                    width=600, height=600, margin=5, # margin 是字元和邊緣距離
                    )
 
-    wc.generate_from_frequencies(vocabularyDict)
-
-    # 保存圖檔
-    if RUNNING_DEVSERVER:
-        wc.to_file(save_path)
+    wc.generate_from_frequencies(topic_dict)
 
     # OpenCV 編碼
     image_array = wc.to_array()
@@ -72,8 +70,7 @@ def draw_wordcloud(title, user_id, RUNNING_DEVSERVER, imgurl=None):
     img_bytes = image_encode[1].tobytes()
 
     # 存到 Google Cloud Storage
-    blob = bucket.blob("static/media/wc/" + user_id + "/" + title + ".png")
-    # blob.upload_from_string(data=img_bytes, content_type="image/png")
+    blob = bucket.blob("static/media/wc/" + user_id + "/" + office + "-" + classification + "-topic" + str(topicId) + ".png")
     blob.upload_from_string(data=img_bytes, content_type="image/png")
 
     return blob.public_url

@@ -84,62 +84,12 @@ def logout(request):
     return HttpResponseRedirect('/')
 
 
-def text(request):
-    from CrawlCuration.mlab import getAllDoc, getAllText
-    units = getAllDoc("post")
-    return render(request, "text.html", locals())
-
-
 def help(request):
     return render(request, 'help.html')
 
 
 def error(request):
     return render(request, 'error_page/error.html')
-
-
-# def get(request):
-#     if request.method == "POST":		# 如果是以POST方式才處理
-#         mess = request.POST['token']
-#         mess2 = request.POST['page_id']
-#         if mess == '':
-#             mess = "請輸入token"
-#         elif mess2 == '':
-#             mess2 = "請輸入粉絲專頁ID"
-#         else:
-#             crawl(mess, mess2)
-#             return redirect('/text/')
-#     else:
-#         mess = "token尚未送出!"
-#         mess2 = "粉絲專頁ID尚未送出!"
-#     return render(request, "get.html", locals())
-
-
-def word_cloud(request):
-    """
-    建立 theme 選單，選擇後
-    呼叫繪製 Wordcloud 並顯示於網頁
-    """
-    from CrawlCuration.visual import word_cloud as wc
-    # 繪製圖檔，供網頁讀取用
-    if not RUNNING_DEVSERVER:
-        imgurl = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/media/wordcloud_plot.png'
-    else:
-        imgurl = 'static/media/wordcloud_plot.png'
-    wc_list = ["default", "cnanewstaiwan"]      # 前端讀取的 theme 選項 TODO: 未來改成動態取得
-    # 如果接收到前端 theme 選單回傳的POST請求
-    if request.method == "POST":
-        selector = request.POST['theme']    # 由前端選單回傳的 theme 選項
-        user_id = request.session['localId']
-        if selector != '':
-            try:
-                print("Try to call WC...")
-                url = wc.draw_wordcloud(selector, user_id, RUNNING_DEVSERVER, imgurl)     # 進行 WC 繪製
-                return render(request, "Visual/wordcloud.html", locals())  # 重載頁面顯示結果
-            except Exception as e:
-                return render(request, "error_page/error.html", locals())      # 失敗則導向至錯誤頁面
-    print("No Selector!")
-    return render(request, "Visual/wordcloud.html", locals())
 
 
 def bubble(request, office, classification):
@@ -155,25 +105,6 @@ def bubble_json(request, office, classification):
     json_res = bubblechart.provide_bubble_chart_data(office, classification)
     pprint(json_res)
     return JsonResponse(json_res)
-
-
-def bar_chart(request):
-    """ 直條圖頁面，自帶JSON而非用Http request """
-    import DataProcessing.ldadata as ldadata
-    lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
-    list = ldadata.topics_list(lda)
-    data = [
-        {
-            'values': [],
-            'key': 'Serie 1',
-            'yAxis': '1'
-        }
-    ]
-    for l in list:
-        data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
-    # print(data)
-    json.dumps(data, ensure_ascii=False)
-    return render_to_response('Visual/barchart.html', locals())
 
 
 def site_options(request):
@@ -194,23 +125,13 @@ def recommendation(request, office, classification):
     :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
     :return: 對指定新聞網站之分類做出的視覺化呈現
     """
+    from CrawlCuration.visual import barchart, word_cloud
     office = office
     theme = classification
+    user_id = request.session['localId']
     print("office name=", office, "\nclassification=", classification)
-    import DataProcessing.ldadata as ldadata
-    lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
-    list = ldadata.topics_list(lda)
-    data = [
-        {
-            'values': [],
-            'key': 'Serie 1',
-            'yAxis': '1'
-        }
-    ]
-    for l in list:
-        data[0]['values'].append({'x': l[0], 'y': np.float64(l[1])})
-    # print(data)
-    json.dumps(data, ensure_ascii=False)
+    data = barchart.provide_bar_chart_data(office, classification)
+    wc_url = word_cloud.draw_wordcloud(office, classification, user_id, 0, RUNNING_DEVSERVER)
     return render(request, "Visual/recommendation.html", locals())
 
 

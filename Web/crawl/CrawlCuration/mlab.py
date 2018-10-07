@@ -42,8 +42,6 @@ def getNewsContent(collection_input, office, classification):
     try:
         collection = connect_mongo(collection_input)
         content = collection.find({"office": office, "classification": classification},{'_id':0,'content':1,'by':1})
-
-        print(content)
         return content
     except Exception as e:
         print('Got an error!')
@@ -79,40 +77,3 @@ def getTextById(collection_input, Pageid):
     except Exception as e:
         print('Got an error!')
         print(e)
-
-# def getVocabularyByTheme(title):
-# # input: 主題字串 ex."deault"
-# # output: cursor
-#
-#     try:
-#         client = MongoClient(MONGO_HOST)
-#         db = client.python
-#         collection = db["theme"]
-#         return collection.find({"title":title},{"vocabulary":1})
-#     except Exception as e:
-#         print('Got an error on getVocabularyByTheme')
-#         print(e)
-#
-#
-# def DeleteById(collection_input,id):
-#     try:
-#         collection = connect_mongo(collection_input)
-#         deletepage = '^'+id
-#         collection.remove({'id':{'$regex':deletepage}})
-#     except Exception as e:
-#         print('Got an error!')
-#         print(e)
-#
-# def save_to_mongo(collection_input, input_data, id):
-#     collection = connect_mongo(collection_input)
-#     # data = read_csv()
-#
-#     try:
-#         #collection.drop()
-#         DeleteById(collection_input,id)
-#         collection.insert_many(input_data)
-#         # result = collection.insert_many(data)
-#         # print('%d rows are saved to "%s" collection in "%s" document successfully!' % (len(result.inserted_ids), COLLECTION_NAME, DOCUMENT_NAME))
-#     except Exception as e:
-#         print('Got an error!')
-#         print(e)
