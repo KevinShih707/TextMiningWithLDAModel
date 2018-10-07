@@ -7,13 +7,12 @@ import operator
 import math
 
 class Lda():
-    def __init__(self, corpora = None, savedModel = None, numTopics = 10, seed = None, autoAproach = False):
+    def __init__(self, corpora = None, savedModel = None, numTopics = 10, seed = None):
         '''
             corpora: Corpora 結構化之文本數據
             saveModel: str = None 欲載入之model路徑
             numTopics: int = 10 欲生成之主題數量
             seed: int = None 使用特定亂數種子碼
-            autoAproach = False 是否自動調整主題數目找出適當值
         '''
         self.corpora = corpora
         self.numTopics = numTopics
@@ -24,21 +23,6 @@ class Lda():
             self.corpora.changeDictionary(corpora.Dictionary.load_from_text(savedModel))
         else:
             self.ldaModel = None
-
-        if(autoAproach):
-            wellLastTime = False
-            while(self.__isWellClassify() or not wellLastTime):
-                if(self.__isWellClassify()):
-                    wellLastTime = True
-                    savedModel(name = "temp")
-                    self.numTopics -= 1
-                    self.__trainingModel()
-                elif(not wellLastTime):
-                    self.numTopics += 2
-                    self.__trainingModel()
-            # else:
-            self.numTopics += 1
-            LdaModel.load("temp.pkl")
 
     def __trainingModel(self):
         if(self.seed != None):
@@ -119,11 +103,8 @@ class Lda():
             topicsDistr = self.topicsDistribution()
         result = []
         for article in topicsDistr: #針對每一篇文章測試
-            topicID = 0 #預設主題為0
-            for topic in article: #依序迭代每一主題
-                if(topic[1] > article[topicID][1]): #該則主題概率更高則取代預設
-                    topicID = topic[0]
-            result.append(topicID)
+            sortedByDb = sorted(article, key = lambda x:x[1], reverse = True)
+            result.append(sortedByDb[0][0]) #機率最高的ID
         return result
 
     def findArticleMatched(self, classifiedTopic = None):

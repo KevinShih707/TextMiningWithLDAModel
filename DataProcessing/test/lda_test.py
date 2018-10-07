@@ -23,8 +23,9 @@ class TestLda(unittest.TestCase):
         fakedata = [[(0,0.2), (1,0.5), (2,0.3)],
                     [(0,0.8), (1,0.1), (2,0.1)],
                     [(0,0.0), (1,0.0), (2,1.0)],
-                    [(0,0.4), (1,0.1), (2,0.5)]]
-        expectResult = [1, 0, 2, 2]
+                    [(0,0.4), (1,0.1), (2,0.5)],
+                    [(0,0.2), (2,0.8)]]
+        expectResult = [1, 0, 2, 2, 2]
         self.assertEqual(expectResult, self.lda.classifyTopic(fakedata))
 
     def test_findArticleMatched(self):
