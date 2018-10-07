@@ -23,8 +23,9 @@ class TestLda(unittest.TestCase):
         fakedata = [[(0,0.2), (1,0.5), (2,0.3)],
                     [(0,0.8), (1,0.1), (2,0.1)],
                     [(0,0.0), (1,0.0), (2,1.0)],
-                    [(0,0.4), (1,0.1), (2,0.5)]]
-        expectResult = [1, 0, 2, 2]
+                    [(0,0.4), (1,0.1), (2,0.5)],
+                    [(0,0.2), (2,0.8)]]
+        expectResult = [1, 0, 2, 2, 2]
         self.assertEqual(expectResult, self.lda.classifyTopic(fakedata))
 
     def test_findArticleMatched(self):
@@ -35,13 +36,13 @@ class TestLda(unittest.TestCase):
                         [2, 8, 13, 18]]
         self.assertEqual(expectResult, self.lda.findArticleMatched(fakedata))
 
-    def test_getArticleCount(self):
+    def test_getTopicArticleCount(self):
         fakedata = [[3, 5, 6, 9, 10, 14, 15],
                     [0, 7, 11, 17, 19],
                     [1, 4, 12, 16],
                     [2, 8, 13, 18]]
         expectResult = [(0, 7), (1, 5), (2, 4), (3, 4)]
-        self.assertEqual(expectResult, self.lda.getArticleCount(fakedata))
+        self.assertEqual(expectResult, self.lda.getTopicArticleCount(fakedata))
 
     def test_relativeEntropy(self):
         p = [0.1, 0.2, 0.3, 0.4]
