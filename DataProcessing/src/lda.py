@@ -119,7 +119,7 @@ class Lda():
             counter += 1
         return result
 
-    def getArticleCount(self, ArticleMached = None):
+    def getTopicArticleCount(self, ArticleMached = None):
         '''回傳分類後各組題包含幾篇文章'''
         if(ArticleMached == None):
             ArticleMached = self.findArticleMatched()
@@ -160,8 +160,10 @@ class Lda():
             klMeans.append((id, self.__relativeEntropy(p, q)))
         return klMeans
 
-    def showAuthenticArticle(self, topicId, num = 1):
+    def showAuthenticArticle(self):
         '''代表性文章'''
-        entropy = self.showRelativeEntropy(topicId, self.corpora.DtMatrix)
-        sortedEntropy = sorted(entropy, key = lambda x: x[1])
-        return [t[0] for t in sortedEntropy[:num]]
+        # entropy = self.showRelativeEntropy(topicId, self.corpora.DtMatrix)
+        # sortedEntropy = sorted(entropy, key = lambda x: x[1])
+        # return [t[0] for t in sortedEntropy[:num]]
+
+        return [i for i in range(len(self.ldaModel.get_topics()))]
