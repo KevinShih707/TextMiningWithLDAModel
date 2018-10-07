@@ -55,10 +55,12 @@
             </div>
         </div>
 
+        {% for topic in wc_url %}
+        <div id="topic-{{ forloop.counter0 }}" style="display: none;">
         {# 這裡放WC #}
         <div class="uk-width-expand">
             <div class="uk-tile uk-background-secondary uk-padding-remove">
-                <img data-src="{{ wc_url }}" class="uk-position--center-center uk-animation-fade" uk-img>
+                <img src="{{ topic }}" class="uk-position--center-center uk-animation-fade" uk-img>
             </div>
         </div>
 
@@ -123,12 +125,16 @@
                 </div>
             </div>
         </div>
-
+        </div>
+        {% endfor %}
     </div>
 </div>
 
 <!-- 把 script 載入標籤盡量放在body尾端 速度考量 -->
-<script>var data_discreteBarChart = {{ data|safe }};</script>
+<script>
+var data_discreteBarChart = {{ data|safe }};
+document.getElementById("topic-0").style.display = "block";
+</script>
 <script type="text/javascript" src="{% static 'js/nv.d3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/barchart.js' %}"></script>
 <script src="{% static 'js/navbar.bg.js' %}"></script>

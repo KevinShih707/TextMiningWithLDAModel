@@ -1,16 +1,14 @@
 import numpy as np
-from CrawlCuration.controller.ldaResult import Result
 
-
-def provide_bubble_chart_data(office, classification):
+# TODO: 更新註解
+def provide_bubble_chart_data(result_topics_list):#office, classification
     """
     提供繪製泡泡圖 bubblechart.js 所需 JSON 資料來源
     :param office: 要爬哪一家網站
     :param classification: 指定新聞分類
     :return: JSON
     """
-    result = Result("news_classify", office, classification)
-    topics_list = result.topics_list()
+    topics_list = result_topics_list
     json_topic_list = {
         "name": "All Data",
         "children": []

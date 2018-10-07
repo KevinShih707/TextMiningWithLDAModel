@@ -27,11 +27,8 @@ class Result():
         self.corpora = Corpora(file=self.newsStrList) # 建立Corpora
         self.lda = Lda(self.corpora, numTopics=numTopics, seed=seed)
 
-    def topics_list(self):
-        return self.lda.showTopicsList()
+        self.topics_list = self.lda.showTopicsList()
 
-    def single_topic_list(self):
-        return self.lda.showTopicsList()[self.topicId][1]
 
     # def classify_topic(self):
     #     return self.lda.classifyTopic()

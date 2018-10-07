@@ -10,7 +10,8 @@ var g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + di
 document.getElementById("chart").style.opacity = 0; // 透明度先設成0
 
 /* 色彩Iterator */
-var color = d3.scaleOrdinal().domain([0, 1, 2, 3]).range(['#ff8533', '#ffd1b3']);
+var color = d3.scaleOrdinal().domain([0, 1]).range(['#b3b3b3', '#e6e6e6']);
+var small_color = d3.scaleOrdinal(d3.schemeCategory10);
 
 var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
@@ -36,13 +37,16 @@ d3.json(jsonPath, function(error, root) {
     .data(nodes)
     .enter().append("circle")
         .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-        .style("fill", function(d) { 
-            console.log(d.depth);
+        .style("fill", function(d, i) { 
+            // console.log(d.children);
             document.getElementById("loader-wrapper").hidden = true;   // 載入完畢，隱藏Spinner
             chart = document.getElementById("chart");           // 載入後淡入效果, 滑~~順~~
-            fadein(chart);
-            return d.children ? color(d.depth) : null; })
+            fadein(chart);  // 淡入圖表
+            return d.children ? color(d.depth) : small_color(i); })
         .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
+
+    // var circle = g.selectAll(".node--leaf")
+    // .style("fill", small_color);
 
     /* 放上文字 */
     var text = g.selectAll("text")

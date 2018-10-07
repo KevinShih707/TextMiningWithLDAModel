@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
-import json
-import numpy as np
 from pprint import pprint
 import pyrebase
+from CrawlCuration.visual.reco import Reco
+from CrawlCuration.controller.ldaResult import Result
 
 
 # Firebase Authentication 初始化: https://firebase.google.com/docs/web/setup
@@ -101,15 +101,17 @@ def bubble(request, office, classification):
 
 def bubble_json(request, office, classification):
     """ 回傳單獨的JSON Http response給前端JS """
-    from CrawlCuration.visual import bubblechart
-    json_res = bubblechart.provide_bubble_chart_data(office, classification)
+    # from CrawlCuration.visual import bubblechart
+    result = Result("news_classify", office, classification)
+    reco = Reco(result)
+    json_res = reco.bubblechart()
     pprint(json_res)
     return JsonResponse(json_res)
 
 
 def site_options(request):
     """網站按鈕選單頁面 ex.蘋果, 中時等等"""
-    if request.session.get('idToken') != None:
+    if request.session.get('idToken') is not None:
         from CrawlCuration.news_mgr import site_list
         SITE_LIST = site_list.get()
         return render(request, "Visual/site_options.html", locals())
@@ -125,13 +127,19 @@ def recommendation(request, office, classification):
     :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
     :return: 對指定新聞網站之分類做出的視覺化呈現
     """
-    from CrawlCuration.visual import barchart, word_cloud
+    # from CrawlCuration.visual import barchart, word_cloud
+    user_id = request.session['localId']
+    result = Result("news_classify", office, classification)
+    reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
     office = office
     theme = classification
     user_id = request.session['localId']
     print("office name=", office, "\nclassification=", classification)
-    data = barchart.provide_bar_chart_data(office, classification)
-    wc_url = word_cloud.draw_wordcloud(office, classification, user_id, 0, RUNNING_DEVSERVER)
+    data = reco.barchart()
+    # data = barchart.provide_bar_chart_data(office, classification)
+    wc_url = reco.wc()
+    # wc_url = word_cloud.draw_wordcloud(office, classification, user_id, 0, RUNNING_DEVSERVER)
+    numTopics = result.numTopics
     return render(request, "Visual/recommendation.html", locals())
 
 
