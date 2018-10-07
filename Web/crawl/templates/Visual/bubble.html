@@ -40,7 +40,6 @@
         }
     </style>
 {% endblock %}
-
 {% block mainbody %}
 <div class="uk-section-secondary  uk-preserve-color" uk-height-viewport="offset-top: true">
     <div class="uk-container uk-container-expand">
@@ -49,9 +48,17 @@
         </legend>
     </div>
     <svg id="chart" width="960" height="800"></svg>
+    {% include "css/loader.html" %}
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
 </div>
 
-
 {% load static %}
+<script>
+    var office = "{{ office|safe }}";
+    var classification = "{{ classification|safe }}";
+</script>
+<script src="{% static 'js/navbar.bg.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bubblechart.js' %}"></script>
 {% endblock %}

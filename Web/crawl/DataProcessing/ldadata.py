@@ -38,7 +38,7 @@ def get_lda_by_path(filepath, stopwords, numTopics=2, seed=10):
     """
     CSV_FILE_PATH = filepath
     STOPWORDS_FILE_PATH = stopwords
-    corpora = Corpora(filePath=CSV_FILE_PATH, isDeleteUrl=False, stopwords=STOPWORDS_FILE_PATH)
+    corpora = Corpora(filePath=CSV_FILE_PATH, stopwords=STOPWORDS_FILE_PATH)
     lda = Lda(corpora, numTopics=numTopics, seed=seed)
     return lda
 

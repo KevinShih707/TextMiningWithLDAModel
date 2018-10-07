@@ -10,7 +10,7 @@
     <style type="text/css">
     /* 圖表文字 字體 */
     .nvd3 text {
-        font: normal 12px "Noto Sans TC", sans-serif;s
+        font: normal 12px "Noto Sans TC", sans-serif;
     }
     /* X軸字體顏色大小 */
     .nv-x text{
@@ -19,7 +19,7 @@
     }
     /* Y軸字體顏色大小 */
     .nv-y text{
-      font-size: 17px;
+      font-size: 16px;
       fill: #bdbdae;
     }
     /* 指標移到上面顯示的字體 */
@@ -58,8 +58,7 @@
         {# 這裡放WC #}
         <div class="uk-width-expand">
             <div class="uk-tile uk-background-secondary uk-padding-remove">
-                <img data-src="https://storage.googleapis.com/crawl-curation.appspot.com/static/media/wc/pygtGh4oolanlQBgnYlJHYqUM4D2/cnanewstaiwan.png"
-                class="uk-position--center-center uk-animation-fade" uk-img>
+                <img data-src="{{ url }}" class="uk-position--center-center uk-animation-fade" uk-img>
             </div>
         </div>
 
@@ -132,6 +131,5 @@
 <script>var data_discreteBarChart = {{ data|safe }};</script>
 <script type="text/javascript" src="{% static 'js/nv.d3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/barchart.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/responsive.d3.js' %}"></script>
 <script src="{% static 'js/navbar.bg.js' %}"></script>
 {% endblock %}

@@ -7,6 +7,7 @@ var diameter = +svg.attr("width");
 var margin = 100;
 var g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")")
     .style("transform", "translate(50%, 50%)");
+document.getElementById("chart").style.opacity = 0; // 透明度先設成0
 
 /* 色彩Iterator */
 var color = d3.scaleOrdinal().domain([0, 1, 2, 3]).range(['#ff8533', '#ffd1b3']);
@@ -15,8 +16,11 @@ var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
     .padding(2);
 
+var jsonPath = "/bubble_json/site=" + office + "&theme=" + classification + "/";
+console.log(jsonPath);
+
 /* 讀JSON畫圖 */
-d3.json("/bubble_json/", function(error, root) {
+d3.json(jsonPath, function(error, root) {
     if (error) throw error;
 
     root = d3.hierarchy(root)
@@ -27,12 +31,17 @@ d3.json("/bubble_json/", function(error, root) {
     var nodes = pack(root).descendants();
     var view;
 
-    /* 畫圓 */
+    /* 非同步畫圓，頁面其餘元素先行載入 */
     var circle = g.selectAll("circle")
     .data(nodes)
     .enter().append("circle")
         .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-        .style("fill", function(d) { console.log(d.depth); return d.children ? color(d.depth) : null; })
+        .style("fill", function(d) { 
+            console.log(d.depth);
+            document.getElementById("loader-wrapper").hidden = true;   // 載入完畢，隱藏Spinner
+            chart = document.getElementById("chart");           // 載入後淡入效果, 滑~~順~~
+            fadein(chart);
+            return d.children ? color(d.depth) : null; })
         .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
     /* 放上文字 */
@@ -77,3 +86,17 @@ d3.json("/bubble_json/", function(error, root) {
         circle.attr("r", function(d) { return d.r * k; });
     }
 });
+
+/* 淡入效果 */
+function fadein(element) {
+    var op = 0.1;  // initial opacity
+    element.style.display = 'block';
+    var timer = setInterval(function () {
+        if (op >= 1){
+            clearInterval(timer);
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op += op * 0.1;
+    }, 10);
+}

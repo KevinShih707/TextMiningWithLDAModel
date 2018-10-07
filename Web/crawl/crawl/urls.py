@@ -35,14 +35,14 @@ urlpatterns = [
     url(r'^help/', views.help),
     url(r'^error/$', views.error),
     url(r'^word_cloud/$', views.word_cloud),
-    url(r'^bubble/$', views.bubble),
-    url(r'^bubble_json/', views.bubble_json),
+    url(r'^bubble/site=(?P<office>\w{1,})&theme=(?P<classification>\w{1,})/$', views.bubble, name="bubble"),
+    url(r'^bubble_json/site=(?P<office>\w{1,})&theme=(?P<classification>\w{1,})/$', views.bubble_json),
     url(r'^bar_chart/$', views.bar_chart),
     url(r'^login/$', views.login),
     url(r'^sign_up/', views.sign_up),
     url(r'^logout/$', views.logout),
     url(r'^site_options/', views.site_options),
-    url(r'^recommendation/$', views.recommendation),
+    url(r'^recommendation/site=(?P<office>\w{1,})&theme=(?P<classification>\w{1,})/$', views.recommendation, name="recommendation"),
 ]
 
 if not RUNNING_DEVSERVER:

@@ -2,7 +2,6 @@ import sys
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
-from .models import Post
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 import json
 import numpy as np
@@ -143,15 +142,17 @@ def word_cloud(request):
     return render(request, "Visual/wordcloud.html", locals())
 
 
-def bubble(request):
+def bubble(request, office, classification):
     """ 氣泡圖頁面 """
+    office = office
+    classification = classification
     return render(request, "Visual/bubble.html", locals())
 
 
-def bubble_json(request):
+def bubble_json(request, office, classification):
     """ 回傳單獨的JSON Http response給前端JS """
     from CrawlCuration.visual import bubblechart
-    json_res = bubblechart.provide_bubble_chart_data()
+    json_res = bubblechart.provide_bubble_chart_data(office, classification)
     pprint(json_res)
     return JsonResponse(json_res)
 
@@ -185,7 +186,17 @@ def site_options(request):
         return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
-def recommendation(request):
+def recommendation(request, office, classification):
+    """
+    主要頁面，顯示包含詞雲、主題長條圖、代表性文章以及主題中之所有文章
+    :param request: http 要求
+    :param office: view回傳，指定網站進行爬取分析顯示
+    :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
+    :return: 對指定新聞網站之分類做出的視覺化呈現
+    """
+    office = office
+    theme = classification
+    print("office name=", office, "\nclassification=", classification)
     import DataProcessing.ldadata as ldadata
     lda = ldadata.get_lda_by_path("DataProcessing/test_data/cnanewstaiwan.csv", "DataProcessing/src/stopwords.txt")
     list = ldadata.topics_list(lda)
