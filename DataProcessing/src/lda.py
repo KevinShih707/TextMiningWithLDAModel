@@ -129,6 +129,24 @@ class Lda():
         index = [x for x in range(len(ArticleMached))]
         return list(zip(index, count))
 
+    def __subTfidfPair(self, tfidfPair, sequence):
+        '''
+            裁減tfidfPPair僅保留序列中的詞, 入部存在則補零
+            tfidfPair:Cprpora.TfidfPair
+            sequence:欲保留的key序列
+        '''
+        tfpSpeKey = [pair[0] for pair in tfidfPair]
+        tfpSpePro = [pair[1] for pair in tfidfPair]
+        result = list()
+        padingCount = 0#紀錄共有幾個零
+        for key in sequence:
+            if(key in tfpSpeKey):
+                result.append((key, tfpSpePro[tfpSpeKey.index(key)]))
+            else:
+                result.append((key, 0.0))
+                padingCount += 1
+        return [result, padingCount]
+
     def __relativeEntropy(self, p , q):#KL-mean
         '''sum(p*log(p/q))'''
         # if(0 in q):
@@ -136,34 +154,50 @@ class Lda():
         # return reduce(operator.add, map(lambda x, y: x*math.log(x/y), p, q))
         return scipy.stats.entropy(p, q)
 
-    def showRelativeEntropy(self, topicId, dtMatrix):
+    def __ArticleMatchKl(self, articleMached = None):
         '''
-            計算給定詞頻矩陣與該model之相對熵
-            topicId: 愈比對之主題ID
-            dtMatrix: 愈比對之文本[[], [], []...]
+            計算出代表性文章的kl
+            output:[[(topicid, kl), ...],
+                    [(topicid, kl), ...],
+                    ....]
         '''
         if(self.ldaModel == None):
             self.__trainingModel()
-        klMeans = list()
-        p = self.ldaModel.get_topics()[topicId]
-        #q
-        candidatesIds = self.findArticleMatched()[topicId]#取得歸類於給定主題之文本
-        for id in candidatesIds:
-            dtm = dtMatrix[id]
-            totalWordCount = sum(dtm)#取得文章總辭彙數用於將詞頻轉為概率
-            q = list()
-            for prob in dtm:
-                if (prob == 0):
-                    q.append(1e-20)
+        if(articleMached == None):
+            articleMached = self.findArticleMatched()#取得歸類於各主題之文本
+
+        result = list()
+        for i in range(self.NumTopics):
+            topicTrem = [self.ldaModel.get_topic_terms(topicid = i, topn = 10)][0]
+            sequence = [pair[0] for pair in topicTrem]
+            topicProb = [pair[1] for pair in topicTrem]
+            topicProb.append(1 - sum(topicProb))#將非代表詞加總視為「其他」的概率
+            topicMatch = articleMached[i]
+            klThisTopic = list()
+            for candidateId in topicMatch:
+                tfp = self.corpora.TfidfPair[candidateId]
+                subTfpb = self.__subTfidfPair(tfp, sequence)
+                if(subTfpb[1] != 0):#含有零
+                    klThisTopic.append((candidateId, subTfpb[1]))
                 else:
-                    q.append(prob/totalWordCount)
-            klMeans.append((id, self.__relativeEntropy(p, q)))
-        return klMeans
+                    subTfpbProb = [pair [1] for pair in subTfpb[0]]
+                    subTfpbProb.append(1 - sum(subTfpb))#將非代表詞加總視為「其他」的概率
+                    klThisTopic.append((candidateId, scipy.stats.entropy(subTfpbProb, topicProb)))
+            result.append(klThisTopic)
+        return result
 
-    def showAuthenticArticle(self):
+    def showAuthenticArticle(self, articleMatchKl = None):
         '''代表性文章'''
-        # entropy = self.showRelativeEntropy(topicId, self.corpora.DtMatrix)
-        # sortedEntropy = sorted(entropy, key = lambda x: x[1])
-        # return [t[0] for t in sortedEntropy[:num]]
+        if (articleMatchKl == None):
+            articleMatchKl = self.__ArticleMatchKl()
+        result = []
+        for eachTopic in articleMatchKl:
+            result.append(sorted(eachTopic, key = lambda x:x[1])[0][0])
+        return result
 
-        return [i for i in range(len(self.ldaModel.get_topics()))]
+    @property
+    def NumTopics(self):
+        '''Model 的 topic 數量'''
+        if(self.ldaModel == None):
+            self.__trainingModel()
+        return len(self.ldaModel.get_topics())

@@ -5,7 +5,7 @@ import numpy as np
 import os
 import math
 
-class TestLda(unittest.TestCase):
+class TestLdaFn(unittest.TestCase):
 
     def setUp(self):
         self.corpora = Corpora()
@@ -44,6 +44,14 @@ class TestLda(unittest.TestCase):
         expectResult = [(0, 7), (1, 5), (2, 4), (3, 4)]
         self.assertEqual(expectResult, self.lda.getTopicArticleCount(fakedata))
 
+    def test_subTfidfPair(self):
+        leaveKeySequence = [1, 2, 5, 7]
+        tfidfPair = [(0, 0.0), (1, 0.1), (3, 0.3), (4, 0.4),
+                     (5, 0.5), (6, 0.6), (8, 0.8), (9, 0.9)]
+        result = self.lda._Lda__subTfidfPair(tfidfPair, leaveKeySequence)
+        self.assertEqual([(1, 0.1), (2, 0.0), (5,0.5), (7, 0.0)], result[0])
+        self.assertEqual(2, result[1])#padungCount
+
     def test_relativeEntropy(self):
         p = [0.1, 0.2, 0.3, 0.4]
         q = [0.4, 0.3, 0.2, 0.1]
@@ -52,18 +60,7 @@ class TestLda(unittest.TestCase):
         self.assertEqual(0.45643481914678347, self.lda._Lda__relativeEntropy(p, q))
         self.assertEqual(math.inf, self.lda._Lda__relativeEntropy(p, r))
 
-    # def test_showRelativeEntropy(self):
-    #     from pprint import pprint
-    #     pprint (
-    #     self.lda.showRelativeEntropy(1, self.corpora.DtMatrix)
-    #     )
-
-    # def test_showAuthenticArticle(self):
-    #     print(
-    #     self.lda.showAuthenticArticle(0, num = 3)
-    #     )
-
-class TestLdaSave(unittest.TestCase):
+class TestLda(unittest.TestCase):
     TEXT_FILE_PATH = "DataProcessing/test_data/testData.txt"
     CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
     STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
@@ -98,6 +95,16 @@ class TestLdaSave(unittest.TestCase):
         ldaBySaving = Lda(corpora1, self.MODEL_SAVING_PATH)
         ldaDirectTraining = Lda(corpora2, savedModel = None)
         self.assertNotEqual(ldaBySaving.corpora.DtPair, ldaDirectTraining.corpora.DtPair)
+
+    def test_showAuthenticArticle(self):
+        fakedata = [[(0, 0.253), (1, 0.251), (2, 0.176), (3, 0.132), (4, 0.116), (15, 0.164), (16, 0.176), (17, 0.121), (18, 0.116), (19, 0.068)],
+                    [(5, 0.192), (6, 0.252), (7, 0.528), (8, 0.076), (9, 0.383), (10, 0.107), (11, 0.121), (12, 0.252), (13, 0.192), (14, 0.152)]]
+        self.assertEqual([19,8], self.lda.showAuthenticArticle(fakedata))
+        self.assertTrue(self.lda.showAuthenticArticle()[0] in self.lda.findArticleMatched()[0])
+        self.assertTrue(self.lda.showAuthenticArticle()[1] in self.lda.findArticleMatched()[1])
+
+    def test_NumTopics(self):
+        self.assertEqual(2, self.lda.NumTopics)
 
 if __name__ == "__main__":
     unittest.main()
