@@ -97,7 +97,7 @@ class Lda():
             self.__trainingModel()
         return [self.ldaModel[article] for article in tfidf]
 
-    def classifyTopic(self, topicsDistr = None):
+    def __classifyTopic(self, topicsDistr = None):
         '''回傳存有文本對應主題之list'''
         if(topicsDistr == None):
             topicsDistr = self.topicsDistribution()
@@ -110,7 +110,7 @@ class Lda():
     def findArticleMatched(self, classifiedTopic = None):
         '''將文本依主題歸類後做成list回傳'''
         if(classifiedTopic == None):
-            classifiedTopic = self.classifyTopic()
+            classifiedTopic = self.__classifyTopic()
         numOfTopic = max(classifiedTopic) + 1
         result = [[] for num in range(0, numOfTopic)]
         counter = 0

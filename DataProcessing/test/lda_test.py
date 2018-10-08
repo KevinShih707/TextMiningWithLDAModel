@@ -26,7 +26,7 @@ class TestLdaFn(unittest.TestCase):
                     [(0,0.4), (1,0.1), (2,0.5)],
                     [(0,0.2), (2,0.8)]]
         expectResult = [1, 0, 2, 2, 2]
-        self.assertEqual(expectResult, self.lda.classifyTopic(fakedata))
+        self.assertEqual(expectResult, self.lda._Lda__classifyTopic(fakedata))
 
     def test_findArticleMatched(self):
         fakedata = [1, 2, 3, 0, 2, 0, 0, 1, 3, 0, 0, 1 ,2 ,3 ,0 ,0 ,2 ,1 ,3, 1]
@@ -105,6 +105,54 @@ class TestLda(unittest.TestCase):
 
     def test_NumTopics(self):
         self.assertEqual(2, self.lda.NumTopics)
+
+class TestLdaOtherCrop(unittest.TestCase):
+    TEXT_FILE_PATH = "DataProcessing/test_data/10articles.txt"
+    CSV_FILE_PATH = "DataProcessing/test_data/testData.csv"
+    STOPWORDS_FILE_PATH = "DataProcessing/test_data/testStopwords.txt"
+    MODEL_SAVING_PATH = "DataProcessing/test_data/mode2_test"
+    MODEL_SAVING_PATH_WITH_EXTENSION = MODEL_SAVING_PATH + ".pkl"
+
+    def setUp(self):
+        self.corporaCsv = Corpora(filePath = self.CSV_FILE_PATH)
+        self.corporaTxt = Corpora(filePath = self.TEXT_FILE_PATH, fileExtension = 'txt')
+        self.ldaCsv = Lda(self.corporaCsv, numTopics = 10, seed = 10)
+        self.ldaCsv.saveModel(self.MODEL_SAVING_PATH)
+        self.ldaTxt = Lda(corpora = self.corporaTxt, savedModel = self.MODEL_SAVING_PATH)
+
+    def tearDown(self):
+        if(os.path.exists(self.MODEL_SAVING_PATH_WITH_EXTENSION)):
+            os.remove(self.MODEL_SAVING_PATH_WITH_EXTENSION)
+            os.remove(self.MODEL_SAVING_PATH_WITH_EXTENSION + ".expElogbeta.npy")
+            os.remove(self.MODEL_SAVING_PATH_WITH_EXTENSION + ".id2word")
+            os.remove(self.MODEL_SAVING_PATH_WITH_EXTENSION + ".state")
+        if(os.path.exists(self.MODEL_SAVING_PATH)):
+            os.remove(self.MODEL_SAVING_PATH)
+
+    def test_foo(self):
+        print()
+        print("\n代表性文章")
+        print(self.ldaCsv.showAuthenticArticle())
+        print("\n文本對應主題，每個list一個主題內裝對應到他的文章No.")
+        print(self.ldaTxt.findArticleMatched())
+        print("\n(主題編號，有幾篇)")
+        print(self.ldaTxt.getTopicArticleCount())
+        print("\n總共有幾篇文章")
+        print(len(self.corporaTxt))
+
+    '''
+        代表性文章
+        [48, 22, 58, 2, 12, 6, 84, 47, 1, 32]
+
+        文本對應主題，每個list一個主題內裝對應到他的文章No.
+        [[], [], [6], [2], [0, 3, 5], [4], [], [], [1]]
+
+        (主題編號，有幾篇)
+        [(0, 0), (1, 0), (2, 1), (3, 1), (4, 3), (5, 1), (6, 0), (7, 0), (8, 1)]
+
+        總共有幾篇文章
+        7
+    '''
 
 if __name__ == "__main__":
     unittest.main()
