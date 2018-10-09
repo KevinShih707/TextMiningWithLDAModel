@@ -28,19 +28,7 @@ class Result():
         self.lda = Lda(self.corpora, numTopics=numTopics, seed=seed)
 
         self.topics_list = self.lda.showTopicsList()
-
-
-    # def classify_topic(self):
-    #     return self.lda.classifyTopic()
-    #
-    # def authentic_article(self):
-    #     try:
-    #         return self.lda.showAuthenticArticle(self.topicId)
-    #     except Exception as e:
-    #         print(e)
-    #
-    # def article_mathed(self):
-    #     try:
-    #         return self.lda.findArticleMatched()
-    #     except Exception as e:
-    #         print(e)
+        self.article_matched = self.lda.findArticleMatched()
+        self.topic_article_count = self.lda.getTopicArticleCount()
+        print(self.topic_article_count)
+        print(len(self.corpora))

@@ -136,7 +136,9 @@ def recommendation(request, office, classification):
     print("office name=", office, "\nclassification=", classification)
     data = reco.barchart()
     wc_url = reco.wc()
-    print(wc_url)
+    article_matched = reco.article_matched()
+    topics = []
+    [topics.append({"wc_url": url, "articles": articles}) for url, articles in zip(wc_url, article_matched)]
     numTopics = result.numTopics
     return render(request, "Visual/recommendation.html", locals())
 

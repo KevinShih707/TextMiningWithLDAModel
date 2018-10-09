@@ -44,7 +44,7 @@
 {% block mainbody %}
 {% load static %}
 <div class="uk-section uk-padding uk-preserve-color" uk-height-viewport="offset-top: true" style="background: #404040;">
-    <div class="uk-grid-small uk-padding uk-text-center uk-padding-remove-horizontal" uk-grid>
+    <div class="uk-grid-small uk-padding uk-text-center" uk-grid>
 
         {# 長條圖 #}
         <div class="uk-width-1-1">
@@ -55,13 +55,13 @@
             </div>
         </div>
 
-        {% for topic in wc_url %}
+        {% for topic in topics %}
         <div class="uk-grid-small uk-grid-match" uk-grid>
             <div id="topic-{{ forloop.counter0 }}" class="uk-hidden">
                 {# 這裡放WC #}
                 <div class="uk-width-expand">
                     <div class="uk-tile uk-background-secondary uk-padding-remove">
-                        <img data-src="{{ topic }}" class="uk-animation-fade" uk-img>
+                        <img data-src="{{ topic.wc_url }}" class="uk-animation-fade" uk-img>
                     </div>
                 </div>
 
@@ -82,6 +82,7 @@
                 </div>
 
                 {# 這裡放主題內文章列表 #}
+                {% for article in topic.articles %}
                 <div class="uk-width-1-1  uk-light">
                     <div class="uk-tile uk-background-secondary uk-padding-small">
                         <div class="uk-margin-left uk-margin-right uk-text-left">
@@ -89,43 +90,13 @@
                             Lorem ipsum dolor sit amet
                         </legend>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            {{ article }}
                         </p>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
 
-                <div class="uk-width-1-1  uk-light">
-                    <div class="uk-tile uk-background-secondary uk-padding-small">
-                        <div class="uk-margin-left uk-margin-right uk-text-left">
-                        <legend class="uk-legend">
-                            Lorem ipsum dolor sit amet
-                        </legend>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="uk-width-1-1  uk-light">
-                    <div class="uk-tile uk-background-secondary uk-padding-small">
-                        <div class="uk-margin-left uk-margin-right uk-text-left">
-                        <legend class="uk-legend">
-                            Lorem ipsum dolor sit amet
-                        </legend>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         {% endfor %}
