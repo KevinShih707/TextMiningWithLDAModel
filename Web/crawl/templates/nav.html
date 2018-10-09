@@ -108,7 +108,7 @@
                         <div class="uk-navbar-right">
                             <ul class="uk-navbar-nav">
                                 {% if not request.session.idToken %}
-                                <li><button class="uk-button uk-button-text noto" uk-toggle="target: #sign-up" style="transform: translate(-10px,0);">sign up</button></li>
+                                    <li><button class="uk-button uk-button-text uk-button-small noto uk-margin-top" uk-toggle="target: #sign-up" style="transform: translate(-10px, 3px);">sign up</button></li>
 
                                 <div id="sign-up" class="uk-flex-top noto" uk-modal>
                                     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
 
-                                <li><button id="loginClick" class="uk-button uk-button-muted uk-button-small noto" style="color: #222222;" uk-toggle="target: #login">login</button></li>
+                                <li><button id="loginClick" class="uk-button uk-button-muted uk-button-small noto uk-margin-top" style="color: #222222;" uk-toggle="target: #login">login</button></li>
 
                                 <div id="login" class="uk-flex-top noto" uk-modal>
                                     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">

@@ -8,43 +8,51 @@
 {% block stylesheet %}
     <link type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css" rel="stylesheet" />
     <style type="text/css">
-    /* 圖表文字 字體 */
-    .nvd3 text {
-        font: normal 12px "Noto Sans TC", sans-serif;
-    }
-    /* X軸字體顏色大小 */
-    .nv-x text{
-      font-size: 20px;
-      fill: #bdbdae;
-    }
-    /* Y軸字體顏色大小 */
-    .nv-y text{
-      font-size: 16px;
-      fill: #bdbdae;
-    }
-    /* 指標移到上面顯示的字體 */
-    .nvtooltip {
-        font-family: "Noto Sans TC", sans-serif;
-        font-size: 17px;
-    }
-    /* 以下2個為圖表格線 */
-    /* 背景網格 */
-    .nvd3 .nv-axis line {
-        stroke: #fff;
-        stroke-opacity: .3;
-    }
-    /* X軸那條垂直線 */
-    .nvd3 .nv-axis path {
-        stroke: #fff;
-        stroke-opacity: .75;
-    }
+        /* 圖表文字 字體 */
+        .nvd3 text {
+            font: normal 12px "Noto Sans TC", sans-serif;
+        }
+        /* X軸字體顏色大小 */
+        .nv-x text{
+          font-size: 20px;
+          fill: #bdbdae;
+        }
+        /* Y軸字體顏色大小 */
+        .nv-y text{
+          font-size: 16px;
+          fill: #bdbdae;
+        }
+        /* 指標移到上面顯示的字體 */
+        .nvtooltip {
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 17px;
+        }
+        /* 以下2個為圖表格線 */
+        /* 背景網格 */
+        .nvd3 .nv-axis line {
+            stroke: #fff;
+            stroke-opacity: .3;
+        }
+        /* X軸那條垂直線 */
+        .nvd3 .nv-axis path {
+            stroke: #fff;
+            stroke-opacity: .75;
+        }
+        .top-button {
+            position: fixed;
+            left: 95%;
+            top: 95%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: auto;
+        }
     </style>
 {% endblock %}
 
 {% block mainbody %}
 {% load static %}
 <div class="uk-section uk-padding uk-preserve-color" uk-height-viewport="offset-top: true" style="background: #404040;">
-    <div class="uk-grid-small uk-padding uk-text-center" uk-grid>
+    <div class="uk-grid-small uk-padding uk-text-center uk-margin" uk-grid>
 
         {# 長條圖 #}
         <div class="uk-width-1-1">
@@ -55,24 +63,25 @@
             </div>
         </div>
 
+
         {% for topic in topics %}
-        <div class="uk-grid-small uk-grid-match" uk-grid>
+        <div class="uk-grid-small uk-grid-match uk-margin" uk-grid>
             <div id="topic-{{ forloop.counter0 }}" class="uk-hidden">
                 {# 這裡放WC #}
-                <div class="uk-width-expand">
+                <div class="uk-width-expand uk-grid-item-match">
                     <div class="uk-tile uk-background-secondary uk-padding-remove">
-                        <img data-src="{{ topic.wc_url }}" class="uk-animation-fade" uk-img>
+                        <img data-src="{{ topic.wc_url }}" class="uk-animation-fade uk-position-center" uk-img>
                     </div>
                 </div>
 
                 {# 放代表性文章 #}
-                <div class="uk-width-1-3 uk-grid-item-match noto">
-                    <div class="uk-tile uk-text-left" style="background: #d9d9d9;">
+                <div class="uk-width-1-3 uk-grid-item-match noto-light">
+                    <div class="uk-tile uk-text-left uk-padding" style="background: #d9d9d9;">
                         <legend class="uk-legend">
                             Lorem ipsum dolor sit amet
                         </legend>
 
-                        <p>
+                        <p style="line-height: 32px; font-size: 18px;" class="noto-light">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -81,15 +90,22 @@
                     </div>
                 </div>
 
+                <div class="uk-width-1-1 uk-grid-item-match noto uk-light">
+                    <div class="uk-tile uk-background-secondary uk-text-left uk-padding-remove-bottom">
+                        <legend class="uk-legend uk-heading-bullet uk-margin-left">
+                            屬於此主題之文章
+                        </legend>
+                    </div>
+                </div>
                 {# 這裡放主題內文章列表 #}
                 {% for article in topic.articles %}
                 <div class="uk-width-1-1  uk-light">
-                    <div class="uk-tile uk-background-secondary uk-padding-small">
-                        <div class="uk-margin-left uk-margin-right uk-text-left">
-                        <legend class="uk-legend">
+                    <div class="uk-tile uk-background-secondary uk-padding-remove-vertical">
+                        <div class="uk-margin-left uk-margin-right uk-text-left uk-padding">
+                        <legend class="uk-legend noto">
                             Lorem ipsum dolor sit amet
                         </legend>
-                        <p>
+                        <p style="line-height: 32px; font-size: 18px;" class="noto-light">
                             {{ article }}
                         </p>
                         </div>
@@ -103,6 +119,14 @@
 
     </div>
 </div>
+
+<svg width="50" height="50" style="position:absolute;top:120%;left:15%;z-index: 10;">
+  <rect x="50" y="20" rx="20" ry="20" width="50" height="50" style="fill:#f0f0f0;opacity:0.5;" />
+</svg>
+
+<a href="#navbar" class="top-button uk-button-small uk-button-primary uk-light" uk-scroll>
+    TOP
+</a>
 
 <!-- 把 script 載入標籤盡量放在body尾端 速度考量 -->
 <script>

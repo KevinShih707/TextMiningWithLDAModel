@@ -12,8 +12,6 @@
     {# 必要在head載入的Script #}
     {% endblock %}
 
-    <!-- 講究字體：思源黑體 -->
-    <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notosanstc.css">
     {% block stylesheet %}
     {# 放自己寫CSS的地方 #}
     {% endblock %}
@@ -37,13 +35,37 @@
             text-decoration: none;
         }
         /* 在所不惜，思源黑體 */
+        @font-face {
+            font-family: 'Noto Sans TC';
+            font-style: normal;
+            font-weight: 400;
+            src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff2) format('woff2'),
+                url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff) format('woff'),
+                url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.otf) format('opentype');
+        }
+        @font-face {
+            font-family: 'Noto Sans TC Light';
+            font-style: normal;
+            font-weight: 300;
+            src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Light.woff2) format('woff2'),
+               url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Light.woff) format('woff'),
+               url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Light.otf) format('opentype');
+        }
         .noto {
             font-family: "Noto Sans TC", sans-serif !important;
+        }
+        .noto-light{
+            font-family: "Noto Sans TC Light", sans-serif !important;
         }
         .uk-navbar-nav > li > a,
         .uk-navbar-item,
         .uk-navbar-toggle {
             font-family: "Noto Sans TC", sans-serif !important;
+            font-size-adjust: 0.63;
+        }
+        .uk-navbar-nav {
+            height: 70px;
+
         }
         body {overflow-x: hidden;}
     </style>
