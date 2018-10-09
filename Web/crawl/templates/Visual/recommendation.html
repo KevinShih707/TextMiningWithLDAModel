@@ -56,84 +56,87 @@
         </div>
 
         {% for topic in wc_url %}
-        <div id="topic-{{ forloop.counter0 }}" style="display: none;">
-        {# 這裡放WC #}
-        <div class="uk-width-expand">
-            <div class="uk-tile uk-background-secondary uk-padding-remove">
-                <img src="{{ topic }}" class="uk-position--center-center uk-animation-fade" uk-img>
-            </div>
-        </div>
+        <div class="uk-grid-small uk-grid-match" uk-grid>
+            <div id="topic-{{ forloop.counter0 }}" class="uk-hidden">
+                {# 這裡放WC #}
+                <div class="uk-width-expand">
+                    <div class="uk-tile uk-background-secondary uk-padding-remove">
+                        <img data-src="{{ topic }}" class="uk-animation-fade" uk-img>
+                    </div>
+                </div>
 
-        {# 放代表性文章 #}
-        <div class="uk-width-1-3 uk-grid-item-match noto">
-            <div class="uk-tile uk-text-left" style="background: #d9d9d9;">
-                <legend class="uk-legend">
-                    Lorem ipsum dolor sit amet
-                </legend>
+                {# 放代表性文章 #}
+                <div class="uk-width-1-3 uk-grid-item-match noto">
+                    <div class="uk-tile uk-text-left" style="background: #d9d9d9;">
+                        <legend class="uk-legend">
+                            Lorem ipsum dolor sit amet
+                        </legend>
 
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-                </p>
-            </div>
-        </div>
+                        </p>
+                    </div>
+                </div>
 
-        {# 這裡放主題內文章列表 #}
-        <div class="uk-width-1-1  uk-light">
-            <div class="uk-tile uk-background-secondary uk-padding-small">
-                <div class="uk-margin-left uk-margin-right uk-text-left">
-                <legend class="uk-legend">
-                    Lorem ipsum dolor sit amet
-                </legend>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
+                {# 這裡放主題內文章列表 #}
+                <div class="uk-width-1-1  uk-light">
+                    <div class="uk-tile uk-background-secondary uk-padding-small">
+                        <div class="uk-margin-left uk-margin-right uk-text-left">
+                        <legend class="uk-legend">
+                            Lorem ipsum dolor sit amet
+                        </legend>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-1-1  uk-light">
+                    <div class="uk-tile uk-background-secondary uk-padding-small">
+                        <div class="uk-margin-left uk-margin-right uk-text-left">
+                        <legend class="uk-legend">
+                            Lorem ipsum dolor sit amet
+                        </legend>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-1-1  uk-light">
+                    <div class="uk-tile uk-background-secondary uk-padding-small">
+                        <div class="uk-margin-left uk-margin-right uk-text-left">
+                        <legend class="uk-legend">
+                            Lorem ipsum dolor sit amet
+                        </legend>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="uk-width-1-1  uk-light">
-            <div class="uk-tile uk-background-secondary uk-padding-small">
-                <div class="uk-margin-left uk-margin-right uk-text-left">
-                <legend class="uk-legend">
-                    Lorem ipsum dolor sit amet
-                </legend>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="uk-width-1-1  uk-light">
-            <div class="uk-tile uk-background-secondary uk-padding-small">
-                <div class="uk-margin-left uk-margin-right uk-text-left">
-                <legend class="uk-legend">
-                    Lorem ipsum dolor sit amet
-                </legend>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-                </div>
-            </div>
-        </div>
         </div>
         {% endfor %}
+
     </div>
 </div>
 
 <!-- 把 script 載入標籤盡量放在body尾端 速度考量 -->
 <script>
 var data_discreteBarChart = {{ data|safe }};
-document.getElementById("topic-0").style.display = "block";
+document.getElementById("topic-0").classList.remove("uk-hidden");
 </script>
 <script type="text/javascript" src="{% static 'js/nv.d3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/barchart.js' %}"></script>

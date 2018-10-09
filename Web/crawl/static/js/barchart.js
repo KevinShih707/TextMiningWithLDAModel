@@ -34,3 +34,26 @@ nv.addGraph(function () {
 
     return chart;
 });
+
+document.addEventListener("DOMContentLoaded", function(e){
+    var bars = document.getElementsByClassName("nv-bar");
+    var i;
+    for(i = 0; i < bars.length; i++){
+        console.log("var i", i);
+        bars[i].setAttribute("onclick", "clickBar(" + i + ","+ bars.length + ")" );
+    }
+})
+
+function clickBar(i, length){
+    var id = "topic-" + i.toString();
+    console.log(i, length);
+    document.getElementById(id).classList.remove("uk-hidden");
+    var j;
+    for(j = 0; j < length; j++){
+        if(j != i){
+            console.log(j)
+            document.getElementById("topic-" + j.toString()).classList.add("uk-hidden");
+        }
+    }
+}
+

@@ -127,18 +127,16 @@ def recommendation(request, office, classification):
     :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
     :return: 對指定新聞網站之分類做出的視覺化呈現
     """
-    # from CrawlCuration.visual import barchart, word_cloud
     user_id = request.session['localId']
-    result = Result("news_classify", office, classification)
+    result = Result("updated_news", office, classification)
     reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
     office = office
     theme = classification
     user_id = request.session['localId']
     print("office name=", office, "\nclassification=", classification)
     data = reco.barchart()
-    # data = barchart.provide_bar_chart_data(office, classification)
     wc_url = reco.wc()
-    # wc_url = word_cloud.draw_wordcloud(office, classification, user_id, 0, RUNNING_DEVSERVER)
+    print(wc_url)
     numTopics = result.numTopics
     return render(request, "Visual/recommendation.html", locals())
 
