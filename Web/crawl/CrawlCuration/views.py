@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.http import JsonResponse, HttpResponseRedirect
 from crawl import apikey    # 這是另外的API Key, 需要使用的話可以問我
 from pprint import pprint
+import requests, json
 import pyrebase
 from CrawlCuration.visual.reco import Reco
 from CrawlCuration.controller.ldaResult import Result
@@ -13,7 +14,6 @@ from CrawlCuration.controller.ldaResult import Result
 config = apikey.firebase_key()
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
-storage = firebase.storage()
 
 RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')  # TRUE: 開發環境, FALSE: Production
 
@@ -29,10 +29,12 @@ def login(request):
     meema = request.POST.get('meema')
     try:
         user = auth.sign_in_with_email_and_password(email, meema) # 從 Firebase Auth 驗證
-        firstname = login_db.get_user(email, "firstname")   # 取得使用者名稱
-    except Exception as e:
-        message = "Email 或密碼錯誤"
+    except requests.HTTPError as e:
+        error_json = e.args[1]
+        error = json.loads(error_json)['error']
+        message = error['message']
         return render(request, "index.html", {"message": message})  # 登入失敗，強制回歸
+    firstname = login_db.get_user(email, "firstname")  # 取得使用者名稱
 
     if user['registered']:
         # user_info = authentication.get_account_info(user['idToken'])
@@ -54,17 +56,20 @@ def sign_up(request):
     email = request.POST.get('email')
     meema = request.POST.get('meema')
     try:
-        if login_db.get_user(email, "uid"):
-            message = "此 email 已經註冊"
-            return render(request, "index.html", {"signup_error": message})
+        try:
+            if login_db.get_user(email, "uid"):
+                message = "此 email 已經註冊"
+                return render(request, "index.html", {"signup_error": message})
+        except:
+            pass
         user = auth.create_user_with_email_and_password(email, meema)
-        uid = user['localId']
-        signup_db.user_to_mongo(firstname, lastname, uid, email)
-    except Exception as e:
-        print(e)
-        message = "註冊失敗，請再試一次"
-        print(message)
+    except requests.HTTPError as e:
+        error_json = e.args[1]
+        error = json.loads(error_json)['error']
+        message = error['message']
         return render(request, "index.html", {"signup_error": message})
+    uid = user['localId']
+    signup_db.user_to_mongo(firstname, lastname, uid, email)
     request.session['idToken'] = user['idToken']  # token有時效性
     request.session['localId'] = user['localId']  # 唯一的User ID
     request.session['username'] = firstname
@@ -94,9 +99,12 @@ def error(request):
 
 def bubble(request, office, classification):
     """ 氣泡圖頁面 """
-    office = office
-    classification = classification
-    return render(request, "Visual/bubble.html", locals())
+    if request.session.get('idToken') is not None:
+        office = office
+        classification = classification
+        return render(request, "Visual/bubble.html", locals())
+    else:
+        return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def bubble_json(request, office, classification):
@@ -111,7 +119,7 @@ def bubble_json(request, office, classification):
 
 def site_options(request):
     """網站按鈕選單頁面 ex.蘋果, 中時等等"""
-    if request.session.get('idToken') is not None:
+    if authorize(request.session['idToken'], request.session['localId']):
         from CrawlCuration.news_mgr import site_list
         SITE_LIST = site_list.get()
         return render(request, "Visual/site_options.html", locals())
@@ -127,20 +135,23 @@ def recommendation(request, office, classification):
     :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
     :return: 對指定新聞網站之分類做出的視覺化呈現
     """
-    user_id = request.session['localId']
-    result = Result("updated_news", office, classification)
-    reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
-    office = office
-    classification = classification
-    user_id = request.session['localId']
-    print("office name=", office, "\nclassification=", classification)
-    data = reco.barchart()
-    wc_url = reco.wc()
-    article_matched = reco.article_matched()
-    topics = []
-    [topics.append({"wc_url": url, "articles": articles}) for url, articles in zip(wc_url, article_matched)]
-    numTopics = result.numTopics
-    return render(request, "Visual/recommendation.html", locals())
+    if authorize(request.session['idToken'], request.session['localId']):
+        user_id = request.session['localId']
+        result = Result("updated_news", office, classification)
+        reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
+        office = office
+        classification = classification
+        user_id = request.session['localId']
+        print("office name=", office, "\nclassification=", classification)
+        data = reco.barchart()
+        wc_url = reco.wc()
+        article_matched = reco.article_matched()
+        topics = []
+        [topics.append({"wc_url": url, "articles": articles}) for url, articles in zip(wc_url, article_matched)]
+        numTopics = result.numTopics
+        return render(request, "Visual/recommendation.html", locals())
+    else:
+        return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def handler404(request, *args, **argv):
@@ -157,3 +168,13 @@ def handler500(request, *args, **argv):
                                   context_instance=RequestContext(request))
     response.status_code = 500
     return response
+
+def authorize(idToken, localId):
+    """驗證使用者，未登入者限制全縣"""
+    user = auth.get_account_info(idToken)
+    localId_real = user['users'][0]['localId']
+    localId_session = localId
+    if localId_real == localId_session:
+        return True
+    else:
+        return False
