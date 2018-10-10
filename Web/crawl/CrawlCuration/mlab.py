@@ -62,6 +62,22 @@ def getNewsInStringList(collection_input, office, classification, col="content")
     return list
 
 
+def getAllNewsContent(collection_input):
+    """
+    建Model用 實際不會用
+    :param collection_input: DB collection 名稱
+    :return: string list
+    """
+    try:
+        collection = connect_mongo(collection_input)
+        content = collection.find({},{'_id':0,'content':1,'by':1})
+    except Exception as e:
+        print('Got an error!')
+        print(e)
+    list = [m['content'] for m in content]
+    return list
+
+
 def getAllText(collection_input):
     try:
         collection = connect_mongo(collection_input)

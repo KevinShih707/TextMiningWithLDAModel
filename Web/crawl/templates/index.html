@@ -1,13 +1,12 @@
 {% extends "basic.html" %}
-
+{% load static %}
 {% block head_script %}
-    {% load static %}
     <script type="text/javascript" src="{% static 'js/d3.v3.js' %}"></script>
 {% endblock %}
 
 {% block stylesheet %}
 <style>
-    #bg {
+    #bg-img {
         position: fixed;
         left: 0;
         right: 0;

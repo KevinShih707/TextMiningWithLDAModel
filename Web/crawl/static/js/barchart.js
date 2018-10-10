@@ -34,6 +34,9 @@ nv.addGraph(function () {
         .style('text-align', "right")
         .attr('transform', function(d,i,j) { return 'translate (0, 10)' });
 
+    d3.selectAll('.nv-bar > text')
+        .attr('style', 'fill: #fff');
+
     // 這邊開始為點選長條後的發光效果
     // 在Html中插入<defs></defs>
     // 是SVG filter 的特殊處理方式，在欲使用之SVG元素加入style="filter:url(#white-glow);"即可

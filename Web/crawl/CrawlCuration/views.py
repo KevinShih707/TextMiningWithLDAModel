@@ -131,7 +131,7 @@ def recommendation(request, office, classification):
     result = Result("updated_news", office, classification)
     reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
     office = office
-    theme = classification
+    classification = classification
     user_id = request.session['localId']
     print("office name=", office, "\nclassification=", classification)
     data = reco.barchart()
