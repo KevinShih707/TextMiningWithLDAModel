@@ -141,13 +141,15 @@ def recommendation(request, office, classification):
         reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
         office = office
         classification = classification
-        user_id = request.session['localId']
         print("office name=", office, "\nclassification=", classification)
         data = reco.barchart()
         wc_url = reco.wc()
         article_matched = reco.article_matched()
+        authentic_article = result.authentic_article()
+        pprint(authentic_article)
         topics = []
-        [topics.append({"wc_url": url, "articles": articles}) for url, articles in zip(wc_url, article_matched)]
+        [topics.append({"wc_url": url, "articles": articles, "authentic_article": authentic_article })
+         for url, articles, authentic_article  in zip(wc_url, article_matched, authentic_article)]
         numTopics = result.numTopics
         return render(request, "Visual/recommendation.html", locals())
     else:

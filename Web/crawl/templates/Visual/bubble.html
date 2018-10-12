@@ -60,6 +60,7 @@
 <script>
     var office = "{{ office|safe }}";
     var classification = "{{ classification|safe }}";
+    document.body.classList.add("loaded");
 </script>
 <script src="{% static 'js/navbar.bg.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bubblechart.js' %}"></script>

@@ -25,10 +25,18 @@ class Result():
         # 必要之初始化
         self.newsStrList = mlab.getNewsInStringList(collection, office, classification, col) # 從DB獲得string list
         self.corpora = Corpora(file=self.newsStrList) # 建立Corpora
-        self.lda = Lda(self.corpora, numTopics=numTopics, seed=seed)
+        self.lda = Lda(self.corpora,numTopics=numTopics, seed=seed)
 
         self.topics_list = self.lda.showTopicsList()
         self.article_matched = self.lda.findArticleMatched()
         self.topic_article_count = self.lda.getTopicArticleCount()
         print(self.topic_article_count)
         print(len(self.corpora))
+
+    def authentic_article(self):
+        list = self.lda.showAuthenticArticle()
+        strlst = []
+        for index in list:
+            article = self.newsStrList[index].encode(encoding='UTF-8',errors='strict')
+            strlst.append(article)
+        return strlst
