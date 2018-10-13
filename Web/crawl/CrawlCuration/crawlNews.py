@@ -19,11 +19,11 @@ def connect_mongo(COLLECTION_NAME):
         print(e)
 
 def save_to_mongo(d):
-    collection = connect_mongo("updated_news")
+    collection = connect_mongo("news_demo")
     data = d
 
     try:
-        result = collection.insert(data)
+        collection.insert(data)
         print("sucess")
     except Exception as e:
         print('saving got an error!')
@@ -42,9 +42,10 @@ def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, pag
     #remove_DB(office,classification)
     pages = range(1, page_num)  # scrape for 40 pages, for each page with 25 news.
     links = []
+    news_counter = 0
     for page in pages:
-        print(url + str(page) + ".html")
-        print("===")
+        # print(url + str(page) + ".html")
+        # print("===")
         yahoo_r = requests.get(url + str(page))
         yahoo_soup = BeautifulSoup(yahoo_r.text, 'html.parser')
         if(classification == "finance" or classification == "health"):
@@ -52,18 +53,18 @@ def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, pag
         else:
             finance = yahoo_soup.findAll(tag, {'class': liclass})[:news_num]
         for info in finance:
-            link = ""
             try:
                 link = info.findAll('a',{'class':liclass2},href=True)[0]
                 if link.get('href') != '#':
                     links.append(base_url + link.get("href"))
-                    print(base_url + link.get("href"))
-                    print('===')
-            except:
-                link = None
-    content = ""
-    retitle = ""
-    recontent = ""
+                    # print(base_url + link.get("href"))
+                    # print('===')
+            except Exception as e:
+                links = list()
+            news_counter += 1
+
+    print("正在爬取", office, classification, "\t共", news_counter, "篇\n")
+
     for link in links:
         news = requests.get(link)
         single_news = BeautifulSoup(news.text, 'html.parser')
@@ -75,46 +76,56 @@ def crawlNews(office, classification, base_url, url, tag, liclass, liclass2, pag
             content = single_news.findAll('p')
             recontent = re_h.sub(r'', str(content))
             recontent = re.sub('\s+', ' ', recontent)
-            print("---------------------------------------")
+            # print("---------------------------------------")
             d = {}
             d["office"] = office
             d["classification"] = classification
             d["time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             d["title"] = str(retitle)
             d["content"] = str(recontent)
-            print(d)
+            # print(d,"\n")
             save_to_mongo(d)
-        except:
-            print("error!!!")
+        except Exception as e:
+            print(e)
         continue
 
-def crawlToDB(office, classification, number):
+    print("爬蟲完成！")
+
+
+def crawlToDB(office, classification, page_num, news_num):
+    """
+    把新聞爬取+存到DB
+    :param office: str 網站: apple | free | china
+    :param classification: str 分類
+    :param page_num: int 頁數
+    :param news_num: int 定義分量的數字
+    """
     if office == "free" and classification == "finance":
-        crawlNews("free", "finance", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', 2, number,"h1","","")
+        crawlNews("free", "finance", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', page_num, news_num, "h1", "", "")
     if office == "free" and classification == "3c":
-        crawlNews("free", "3c", "http://3c.ltn.com.tw/", "http://3c.ltn.com.tw/menu/internet/", 'li', 'list_box', '', 2, number,"h1","","")
+        crawlNews("free", "3c", "http://3c.ltn.com.tw/", "http://3c.ltn.com.tw/menu/internet/", 'li', 'list_box', '', page_num, news_num, "h1", "", "")
     if office == "free" and classification == "health":
-        crawlNews("free", "health", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', 2, number,"h1","","")
+        crawlNews("free", "health", "", "http://ec.ltn.com.tw/list/securities/", 'li', '', 'boxText', page_num, news_num, "h1", "", "")
 
     if office == "apple" and classification == "iphone":
-        crawlNews("apple", "iphone", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/768/", 'div','aht_title', "", 2, number,"h1","id","h1")
+        crawlNews("apple", "iphone", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/768/", 'div','aht_title', "", page_num, news_num, "h1", "id", "h1")
     if office == "apple" and classification == "career":
-        crawlNews("apple", "career", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/540/", 'div','aht_title', "", 2, number,"h1","id","h1")
+        crawlNews("apple", "career", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/540/", 'div','aht_title', "", page_num, news_num, "h1", "id", "h1")
     if office == "apple" and classification == "liveStream":
-        crawlNews("apple", "liveStream", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/532/", 'div', 'aht_title', "", 2, number,"h1","id","h1")
+        crawlNews("apple", "liveStream", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/532/", 'div', 'aht_title', "", page_num, news_num, "h1", "id", "h1")
     if office == "apple" and classification == "trading":
-        crawlNews("apple", "trading", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/660/", 'div', 'aht_title', "", 2, number,"h1","id","h1")
+        crawlNews("apple", "trading", "https://tw.appledaily.com", "https://tw.appledaily.com/column/index/660/", 'div', 'aht_title', "", page_num, news_num, "h1", "id", "h1")
 
     if office == "china" and classification == "sport":
-        crawlNews("china", "sport", "http:", "http://www.chinatimes.com/sports/total/?page=", 'h3', '', "", 2, number,"h1","id","h1")
+        crawlNews("china", "sport", "http:", "http://www.chinatimes.com/sports/total/?page=", 'h3', '', "", page_num, news_num, "h1", "id", "h1")
     if office == "china" and classification == "military":
-        crawlNews("china", "military", "https://www.chinatimes.com", "https://www.chinatimes.com/armament/total?page=", 'h3', '', "", 2, number,"h1","id","h1")
+        crawlNews("china", "military", "https://www.chinatimes.com", "https://www.chinatimes.com/armament/total?page=", 'h3', '', "", page_num, news_num, "h1", "id", "h1")
     if office == "china" and classification == "entertainment":
-        crawlNews("china", "entertainment", "https:", "https://www.chinatimes.com/star/total/?page=", 'h3', '', "", 2, number,"h1","id","h1")
+        crawlNews("china", "entertainment", "https:", "https://www.chinatimes.com/star/total/?page=", 'h3', '', "", page_num, news_num, "h1", "id", "h1")
     if office == "china" and classification == "election":
-        crawlNews("china", "election", "", "https://www.chinatimes.com/vote2018/total?page=", 'h3', '', "", 2, number,"h1","id","h1")
+        crawlNews("china", "election", "", "https://www.chinatimes.com/vote2018/total?page=", 'h3', '', "", page_num, news_num, "h1", "id", "h1")
     if office == "china" and classification == "travel":
-        crawlNews("china", "travel", "https:", "https://www.chinatimes.com/travel/total?page=", 'h3', '', "", 2, number,"h1","id","h1")
+        crawlNews("china", "travel", "https:", "https://www.chinatimes.com/travel/total?page=", 'h3', '', "", page_num, news_num, "h1", "id", "h1")
 
 def getUpdatedNews(office, classification, number):
     collection = connect_mongo("updated_news")
@@ -125,3 +136,24 @@ def getUpdatedNews(office, classification, number):
     except Exception as e:
         print('querying got an error!')
         print(e)
+
+def crawl_all_news_with_appropriate_amount():
+    # 約98篇
+    crawlToDB("free", "finance", 3, 100)
+    crawlToDB("free", "health", 3, 100)
+
+    # 100
+    crawlToDB("free", "3c", 6, 100)
+
+    # 約120篇
+    crawlToDB("china", "sport", 5, 100)
+    crawlToDB("china", "military", 5, 100)
+    crawlToDB("china", "entertainment", 5, 100)
+    crawlToDB("china", "election", 5, 100)
+    crawlToDB("china", "travel", 5, 100)
+
+    # 約104篇
+    crawlToDB("apple","iphone",6,26)
+    crawlToDB("apple", "career", 6, 26)
+    crawlToDB("apple", "liveStream", 6, 26)
+    crawlToDB("apple", "trading", 6, 26)

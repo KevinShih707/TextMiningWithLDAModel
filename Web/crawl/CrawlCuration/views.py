@@ -152,7 +152,7 @@ def recommendation(request, office, classification):
     else:
         if authorize(request.session['idToken'], request.session['localId']):
             user_id = request.session['localId']
-            result = Result("updated_news", office, classification)
+            result = Result("news_demo", office, classification)
             reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
             office = office
             classification = classification

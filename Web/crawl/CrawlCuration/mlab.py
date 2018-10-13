@@ -93,3 +93,26 @@ def getTextById(collection_input, Pageid):
     except Exception as e:
         print('Got an error!')
         print(e)
+
+def get_classification_count(collection_input="news_demo"):
+    """查詢DB中每個分類有幾篇"""
+    collection_input = collection_input
+    collection = connect_mongo(collection_input)
+    classlist = [
+    ("free",  "finance"),
+    ("free",  "health"),
+    ("free",  "3c"),
+    ("china", "sport"),
+    ("china", "military"),
+    ("china", "entertainment"),
+    ("china", "election"),
+    ("china", "travel"),
+    ("apple", "iphone"),
+    ("apple", "career"),
+    ("apple", "liveStream"),
+    ("apple", "trading")
+    ]
+    for single_class in classlist:
+        class_count = collection.count({"office": single_class[0], "classification": single_class[1]})
+        print(single_class[0], "\t", single_class[1], ":\t", class_count, "\n")
+
