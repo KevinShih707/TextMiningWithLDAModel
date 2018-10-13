@@ -111,8 +111,7 @@ class Lda():
         '''將文本依主題歸類後做成list回傳'''
         if(classifiedTopic == None):
             classifiedTopic = self.__classifyTopic()
-        numOfTopic = max(classifiedTopic) + 1
-        result = [[] for num in range(0, numOfTopic)]
+        result = [[] for num in range(0, self.NumTopics)]
         counter = 0
         while (counter < len(classifiedTopic)):
             result[classifiedTopic[counter]].append(counter) #把文章丟進對應的主題桶子
@@ -188,7 +187,6 @@ class Lda():
 
     def showAuthenticArticle(self, articleMatchKl_input = None):
         '''代表性文章'''
-        global articleMatchKl
         if (articleMatchKl_input is None):
             articleMatchKl = self.__ArticleMatchKl()
         else:
