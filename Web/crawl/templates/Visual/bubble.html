@@ -47,7 +47,7 @@
         </legend>
     </div>
     <svg id="chart" width="960" height="800"></svg>
-    <figure id="loader-wrapper">
+    <figure id="bubble-loader-wrapper">
         <div class="dot white"></div>
         <div class="dot"></div>
         <div class="dot"></div>
@@ -60,7 +60,8 @@
 <script>
     var office = "{{ office|safe }}";
     var classification = "{{ classification|safe }}";
-    document.body.classList.add("loaded");
+    document.getElementById("spinner").style.visibility = "hidden";
+    document.getElementById("loader-wrapper").style.visibility = "hidden";
 </script>
 <script src="{% static 'js/navbar.bg.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bubblechart.js' %}"></script>

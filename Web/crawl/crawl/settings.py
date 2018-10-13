@@ -107,7 +107,8 @@ USE_L10N = True
 # Google端使用'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
 if RUNNING_DEVSERVER:
     STATIC_URL = '/static/'
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # 使用本地端 Static 元素用這行
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 elif not RUNNING_DEVSERVER:
     STATIC_URL = 'https://storage.googleapis.com/crawl-curation.appspot.com/static/'
-    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')          # 使用本地端測試圖片等 Static 元素[請註解]
+    

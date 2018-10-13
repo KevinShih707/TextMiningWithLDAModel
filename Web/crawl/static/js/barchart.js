@@ -83,14 +83,20 @@ nv.addGraph(function () {
 });
 
 // Event Listener為非同步，等待圖表繪製完成後再存取DOM
-document.addEventListener("DOMContentLoaded", function(e){
+if (/(?!.*?compatible|.*?webkit)^mozilla|opera/i.test(navigator.userAgent)){ // Feeling dirty yet?
+    document.addEventListener("DOMContentLoaded", init_bar, false);
+    document.addEventListener("load", init_bar, false);
+  }else{
+    window.setTimeout(init_bar, 200);
+  }
+function init_bar(){
     var bars = document.getElementsByClassName("discreteBar");
     bars[0].style.filter = "url(#white-glow)";
     var i;
     for(i = 0; i < bars.length; i++){
         bars[i].setAttribute("onclick", "clickBar(" + i + ","+ bars.length + ")" );
     }
-})
+}
 // 點擊後處發函式: i: 第i個主題, length: 主題總數 即長條總數
 function clickBar(i, length){
     var id = "topic-" + i.toString();

@@ -39,7 +39,7 @@ d3.json(jsonPath, function(error, root) {
         .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
         .style("fill", function(d, i) { 
             // console.log(d.children);
-            document.getElementById("loader-wrapper").hidden = true;   // 載入完畢，隱藏Spinner
+            document.getElementById("bubble-loader-wrapper").hidden = true;   // 載入完畢，隱藏Spinner
             chart = document.getElementById("chart");           // 載入後淡入效果, 滑~~順~~
             fadein(chart);  // 淡入圖表
             return d.children ? color(d.depth) : small_color(i); })
