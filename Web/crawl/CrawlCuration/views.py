@@ -99,12 +99,17 @@ def error(request):
 
 def bubble(request, office, classification):
     """ 氣泡圖頁面 """
-    if request.session.get('idToken') is not None:
-        office = office
-        classification = classification
-        return render(request, "Visual/bubble.html", locals())
-    else:
+    try:
+        request.session['idToken']
+    except KeyError:
         return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
+    else:
+        if request.session.get('idToken'):
+            office = office
+            classification = classification
+            return render(request, "Visual/bubble.html", locals())
+        else:
+            return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def bubble_json(request, office, classification):
@@ -119,12 +124,17 @@ def bubble_json(request, office, classification):
 
 def site_options(request):
     """網站按鈕選單頁面 ex.蘋果, 中時等等"""
-    if authorize(request.session['idToken'], request.session['localId']):
-        from CrawlCuration.news_mgr import site_list
-        SITE_LIST = site_list.get()
-        return render(request, "Visual/site_options.html", locals())
-    else:
+    try:
+        request.session['idToken']
+    except KeyError:
         return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
+    else:
+        if authorize(request.session['idToken'], request.session['localId']):
+            from CrawlCuration.news_mgr import site_list
+            SITE_LIST = site_list.get()
+            return render(request, "Visual/site_options.html", locals())
+        else:
+            return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def recommendation(request, office, classification):
@@ -135,25 +145,30 @@ def recommendation(request, office, classification):
     :param classification: view回傳，指定該網站之分類，進行爬取分析顯示
     :return: 對指定新聞網站之分類做出的視覺化呈現
     """
-    if authorize(request.session['idToken'], request.session['localId']):
-        user_id = request.session['localId']
-        result = Result("updated_news", office, classification)
-        reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
-        office = office
-        classification = classification
-        print("office name=", office, "\nclassification=", classification)
-        data = reco.barchart()
-        wc_url = reco.wc()
-        article_matched = reco.article_matched()
-        authentic_article = result.authentic_article()
-        pprint(authentic_article)
-        topics = []
-        [topics.append({"wc_url": url, "articles": articles, "authentic_article": authentic_article })
-         for url, articles, authentic_article  in zip(wc_url, article_matched, authentic_article)]
-        numTopics = result.numTopics
-        return render(request, "Visual/recommendation.html", locals())
-    else:
+    try:
+        request.session['idToken']
+    except KeyError:
         return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
+    else:
+        if authorize(request.session['idToken'], request.session['localId']):
+            user_id = request.session['localId']
+            result = Result("updated_news", office, classification)
+            reco = Reco(result, user_id=user_id, RUNNING_DEVSERVER=RUNNING_DEVSERVER)
+            office = office
+            classification = classification
+            print("office name=", office, "\nclassification=", classification)
+            data = reco.barchart()
+            wc_url = reco.wc()
+            article_matched = reco.article_matched()
+            authentic_article = result.authentic_article()
+            pprint(authentic_article)
+            topics = []
+            [topics.append({"wc_url": url, "articles": articles, "authentic_article": authentic_article })
+             for url, articles, authentic_article  in zip(wc_url, article_matched, authentic_article)]
+            numTopics = result.numTopics
+            return render(request, "Visual/recommendation.html", locals())
+        else:
+            return render(request, 'index.html', {"login_trigger": True, "message": "請先登入"})
 
 
 def handler404(request, *args, **argv):
@@ -172,7 +187,7 @@ def handler500(request, *args, **argv):
     return response
 
 def authorize(idToken, localId):
-    """驗證使用者，未登入者限制全縣"""
+    """驗證使用者，未登入者限制權限"""
     user = auth.get_account_info(idToken)
     localId_real = user['users'][0]['localId']
     localId_session = localId
