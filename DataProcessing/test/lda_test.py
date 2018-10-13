@@ -9,7 +9,7 @@ class TestLdaFn(unittest.TestCase):
 
     def setUp(self):
         self.corpora = Corpora()
-        self.lda = Lda(self.corpora, numTopics = 2, seed = 10)
+        self.lda = Lda(self.corpora, numTopics = 4, seed = 10)
 
     def test_isWellClassify(self):
         fakedata = [[(0,0.1), (1,0.4), (2,0.5)],
