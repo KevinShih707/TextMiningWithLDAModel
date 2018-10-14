@@ -126,13 +126,13 @@
     <div class="uk-dark">
         <!-- 第一排 -->
         <div class="uk-container uk-container-expand" style="background-color: #404040;">
-            <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@m uk-flex uk-flex-center" uk-grid
+            <div class="uk-grid-match uk-grid-medium uk-child-width-1-2@s uk-flex uk-flex-center" uk-grid
                  uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
                 <!-- 文字 -->
                 <div class="uk-padding-small">
                 <div class="uk-inline uk-height-medium uk-light uk-flex">
                     <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
-                        <a href="/wc/"><h3 class="noto">詞雲
+                        <a href="/site_options/"><h3 class="noto">詞雲
                         <div class="noto uk-text-small">Word Cloud</div></h3></a>
                         <p class="noto-light">
                             透過隱含狄利克雷分佈 (Latent  Dirichlet  Allocation,  LDA)
@@ -144,7 +144,7 @@
                 </div>
                 <!-- 圖片 -->
                 {% load static %}
-                <div class="uk-padding-small">
+                <div class="uk-padding-small@s">
                 <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                   uk-light uk-background-blend-screen uk-background-secondary"
                     style="background-image: url({% static 'media/wordcloud_index.png' %});" uk-parallax="bgy: -70">
@@ -161,7 +161,7 @@
                  uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
                 <!-- 圖片 -->
                 {% load static %}
-                <div class="uk-padding-small">
+                <div class="uk-padding-small uk-visible@s">
                 <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                   uk-light uk-background-blend-screen uk-background-secondary"
                      style="background-image: url({% static 'media/barchart_index.jpg' %});" uk-parallax="bgy: -70">
@@ -174,11 +174,22 @@
                 <div class="uk-padding-small">
                 <div class="uk-inline uk-height-medium uk-light uk-flex">
                     <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
-                        <a href="/bar_chart/"><h3 class="noto">直條圖
+                        <a href="/site_options/"><h3 class="noto">直條圖
                         <div class="noto uk-text-small">Bar Chart</div></h3></a>
                         <p class="noto-light">
                             透過 LDA 主題中每個詞出現的概率<br>使用 D3.js 動態繪製成直條圖
                         </p>
+                    </div>
+                </div>
+                </div>
+                <!-- 圖片 -->
+                {% load static %}
+                <div class="uk-hidden@s">
+                <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
+                  uk-light uk-background-blend-screen uk-background-secondary"
+                     style="background-image: url({% static 'media/barchart_index.jpg' %});" uk-parallax="bgy: -70">
+                    <div class="noto uk-overlay uk-position-center
+                    uk-width-1-2@m uk-text-center uk-margin-auto uk-margin-auto-vertical">
                     </div>
                 </div>
                 </div>
@@ -192,7 +203,7 @@
                 <div class="uk-padding-small">
                 <div class="uk-inline uk-height-medium uk-light uk-flex">
                     <div class="noto uk-padding-large uk-text-left uk-margin-auto uk-margin-auto-vertical">
-                        <a href="/bubble/"><h3 class="noto">氣泡圖
+                        <a href="/site_options/"><h3 class="noto">氣泡圖
                         <div class="noto uk-text-small">Grouped Bubble Chart</div></h3></a>
                         <p class="noto-light">
                             同一主題之詞彙將集中於同一圓形<br>詞彙概率愈大，則面積愈大<br>
@@ -203,7 +214,7 @@
                 </div>
                 <!-- 圖片 -->
                 {% load static %}
-                <div class="uk-padding-small">
+                <div class="uk-padding-small@s">
                 <div class="uk-inline uk-height-medium uk-background-cover uk-overflow-hidden
                   uk-light"
                      style="background-image: url({% static 'media/bubblechart_index.jpg' %});" uk-parallax="bgy: -70">
@@ -214,6 +225,12 @@
                 </div>
             </div>
         </div><!-- end 第三排 -->
+        <div class="uk-container uk-container-expand" style="background-color: #24478f;">
+            <div class=" uk-grid-medium uk-child-width-1-1 uk-flex uk-flex-center" uk-grid>
+            <div class="uk-height-medium uk-text-center uk-text-middle uk-light">
+            <a href="/site_options/"><h5 class="uk-heading-primary uk-margin-large-top noto">開始使用</h5></a></div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
