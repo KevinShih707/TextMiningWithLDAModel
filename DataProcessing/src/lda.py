@@ -180,7 +180,7 @@ class Lda():
                     klThisTopic.append((candidateId, subTfpb[1]))
                 else:
                     subTfpbProb = [pair [1] for pair in subTfpb[0]]
-                    subTfpbProb.append(1 - sum(subTfpb))#將非代表詞加總視為「其他」的概率
+                    subTfpbProb.append(1 - sum(subTfpbProb))#將非代表詞加總視為「其他」的概率
                     klThisTopic.append((candidateId, scipy.stats.entropy(subTfpbProb, topicProb)))
             result.append(klThisTopic)
         return result
