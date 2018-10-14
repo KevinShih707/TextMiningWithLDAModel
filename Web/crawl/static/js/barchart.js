@@ -83,12 +83,12 @@ nv.addGraph(function () {
 });
 
 // Event Listener為非同步，等待圖表繪製完成後再存取DOM
-if (/(?!.*?compatible|.*?webkit)^mozilla|opera/i.test(navigator.userAgent)){ // Feeling dirty yet?
-    document.addEventListener("DOMContentLoaded", init_bar, false);
-    document.addEventListener("load", init_bar, false);
-  }else{
+// if (/(?!.*?compatible|.*?webkit)^mozilla|opera/i.test(navigator.userAgent)){ // Feeling dirty yet?
+//     document.addEventListener("DOMContentLoaded", init_bar, false);
+//     document.addEventListener("load", init_bar, false);
+//   }else{
     window.setTimeout(init_bar, 200);
-  }
+//   }
 function init_bar(){
     var bars = document.getElementsByClassName("discreteBar");
     bars[0].style.filter = "url(#white-glow)";
