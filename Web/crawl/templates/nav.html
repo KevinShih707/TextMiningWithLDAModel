@@ -17,44 +17,30 @@
 
                                 <!-- 手機板選單 -->
                                 <div id="offcanvas" uk-offcanvas>
-
-                                    <div class="uk-offcanvas-bar uk-animation-toggle">
-
-                                        <div class="uk-animation-fade">
-                                            <button class="uk-offcanvas-close uk-align-right" type="button" uk-close>
-                                            </button>
-                                            <div>
-                                                <a href="/"><h2>HOME</h2></a>
+                                    <div class="uk-offcanvas-bar">
+                                        <button class="uk-offcanvas-close uk-align-right" type="button" uk-close>
+                                        </button>
+                                        <div>
+                                            <a href="/"><h2>HOME</h2></a>
+                                        </div>
+                                        <div>
+                                            <h2>Services</h2>
+                                        </div>
+                                        <div class="uk-child-width-1-1" uk-grid>
+                                            <div class="noto">
+                                                <a href="/site_options/">目標選擇</a>
                                             </div>
-                                            <div>
-                                                <h2>Services</h2>
-                                            </div>
-                                            <div class="uk-child-width-1-1" uk-grid>
-                                                <div class="noto">
-                                                    <a href="/wc/">詞雲 Word Cloud</a>
-                                                </div>
-                                                <div class="noto">
-                                                    <a href="/bar_chart/">直條圖 Bar Chart</a>
-                                                </div>
-                                                <div class="noto">
-                                                    <a href="/bubble/">氣泡圖 Bubble Chart</a>
-                                                </div>
-                                                <div class="noto">
-                                                    <a href="/get/">臉書爬蟲</a>
-                                                </div>
-                                                <div class="noto">
-                                                    <a href="/text/">資料文本</a>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div>
-                                                <a href="https://csie.ntut.edu.tw/csie/index_i.htm">
-                                                    <h2>CSIE</h2>
-                                                </a>
+                                            <div class="noto">
+                                                <a href="/help/">說明</a>
                                             </div>
                                         </div>
+                                        <p></p>
+                                        <div>
+                                            <a href="https://csie.ntut.edu.tw/csie/index_i.htm">
+                                                <h2>CSIE</h2>
+                                            </a>
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
                             <!-- 網頁標題 -->
@@ -91,7 +77,7 @@
                                     </div>
                                 </div>
 
-                                <li><button id="loginClick" class="uk-button uk-button-muted uk-button-small noto uk-margin-top" style="color: #222222;" uk-toggle="target: #login">login</button></li>
+                                <li><button id="loginClick" class="uk-button uk-button-muted uk-button-small noto uk-margin-top uk-margin-right" uk-toggle="target: #login">login</button></li>
 
                                 <div id="login" class="uk-flex-top noto" uk-modal>
                                     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
