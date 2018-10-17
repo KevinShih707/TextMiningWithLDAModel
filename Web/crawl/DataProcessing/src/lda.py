@@ -1,3 +1,4 @@
+from memoize import memoize, delete_memoized
 from gensim.models.ldamodel import LdaModel
 from gensim import corpora
 import numpy as np
@@ -34,6 +35,7 @@ class Lda():
             self.ldaModel = LdaModel(corpus = self.corpora.TfidfPair,
                                 id2word = self.corpora.Dictionary,
                                 num_topics = self.numTopics)
+        print("Training success")
 
     def __isWellClassify(self, threshold = 0.8, test = None):
         '''
@@ -73,6 +75,7 @@ class Lda():
             self.__trainingModel()
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
+    @memoize(600)
     def showTopicsList(self, topn = 10):
         '''
             以list of tuple 顯示主題
@@ -107,6 +110,7 @@ class Lda():
             result.append(sortedByDb[0][0]) #機率最高的ID
         return result
 
+    @memoize(600)
     def findArticleMatched(self, classifiedTopic = None):
         '''將文本依主題歸類後做成list回傳'''
         if(classifiedTopic == None):
@@ -118,6 +122,7 @@ class Lda():
             counter += 1
         return result
 
+    @memoize(600)
     def getTopicArticleCount(self, ArticleMached = None):
         '''回傳分類後各組題包含幾篇文章'''
         if(ArticleMached == None):
@@ -185,6 +190,7 @@ class Lda():
             result.append(klThisTopic)
         return result
 
+    @memoize(600)
     def showAuthenticArticle(self, articleMatchKl_input = None):
         '''代表性文章'''
         if (articleMatchKl_input is None):

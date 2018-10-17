@@ -14,3 +14,4 @@ pyrebase==3.0.27
 google-cloud-storage==1.12.0
 opencv-python==3.4.3.18
 beautifulsoup4==4.6.3
+django-memoize==2.1.1

@@ -1,6 +1,8 @@
+from memoize import memoize, delete_memoized
 import numpy as np
 
 # TODO: 更新註解
+@memoize(600)
 def provide_bubble_chart_data(result_topics_list):#office, classification
     """
     提供繪製泡泡圖 bubblechart.js 所需 JSON 資料來源

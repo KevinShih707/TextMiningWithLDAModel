@@ -1,3 +1,4 @@
+from memoize import memoize, delete_memoized
 from DataProcessing.src.corpora import Corpora
 from DataProcessing.src.lda import Lda
 from CrawlCuration import mlab
@@ -23,17 +24,38 @@ class Result():
         self.topicId = topicId
 
         # 必要之初始化
-        self.newsStrList = mlab.getNewsInStringList(collection, office, classification, col) # 從DB獲得string list
+        self.__newsStrList = mlab.getNewsInStringList(collection, office, classification, col) # 從DB獲得string list
         self.corpora = Corpora(file=self.newsStrList) # 建立Corpora
         self.lda = Lda(self.corpora,numTopics=numTopics, seed=seed)
 
-        self.topics_list = self.lda.showTopicsList()
-        self.article_matched = self.lda.findArticleMatched()
-        self.topic_article_count = self.lda.getTopicArticleCount()
+        self.__topics_list = self.lda.showTopicsList()
+        self.__article_matched = self.lda.findArticleMatched()
+        self.__topic_article_count = self.lda.getTopicArticleCount()
         print(self.topic_article_count)
         print(len(self.corpora))
 
-    def authentic_article(self):
+    @property
+    @memoize(600)
+    def newsStrList(self):
+        return self.__newsStrList
+
+    @property
+    @memoize(600)
+    def topics_list(self):
+        return self.__topics_list
+
+    @property
+    @memoize(600)
+    def article_matched(self):
+        return self.__article_matched
+
+    @property
+    @memoize(600)
+    def topic_article_count(self):
+        return self.__topic_article_count
+
+    @memoize(600)
+    def authentic_article(self, hc=True):
         list = self.lda.showAuthenticArticle()
         strlst = []
         for index in list:

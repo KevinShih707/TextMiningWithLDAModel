@@ -161,7 +161,6 @@ def recommendation(request, office, classification):
             wc_url = reco.wc()
             article_matched = reco.article_matched()
             authentic_article = result.authentic_article()
-            pprint(authentic_article)
             topics = []
             [topics.append({"wc_url": url, "articles": articles, "authentic_article": authentic_article })
              for url, articles, authentic_article  in zip(wc_url, article_matched, authentic_article)]
