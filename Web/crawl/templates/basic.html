@@ -6,11 +6,12 @@
     <meta name="author" content="Li Yen Tseng, J.S.Li, Kevin Shih">
     <meta name="description" content="A capstone project that serves visualized data by crawling & analyzing articles.">
     <title>Crawl Curation</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.10/jquery.lazy.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.10/jquery.lazy.plugins.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js'  %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.lazy.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.lazy.plugins.min.js' %}"></script>
+    <script src="{% static 'js/uikit.min.js' %}"></script>
+    <script src="{% static 'js/uikit-icons.min.js' %}"></script>
     <script>
         var loaded = false;
         function hide_loader() {
