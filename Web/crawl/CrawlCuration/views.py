@@ -159,11 +159,19 @@ def recommendation(request, office, classification):
             print("office name=", office, "\nclassification=", classification)
             data = reco.barchart()
             wc_url = reco.wc()
-            article_matched = reco.article_matched()
+            # article_matched = reco.article_matched()
+            # title_matched = reco.title_matched()
+            # topicList = reco.topic_matched()
+            newsList = reco.newsDistri()
             authentic_article = result.authentic_article()
             topics = []
-            [topics.append({"wc_url": url, "articles": articles, "authentic_article": authentic_article })
-             for url, articles, authentic_article  in zip(wc_url, article_matched, authentic_article)]
+
+            # [topics.append({"wc_url": url, "articles": {"content": articles,"title": titles,"topic": topics},"authentic_article": authentic_article })
+            #  for url, articles, titles, topics, authentic_article  in zip(wc_url, article_matched, title_matched, topicList, authentic_article)]
+            [topics.append({"wc_url": url, "articles": news,
+                            "authentic_article": authentic_article})
+             for url, news, authentic_article in
+             zip(wc_url, newsList, authentic_article)]
             numTopics = result.numTopics
             return render(request, "Visual/recommendation.html", locals())
         else:

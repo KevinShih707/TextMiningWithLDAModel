@@ -65,7 +65,7 @@ class Corpora():
             article: 欲刪除url文章
         '''
         urlregex = re.compile(u"(網址|連結|快速連結|捷徑|超連結)*(:|：| )*(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+[\w\-\.,@?^=%&amp;:\/~‌​\+#]*[\w\-\@?^=%&amp‌​;\/~\+#]"
-                              u"|([0-9]{1,})")
+                              u"|(((100)|(\d{1,2}(\.\d*)?))%)|([0-9]{1,})")
         return urlregex.sub(r'', text)
 
     def __openFile(self, path, extension, fieldnames = ['time', 'id', 'text', 'share', 'likecount', 'sharecount']):

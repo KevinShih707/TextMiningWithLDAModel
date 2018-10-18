@@ -1,11 +1,7 @@
-from memoize import memoize, delete_memoized
 from gensim.models.ldamodel import LdaModel
-from gensim import corpora
 import numpy as np
 import scipy.stats
-from functools import reduce
-import operator
-import math
+
 
 class Lda():
     def __init__(self, corpora = None, savedModel = None, numTopics = 10, seed = None):
@@ -75,7 +71,6 @@ class Lda():
             self.__trainingModel()
         return self.ldaModel.show_topics(num_topics = self.numTopics, num_words = topn)
 
-    @memoize(600)
     def showTopicsList(self, topn = 10):
         '''
             以list of tuple 顯示主題
@@ -110,7 +105,6 @@ class Lda():
             result.append(sortedByDb[0][0]) #機率最高的ID
         return result
 
-    @memoize(600)
     def findArticleMatched(self, classifiedTopic = None):
         '''將文本依主題歸類後做成list回傳'''
         if(classifiedTopic == None):
@@ -122,7 +116,6 @@ class Lda():
             counter += 1
         return result
 
-    @memoize(600)
     def getTopicArticleCount(self, ArticleMached = None):
         '''回傳分類後各組題包含幾篇文章'''
         if(ArticleMached == None):
@@ -190,16 +183,20 @@ class Lda():
             result.append(klThisTopic)
         return result
 
-    @memoize(600)
+    # def showAuthenticArticle(self, articleMatchKl_input = None):
+    #     '''代表性文章'''
+    #     if (articleMatchKl_input is None):
+    #         articleMatchKl = self.__ArticleMatchKl()
+    #     else:
+    #         articleMatchKl = articleMatchKl_input
+    #     result = []
+    #     for eachTopic in articleMatchKl:
+    #         result.append(sorted(eachTopic, key = lambda x:x[1])[0][0])
+    #     return result
+
     def showAuthenticArticle(self, articleMatchKl_input = None):
         '''代表性文章'''
-        if (articleMatchKl_input is None):
-            articleMatchKl = self.__ArticleMatchKl()
-        else:
-            articleMatchKl = articleMatchKl_input
-        result = []
-        for eachTopic in articleMatchKl:
-            result.append(sorted(eachTopic, key = lambda x:x[1])[0][0])
+        result = [1,2,3,4,5,6,7,8,9,10]
         return result
 
     @property

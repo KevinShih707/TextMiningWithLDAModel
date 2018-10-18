@@ -34,6 +34,7 @@ class Lda():
             self.ldaModel = LdaModel(corpus = self.corpora.TfidfPair,
                                 id2word = self.corpora.Dictionary,
                                 num_topics = self.numTopics)
+        print("Training success")
 
     def __isWellClassify(self, threshold = 0.8, test = None):
         '''

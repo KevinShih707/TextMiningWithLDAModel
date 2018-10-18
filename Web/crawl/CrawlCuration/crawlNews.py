@@ -29,8 +29,8 @@ def save_to_mongo(d):
         print('saving got an error!')
         print(e)
 
-def remove_DB(office,classification):
-    collection = connect_mongo("updated_news")
+def remove_DB(collection, office,classification):
+    collection = connect_mongo(collection)
     try:
         collection.remove({"$and": [{"office": office}, {"classification": classification}]})
         print("sucess")

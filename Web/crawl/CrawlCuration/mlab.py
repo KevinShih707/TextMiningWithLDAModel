@@ -62,6 +62,24 @@ def getNewsInStringList(collection_input, office, classification, col="content")
     return list
 
 
+def getNews(collection_input, office, classification):
+    collection = connect_mongo(collection_input)
+    content = collection.find({"office":office,"classification":classification},{'_id':0,'title':1, 'classification':1, 'content':1, 'by':1})
+    news_list = list()
+    [news_list.append(c) for c in content]
+    print("getNews len:", len(news_list))
+    return news_list
+
+
+def getAllNews(collection_input):
+    collection = connect_mongo(collection_input)
+    content = collection.find({},{'_id':0,'title':1, 'classification':1, 'content':1, 'by':1})
+    news_list = list()
+    [news_list.append(c) for c in content]
+    print("getNews len:", len(news_list))
+    return news_list
+
+
 def getAllNewsContent(collection_input):
     """
     建Model用 實際不會用
