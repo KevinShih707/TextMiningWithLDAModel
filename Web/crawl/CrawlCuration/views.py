@@ -7,7 +7,9 @@ from pprint import pprint
 import requests, json
 import pyrebase
 from CrawlCuration.visual.reco import Reco
+import CrawlCuration.visual.bubblechart as bubblechart
 from CrawlCuration.controller.ldaResult import Result
+
 
 
 # Firebase Authentication 初始化: https://firebase.google.com/docs/web/setup
@@ -115,9 +117,10 @@ def bubble(request, office, classification):
 def bubble_json(request, office, classification):
     """ 回傳單獨的JSON Http response給前端JS """
     # from CrawlCuration.visual import bubblechart
-    result = Result("news_classify", office, classification)
-    reco = Reco(result)
-    json_res = reco.bubblechart()
+    # result = Result("news_demo", office, classification, isWC=True)
+    # reco = Reco(result)
+    # json_res = reco.bubblechart()
+    json_res = bubblechart.provide_bubble_chart_data()
     pprint(json_res)
     return JsonResponse(json_res)
 
@@ -159,19 +162,15 @@ def recommendation(request, office, classification):
             print("office name=", office, "\nclassification=", classification)
             data = reco.barchart()
             wc_url = reco.wc()
-            # article_matched = reco.article_matched()
-            # title_matched = reco.title_matched()
-            # topicList = reco.topic_matched()
-            newsList = reco.newsDistri()
-            authentic_article = result.authentic_article()
+            newsList = reco.newsDistri() # 文章分佈
+            authentic_article = result.authentic_article() # 代表性文章
             topics = []
 
-            # [topics.append({"wc_url": url, "articles": {"content": articles,"title": titles,"topic": topics},"authentic_article": authentic_article })
-            #  for url, articles, titles, topics, authentic_article  in zip(wc_url, article_matched, title_matched, topicList, authentic_article)]
             [topics.append({"wc_url": url, "articles": news,
                             "authentic_article": authentic_article})
              for url, news, authentic_article in
              zip(wc_url, newsList, authentic_article)]
+            print(len(topics),len(wc_url),len(newsList),len(authentic_article))
             numTopics = result.numTopics
             return render(request, "Visual/recommendation.html", locals())
         else:

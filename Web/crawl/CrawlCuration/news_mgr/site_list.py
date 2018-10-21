@@ -9,8 +9,6 @@ def get():
             'img': 'media/web-apple-daily.jpg',
             'name': '蘋果日報',
             'topics': [
-                {'topicname': 'Iphone',
-                 'url': base + 'apple&theme=iphone'},
                 {'topicname': '就業',
                  'url': base + 'apple&theme=career'},
                 {'topicname': '直播',

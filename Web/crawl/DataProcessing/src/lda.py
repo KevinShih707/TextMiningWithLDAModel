@@ -183,20 +183,15 @@ class Lda():
             result.append(klThisTopic)
         return result
 
-    # def showAuthenticArticle(self, articleMatchKl_input = None):
-    #     '''代表性文章'''
-    #     if (articleMatchKl_input is None):
-    #         articleMatchKl = self.__ArticleMatchKl()
-    #     else:
-    #         articleMatchKl = articleMatchKl_input
-    #     result = []
-    #     for eachTopic in articleMatchKl:
-    #         result.append(sorted(eachTopic, key = lambda x:x[1])[0][0])
-    #     return result
-
     def showAuthenticArticle(self, articleMatchKl_input = None):
         '''代表性文章'''
-        result = [1,2,3,4,5,6,7,8,9,10]
+        if (articleMatchKl_input is None):
+            articleMatchKl = self.__ArticleMatchKl()
+        else:
+            articleMatchKl = articleMatchKl_input
+        result = []
+        for eachTopic in articleMatchKl:
+            result.append(sorted(eachTopic, key = lambda x:x[1])[0][0])
         return result
 
     @property

@@ -87,7 +87,7 @@ nv.addGraph(function () {
 //     document.addEventListener("DOMContentLoaded", init_bar, false);
 //     document.addEventListener("load", init_bar, false);
 //   }else{
-    window.setTimeout(init_bar, 200);
+    window.setTimeout(init_bar, 300);
 //   }
 function init_bar(){
     var bars = document.getElementsByClassName("discreteBar");
